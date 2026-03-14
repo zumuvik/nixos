@@ -34,19 +34,24 @@
   };
 
   console.useXkbConfig = true;   # применяет раскладку также в tty
-  
+
   nix.gc = {
   automatic = true;
       dates = "daily";
       options = "--delete-older-than 3d";
     };
-  
-  
+
+  systemd.timers.nix_gc = {
+    enable = true;
+    unitConfig.Timer = "OnCalendar=daily";
+  };
+
+
     # Разрешаем несвободные пакеты (Discord, NVIDIA драйверы, Steam и т.д.)
     nixpkgs.config.allowUnfree = true;
-  
+
     # Твой остальной конфиг...
-  
+
 
   swapDevices = [
     {
@@ -54,7 +59,7 @@
       size = 32768;
     }
   ];
-  
+
 
   # ────────────────────────────────────────────────
   # Users
@@ -119,7 +124,7 @@
   # Важно для AMD VAAPI
   hardware.opengl = {
     enable = true;
-   
+
   };
 
 
@@ -135,33 +140,33 @@ security.rtkit.enable = true;
   networking.wireguard.enable = true;
 
 
-  
+
   # ────────────────────────────────────────────────
   # Packages (system-wide — только необходимое)
   # ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
     btop
     xrandr hyprlock
-    nwg-look            
+    nwg-look
     # terminal & basics
     fastfetch
     micro
     kitty
     zip unzip
-    git 
+    git
     nwg-displays
     wlr-randr cliphist wl-clipboard
     # wayland utils
-    
+
     mako mpvpaper remmina
-      mpv fish 
+      mpv fish
     swww waypaper spotube scrcpy
     grim gh wireguard-tools
     slurp android-tools
     rofi   playerctl       # или wofi — выбери один
     # wofi
     wl-clipboard libnotify
-    
+
     # apps
     pavucontrol
     kdePackages.qtsvg
@@ -177,7 +182,7 @@ security.rtkit.enable = true;
    nerd-fonts.jetbrains-mono
    nerd-fonts.iosevka
   ];
-  
+
 
   # ────────────────────────────────────────────────
   # Misc / Compatibility
