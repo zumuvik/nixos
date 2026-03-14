@@ -136,13 +136,14 @@ security.rtkit.enable = true;
   services.blueman.enable = true;           # удобный bluetooth gui
   networking.wireguard.enable = true;
 
-  
+
   
   # ────────────────────────────────────────────────
   # Packages (system-wide — только необходимое)
   # ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    aqemu
+    gnome.gnome-boxes
+    qemu
     btop
     xrandr
     nwg-look
