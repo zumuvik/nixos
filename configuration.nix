@@ -142,6 +142,7 @@ security.rtkit.enable = true;
   # Packages (system-wide — только необходимое)
   # ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
+    aqemu
     btop
     xrandr
     nwg-look
@@ -191,5 +192,5 @@ security.rtkit.enable = true;
   # ────────────────────────────────────────────────
   # Misc / Compatibility
   # ────────────────────────────────────────────────
-  system.stateVersion = "25.11";            # НЕ МЕНЯЙ без прочтения комментария!
+  system.stateVersion = "26.05";            # НЕ МЕНЯЙ без прочтения комментария!
 }
