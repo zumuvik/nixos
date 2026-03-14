@@ -24,11 +24,9 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   networking.hostName = "nixlensk323";          # ← раскомментируй и поменяй при желании
   programs.fish.enable = true;
-  # ────────────────────────────────────────────────
-  # Time & Localization
-  # ────────────────────────────────────────────────
-  # time.timeZone = "Europe/Amsterdam";     # ← включи нужный регион
-  # i18n.defaultLocale = "en_US.UTF-8";
+  time.timeZone = "Europe/Moscow";
+
+
 
   services.xserver.xkb = {
     layout = "us,ru";
@@ -136,32 +134,25 @@ security.rtkit.enable = true;
   services.blueman.enable = true;           # удобный bluetooth gui
   networking.wireguard.enable = true;
 
-  virtualisation.libvirtd.enable = true;
-  programs.virt-manager.enable = true; # Это поставит нужные утилиты, включая virsh
+
   
   # ────────────────────────────────────────────────
   # Packages (system-wide — только необходимое)
   # ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    gnome-boxes
-    qemu
     btop
-    xrandr
-    nwg-look
-    bibata-cursors
-    discord
-    
-    steam
+    xrandr hyprlock
+    nwg-look            
     # terminal & basics
     fastfetch
     micro
     kitty
-    htop zip unzip
-    git vesktop
+    zip unzip
+    git 
     nwg-displays
     wlr-randr cliphist wl-clipboard
     # wayland utils
-    waybar
+    
     mako mpvpaper remmina
       mpv fish 
     swww waypaper spotube scrcpy
@@ -170,12 +161,9 @@ security.rtkit.enable = true;
     rofi   playerctl       # или wofi — выбери один
     # wofi
     wl-clipboard libnotify
-    inputs.ayugram-desktop.packages.${pkgs.system}.ayugram-desktop
+    
     # apps
-    firefox
     pavucontrol
-    cava
-    throne                   # уже тянется через programs.throne, но на всякий
     kdePackages.qtsvg
     kdePackages.kio # needed since 25.11
         kdePackages.kio-fuse #to mount remote filesystems via FUSE
