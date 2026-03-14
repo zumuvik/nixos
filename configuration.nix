@@ -142,7 +142,7 @@ security.rtkit.enable = true;
   # Packages (system-wide — только необходимое)
   # ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    utm
+    btop
     xrandr
     nwg-look
     bibata-cursors
