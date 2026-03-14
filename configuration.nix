@@ -63,7 +63,7 @@
   # ────────────────────────────────────────────────
   users.users.zumuvik = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" ];
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" "disk" ];
    shell = pkgs.fish;      # лучше вынести в home-manager
   };
   security.sudo.extraRules = [
@@ -136,13 +136,14 @@ security.rtkit.enable = true;
   services.blueman.enable = true;           # удобный bluetooth gui
   networking.wireguard.enable = true;
 
-
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true; # Это поставит нужные утилиты, включая virsh
   
   # ────────────────────────────────────────────────
   # Packages (system-wide — только необходимое)
   # ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    gnome.gnome-boxes
+    gnome-boxes
     qemu
     btop
     xrandr
