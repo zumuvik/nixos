@@ -17,6 +17,7 @@
     steam
     firefox
     waybar # Можно оставить пока не допишете конфиг AGS
+    galaxy-buds-client
     bibata-cursors
     inputs.ayugram-desktop.packages.${pkgs.system}.default
 
