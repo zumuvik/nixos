@@ -108,7 +108,7 @@
   # ────────────────────────────────────────────────
   # Hardware
   # ────────────────────────────────────────────────
-
+  home-manager.backupFileExtension = "backup";
   programs.obs-studio = {
     enable = true;
 
@@ -138,7 +138,7 @@ security.rtkit.enable = true;
 
   services.blueman.enable = true;           # удобный bluetooth gui
   networking.wireguard.enable = true;
-  
+
 
 
   # ────────────────────────────────────────────────

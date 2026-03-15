@@ -57,6 +57,19 @@
     ];
   };
 
+  home.sessionVariables = {
+    EDITOR = "micro";
+    VISUAL = "micro";
+  };
+
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/plain" = [ "micro.desktop" ];
+      "application/x-zerosize" = [ "micro.desktop" ]; # для пустых файлов
+    };
+  };
+
   # Локализация
   home.language = {
     base = "ru_RU.UTF-8";
