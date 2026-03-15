@@ -1,33 +1,55 @@
-# /etc/nixos/home.nix
 { pkgs, inputs, ... }:
 
 {
+  # 1. Добавляем импорт модуля AGS из инпутов флейка
+  imports = [
+    inputs.ags.homeManagerModules.default
+  ];
+
   home.username = "zumuvik";
   home.homeDirectory = "/home/zumuvik";
 
-  # Сюда переносим пакеты из configuration.nix
   home.packages = with pkgs; [
     discord
     vesktop
     spotube
     cava
     steam
-    firefox waybar
+    firefox
+    waybar # Можно оставить пока не допишете конфиг AGS
     bibata-cursors
-    inputs.ayugram-desktop.packages.${pkgs.system}.default # Юзаем наш инпут
+    inputs.ayugram-desktop.packages.${pkgs.system}.default
+
+    # Рекомендуемые пакеты для работы виджетов AGS
+    sassc              # Для компиляции стилей scss -> css
+    brightnessctl      # Для управления яркостью через виджеты
+    playerctl          # Для управления музыкой
   ];
-  # Установка языка интерфейса, системы и формата региона
-  # В home.nix
+
+  # 2. Настройка AGS
+  programs.ags = {
+    enable = true;
+
+    # Путь к папке с конфигом (создайте её в /etc/nixos/ags или ~/.config/ags)
+    # configDir = ./ags;
+
+    extraPackages = with pkgs; [
+      gtksourceview
+      webkitgtk_6_0
+      accountsservice
+    ];
+  };
+
   home.language = {
     base = "ru_RU.UTF-8";
     address = "ru_RU.UTF-8";
     messages = "ru_RU.UTF-8";
   };
-  # В home.nix
+
   gtk = {
     enable = true;
     theme = {
-      name = "Adwaita-dark"; # Стандартная темная тема
+      name = "Adwaita-dark";
       package = pkgs.gnome-themes-extra;
     };
     gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
@@ -36,11 +58,9 @@
 
   qt = {
     enable = true;
-    platformTheme.name = "gtk"; # Заставляет Qt программы выглядеть как GTK
+    platformTheme.name = "gtk";
     style.name = "adwaita-dark";
   };
 
-
-  # Чтобы Home Manager работал, нужно указать версию
-  home.stateVersion = "26.05";
+  home.stateVersion = "25.05"; # Обратите внимание: версия должна соответствовать вашему каналу nixpkgs
 }
