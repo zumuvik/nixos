@@ -1,7 +1,6 @@
 { pkgs, inputs, ... }:
 
 {
-  # 1. Добавляем импорт модуля AGS из инпутов флейка
   imports = [
     inputs.ags.homeManagerModules.default
   ];
@@ -10,30 +9,36 @@
   home.homeDirectory = "/home/zumuvik";
 
   home.packages = with pkgs; [
-    discord
-    vesktop
-    spotube
-    cava
-    steam
-    firefox
-    waybar # Можно оставить пока не допишете конфиг AGS
-    galaxy-buds-client
-    bibata-cursors
-    inputs.ayugram-desktop.packages.${pkgs.system}.default
+    # Интерфейс и система
+    fastfetch micro kitty zip unzip git
+    mako swww waypaper waybar rofi
+    grim slurp wl-clipboard libnotify
+    pavucontrol nix-search
 
-    # Рекомендуемые пакеты для работы виджетов AGS
-    sassc              # Для компиляции стилей scss -> css
-    brightnessctl      # Для управления яркостью через виджеты
-    playerctl          # Для управления музыкой
+      xfce.thunar
+      xfce.thunar-archive-plugin
+      xfce.tumbler # для превью картинок
+
+    # Мультимедиа и работа
+    mpv mpvpaper spotube cava playerctl
+    discord vesktop firefox
+    scrcpy android-tools brightnessctl sassc
+
+    # Bluetooth & Софт для наушников
+    galaxy-buds-client
+
+    # Темы и кастом
+    bibata-cursors
+    nwg-look
+
+    # Пакеты из внешних инпутов
+    inputs.ayugram-desktop.packages.${pkgs.system}.default
   ];
 
-  # 2. Настройка AGS
+  # Настройка AGS
   programs.ags = {
     enable = true;
-
-    # Путь к папке с конфигом (создайте её в /etc/nixos/ags или ~/.config/ags)
-    # configDir = ./ags;
-
+    # configDir = ./ags; # Раскомментируй, если папка ags лежит рядом с home.nix
     extraPackages = with pkgs; [
       gtksourceview
       webkitgtk_6_0
@@ -41,12 +46,23 @@
     ];
   };
 
-  home.language = {
-    base = "ru_RU.UTF-8";
-    address = "ru_RU.UTF-8";
-    messages = "ru_RU.UTF-8";
+  # Настройка OBS (перенесено из системного конфига)
+  programs.obs-studio = {
+    enable = true;
+    plugins = with pkgs.obs-studio-plugins; [
+      obs-vaapi
+      obs-pipewire-audio-capture
+      wlrobs
+      obs-vkcapture
+    ];
   };
 
+  # Локализация
+  home.language = {
+    base = "ru_RU.UTF-8";
+  };
+
+  # Темы (под твой монохромный стиль)
   gtk = {
     enable = true;
     theme = {
@@ -63,5 +79,5 @@
     style.name = "adwaita-dark";
   };
 
-  home.stateVersion = "25.05"; # Обратите внимание: версия должна соответствовать вашему каналу nixpkgs
+  home.stateVersion = "25.11";
 }
