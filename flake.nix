@@ -14,7 +14,13 @@
       submodules = true;
       url = "https://github.com/ndfined-crp/ayugram-desktop/";
     };
+     ags = {
+       url = "github:Aylur/ags";
+       inputs.nixpkgs.follows = "nixpkgs";
+     };
   };
+
+
 
   outputs = { self, nixpkgs, home-manager, ... } @ inputs: {
     nixosConfigurations.nixlensk323 = nixpkgs.lib.nixosSystem {
