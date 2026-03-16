@@ -1,43 +1,103 @@
 { pkgs, inputs, ... }:
-
 {
   imports = [
     inputs.ags.homeManagerModules.default
+    inputs.nixvim.homeManagerModules.nixvim  # ← добавь эту строку
   ];
+
+  # Настройка nixvim прямо здесь (для начала)
+  programs.nixvim = {
+    enable = true;
+    defaultEditor = true;
+
+    viAlias = true;
+    vimAlias = true;
+
+    # Базовые настройки
+    opts = {
+      number = true;
+      relativenumber = true;
+
+      tabstop = 2;
+      shiftwidth = 2;
+      expandtab = true;
+
+      ignorecase = true;
+      smartcase = true;
+
+      cursorline = true;
+      termguicolors = true;
+      signcolumn = "yes";
+
+      mouse = "a";
+      clipboard = "unnamedplus";
+      undofile = true;
+      swapfile = false;
+    };
+
+    # Цветовая схема
+    colorschemes.gruvbox = {
+      enable = true;
+      settings.contrast = "hard";
+    };
+
+    # Leader key
+    globals.mapleader = " ";
+
+    # Простые кейбинды
+    keymaps = [
+      { mode = "n"; key = "<leader>w"; action = "<cmd>w<CR>"; }
+      { mode = "n"; key = "<leader>q"; action = "<cmd>q<CR>"; }
+    ];
+
+    # Базовые плагины
+    plugins = {
+      lualine.enable = true;
+      treesitter.enable = true;
+      neo-tree.enable = true;
+      telescope.enable = true;
+      which-key.enable = true;
+
+      # LSP
+      lsp = {
+        enable = true;
+        servers = {
+          nixd.enable = true;
+          bashls.enable = true;
+        };
+      };
+
+      # Автодополнение
+      cmp = {
+        enable = true;
+        autoEnableSources = true;
+      };
+    };
+  };
 
   home.username = "zumuvik";
   home.homeDirectory = "/home/zumuvik";
 
   home.packages = with pkgs; [
-    # Интерфейс и система
-    fastfetch micro kitty zip unzip git
+    # Убери micro отсюда
+    fastfetch kitty zip unzip git
     mako swww waypaper waybar rofi
     grim slurp wl-clipboard libnotify
     pavucontrol nix-search
-
-      xfce.thunar
-      xfce.thunar-archive-plugin
-      xfce.tumbler # для превью картинок
-
-    # Мультимедиа и работа
+    xfce.thunar
+    xfce.thunar-archive-plugin
+    xfce.tumbler
     mpv mpvpaper spotube cava playerctl
     discord vesktop firefox
     scrcpy android-tools brightnessctl sassc
-
-    # Bluetooth & Софт для наушников
     galaxy-buds-client
-
-    # Темы и кастом
     bibata-cursors
     nwg-look
-
-    # Пакеты из внешних инпутов
     inputs.ayugram-desktop.packages.${pkgs.system}.default
   ];
-  # Настройка AGS
+
   programs.ags = {
     enable = true;
-    # configDir = ./ags; # Раскомментируй, если папка ags лежит рядом с home.nix
     extraPackages = with pkgs; [
       gtksourceview
       webkitgtk_6_0
@@ -45,7 +105,6 @@
     ];
   };
 
-  # Настройка OBS (перенесено из системного конфига)
   programs.obs-studio = {
     enable = true;
     plugins = with pkgs.obs-studio-plugins; [
@@ -56,15 +115,17 @@
     ];
   };
 
+  home.sessionVariables = {
+    EDITOR = "nvim";   # ← поменяй на nvim
+    VISUAL = "nvim";
+  };
 
+  # Убери xdg.desktopEntries.micro и xdg.mimeApps для micro
 
-
-  # Локализация
   home.language = {
     base = "ru_RU.UTF-8";
   };
 
-  # Темы (под твой монохромный стиль)
   gtk = {
     enable = true;
     theme = {
