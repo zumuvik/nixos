@@ -34,7 +34,6 @@
     # Пакеты из внешних инпутов
     inputs.ayugram-desktop.packages.${pkgs.system}.default
   ];
-
   # Настройка AGS
   programs.ags = {
     enable = true;
@@ -57,29 +56,7 @@
     ];
   };
 
-  home.sessionVariables = {
-    EDITOR = "micro";
-    VISUAL = "micro";
-  };
 
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "text/plain" = [ "micro.desktop" ];
-      "application/x-zerosize" = [ "micro.desktop" ]; # для пустых файлов
-    };
-  };
-
-  # 1. Создаем "правильный" ярлык для micro, который сам открывает kitty
-  xdg.desktopEntries.micro = {
-    name = "Micro";
-    genericName = "Text Editor";
-    exec = "kitty -e micro %u"; # Теперь он сам знает, что запускаться надо в kitty
-    icon = "micro";
-    terminal = false; # ГЛАВНОЕ: ставим false, чтобы система не искала терминал сама
-    categories = [ "Utility" "TextEditor" ];
-    mimeType = [ "text/plain" ];
-  };
 
 
   # Локализация
