@@ -150,7 +150,6 @@ security.rtkit.enable = true;
     nwg-look
     # terminal & basics
     fastfetch
-    micro
     kitty
     zip unzip
     git
@@ -163,8 +162,7 @@ security.rtkit.enable = true;
     swww waypaper spotube scrcpy
     grim gh wireguard-tools
     slurp android-tools
-    rofi   playerctl       # или wofi — выбери один
-    # wofi
+    rofi   playerctl       
     wl-clipboard libnotify
 
     # apps
