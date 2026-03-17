@@ -90,7 +90,7 @@
     mpv mpvpaper spotube cava playerctl
     discord vesktop firefox
     scrcpy android-tools brightnessctl sassc
-    galaxy-buds-client
+    galaxy-buds-client micro
     bibata-cursors
     nwg-look 
     inputs.ayugram-desktop.packages.${pkgs.system}.default
