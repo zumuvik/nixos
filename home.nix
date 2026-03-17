@@ -92,7 +92,7 @@
     scrcpy android-tools brightnessctl sassc
     galaxy-buds-client
     bibata-cursors
-    nwg-look
+    nwg-look 
     inputs.ayugram-desktop.packages.${pkgs.system}.default
   ];
 
