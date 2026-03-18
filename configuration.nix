@@ -26,18 +26,15 @@
   time.timeZone = "Europe/Moscow";
   systemd.network.networks."40-enp8s0" = {
     matchConfig.Name = "enp8s0";
-    # Настройка адреса (если не DHCP)
     address = [ "192.168.3.155/24" ];
-
-    # Вот тут магия маршрутов с метриками
     routes = [
       {
-        # Основной путь через сервер
         Gateway = "192.168.3.1";
-        GatewayOnLink = true;
-        Metric = 10;
+        Metric = 1024;
       }
     ];
+    DHCP = "no";
+    DNS = [ "8.8.8.8" "1.1.1.1" ];
   };
 
 
