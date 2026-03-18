@@ -132,6 +132,8 @@
 
 
  hardware.opentabletdriver.enable = true;
+ hardware.uinput.enable = true;
+  boot.kernelModules = [ "uinput" ];
 security.rtkit.enable = true;
   hardware.bluetooth = {
     enable = true;
@@ -140,7 +142,7 @@ security.rtkit.enable = true;
 
   services.blueman.enable = true;           # удобный bluetooth gui
   networking.wireguard.enable = true;
-
+  
 
 
   # ────────────────────────────────────────────────
