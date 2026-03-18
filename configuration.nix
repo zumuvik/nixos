@@ -25,7 +25,30 @@
   networking.hostName = "nixlensk323";          # ← раскомментируй и поменяй при желании
   programs.fish.enable = true;
   time.timeZone = "Europe/Moscow";
+  networking.useNetworkd = true; # Включаем современный бэкенд
 
+  systemd.network.networks."40-enp8s0" = {
+    matchConfig.Name = "enp8s0";
+
+    # Настройка адреса (если не DHCP)
+    address = [ "192.168.3.155/24" ];
+
+    # Вот тут магия маршрутов с метриками
+    routes = [
+      {
+        # Основной путь через сервер
+        Gateway = "192.168.3.1";
+        GatewayOnLink = true;
+        Metric = 10;
+      }
+      {
+        # Резервный путь через роутер
+        Gateway = "192.168.1.1";
+        GatewayOnLink = true;
+        Metric = 100;
+      }
+    ];
+  };
 
 
   services.xserver.xkb = {
@@ -142,7 +165,7 @@ security.rtkit.enable = true;
 
   services.blueman.enable = true;           # удобный bluetooth gui
   networking.wireguard.enable = true;
-  
+
 
 
   # ────────────────────────────────────────────────
@@ -166,7 +189,7 @@ security.rtkit.enable = true;
     swww waypaper spotube scrcpy
     grim gh wireguard-tools
     slurp android-tools
-    rofi   playerctl       
+    rofi   playerctl
     wl-clipboard libnotify
 
     # apps
