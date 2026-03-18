@@ -80,7 +80,7 @@
 
   home.packages = with pkgs; [
     # Убери micro отсюда
-    opentabletdriver osu-lazer
+    osu-lazer
     fastfetch kitty zip unzip git
     mako swww waypaper waybar rofi
     grim slurp wl-clipboard libnotify

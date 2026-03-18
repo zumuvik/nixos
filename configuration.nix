@@ -148,7 +148,7 @@ security.rtkit.enable = true;
   # ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
     btop
-    xrandr hyprlock
+    xrandr hyprlock pkgs.opentabletdriver
     nwg-look
     # terminal & basics
     fastfetch
