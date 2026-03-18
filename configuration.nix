@@ -37,12 +37,6 @@
         GatewayOnLink = true;
         Metric = 10;
       }
-      {
-        # Резервный путь через роутер
-        Gateway = "192.168.1.1";
-        GatewayOnLink = true;
-        Metric = 100;
-      }
     ];
   };
 
