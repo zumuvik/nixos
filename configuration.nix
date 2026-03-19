@@ -202,3 +202,4 @@ security.rtkit.enable = true;
   # ────────────────────────────────────────────────
   system.stateVersion = "26.05";            # НЕ МЕНЯЙ без прочтения комментария!
 }
+# test change
