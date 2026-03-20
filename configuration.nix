@@ -21,7 +21,7 @@
   # Networking
   # ────────────────────────────────────────────────
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  networking.hostName = "nixlensk323";          # ← раскомментируй и поменяй при желании
+  networking.hostName = "nixlensk323";
   programs.fish.enable = true;
   time.timeZone = "Europe/Moscow";
   systemd.network.networks."40-enp8s0" = {
@@ -44,7 +44,7 @@
     options = "grp:alt_shift_toggle";
   };
 
-  console.useXkbConfig = true;   # применяет раскладку также в tty
+  console.useXkbConfig = true;
 
   nix.gc = {
   automatic = true;
@@ -58,10 +58,9 @@
   };
 
 
-    # Разрешаем несвободные пакеты (Discord, NVIDIA драйверы, Steam и т.д.)
     nixpkgs.config.allowUnfree = true;
 
-    # Твой остальной конфиг...
+
 
 
   swapDevices = [
@@ -78,7 +77,7 @@
   users.users.zumuvik = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" "disk" ];
-   shell = pkgs.fish;      # лучше вынести в home-manager
+   shell = pkgs.fish;
   };
   security.sudo.extraRules = [
     {
@@ -163,14 +162,12 @@ security.rtkit.enable = true;
     btop
     xrandr hyprlock pkgs.opentabletdriver
     nwg-look
-    # terminal & basics
     fastfetch
     kitty
     zip unzip
     git
     nwg-displays
     wlr-randr cliphist wl-clipboard
-    # wayland utils
 
     mako mpvpaper remmina
       mpv fish
@@ -182,11 +179,6 @@ security.rtkit.enable = true;
 
     # apps
     pavucontrol
-    kdePackages.qtsvg
-    kdePackages.kio # needed since 25.11
-        kdePackages.kio-fuse #to mount remote filesystems via FUSE
-        kdePackages.kio-extras #extra protocols support (sftp, fish and more)
-        kdePackages.dolphin
     nix-search            # поиск по пакетам nix
   ];
 

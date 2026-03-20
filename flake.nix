@@ -33,7 +33,6 @@
       specialArgs = { inherit inputs; };
       modules = [
         ./configuration.nix
-        # Подключаем Home Manager как модуль
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
