@@ -80,7 +80,7 @@
 
   home.packages = with pkgs; [
     # Убери micro отсюда
-    osu-lazer
+    osu-lazer-bin
     fastfetch kitty zip unzip git
     mako swww waypaper waybar rofi
     grim slurp wl-clipboard libnotify
