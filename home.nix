@@ -2,10 +2,10 @@
 {
   imports = [
     inputs.ags.homeManagerModules.default
-    inputs.nixvim.homeManagerModules.nixvim  # ← добавь эту строку
+    inputs.nixvim.homeManagerModules.nixvim  
   ];
 
-  # Настройка nixvim прямо здесь (для начала)
+
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
@@ -13,7 +13,7 @@
     viAlias = true;
     vimAlias = true;
 
-    # Базовые настройки
+    
     opts = {
       number = true;
       relativenumber = true;
@@ -35,22 +35,22 @@
       swapfile = false;
     };
 
-    # Цветовая схема
+    
     colorschemes.gruvbox = {
       enable = true;
       settings.contrast = "hard";
     };
 
-    # Leader key
+    # 
     globals.mapleader = " ";
 
-    # Простые кейбинды
+    
     keymaps = [
       { mode = "n"; key = "<leader>w"; action = "<cmd>w<CR>"; }
       { mode = "n"; key = "<leader>q"; action = "<cmd>q<CR>"; }
     ];
 
-    # Базовые плагины
+  
     plugins = {
       lualine.enable = true;
       treesitter.enable = true;
@@ -67,7 +67,7 @@
         };
       };
 
-      # Автодополнение
+      
       cmp = {
         enable = true;
         autoEnableSources = true;
@@ -79,7 +79,7 @@
   home.homeDirectory = "/home/zumuvik";
 
   home.packages = with pkgs; [
-    # Убери micro отсюда
+    
     osu-lazer-bin
     fastfetch kitty zip unzip git
     mako swww waypaper waybar rofi
@@ -117,11 +117,11 @@
   };
 
   home.sessionVariables = {
-    EDITOR = "nvim";   # ← поменяй на nvim
+    EDITOR = "nvim";   
     VISUAL = "nvim";
   };
 
-  # Убери xdg.desktopEntries.micro и xdg.mimeApps для micro
+
 
   home.language = {
     base = "ru_RU.UTF-8";
