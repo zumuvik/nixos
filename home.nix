@@ -2,7 +2,7 @@
 {
   imports = [
     inputs.ags.homeManagerModules.default
-    inputs.nixvim.homeManagerModules.nixvim  
+    inputs.nixvim.homeManagerModules.nixvim
   ];
 
 
@@ -13,7 +13,7 @@
     viAlias = true;
     vimAlias = true;
 
-    
+
     opts = {
       number = true;
       relativenumber = true;
@@ -35,22 +35,22 @@
       swapfile = false;
     };
 
-    
+
     colorschemes.gruvbox = {
       enable = true;
       settings.contrast = "hard";
     };
 
-    # 
+    #
     globals.mapleader = " ";
 
-    
+
     keymaps = [
       { mode = "n"; key = "<leader>w"; action = "<cmd>w<CR>"; }
       { mode = "n"; key = "<leader>q"; action = "<cmd>q<CR>"; }
     ];
 
-  
+
     plugins = {
       lualine.enable = true;
       treesitter.enable = true;
@@ -67,7 +67,7 @@
         };
       };
 
-      
+
       cmp = {
         enable = true;
         autoEnableSources = true;
@@ -79,7 +79,7 @@
   home.homeDirectory = "/home/zumuvik";
 
   home.packages = with pkgs; [
-    
+
     osu-lazer-bin
     fastfetch kitty zip unzip git
     mako swww waypaper waybar rofi
@@ -93,9 +93,18 @@
     scrcpy android-tools brightnessctl sassc
     galaxy-buds-client micro
     bibata-cursors
-    nwg-look 
+    nwg-look
     inputs.ayugram-desktop.packages.${pkgs.system}.default
   ];
+
+  programs.vscode = {
+    enable = true;
+    profiles.default.extensions = with pkgs.vscode-extensions; [
+      dracula-theme.theme-dracula
+      vscodevim.vim
+      yzhang.markdown-all-in-one
+    ];
+  };
 
   programs.ags = {
     enable = true;
@@ -117,7 +126,7 @@
   };
 
   home.sessionVariables = {
-    EDITOR = "nvim";   
+    EDITOR = "nvim";
     VISUAL = "nvim";
   };
 
