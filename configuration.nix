@@ -188,6 +188,13 @@ security.rtkit.enable = true;
    nerd-fonts.iosevka
   ];
 
+  services.openssh = {
+    enable = true;
+    settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = true;
+    };
+  };
 
   # ────────────────────────────────────────────────
   # Misc / Compatibility
