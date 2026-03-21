@@ -80,20 +80,30 @@
 
   home.packages = with pkgs; [
 
-    osu-lazer-bin
-    fastfetch kitty zip unzip git
-    mako swww waypaper waybar rofi
-    grim slurp wl-clipboard libnotify
-    pavucontrol nix-search
-    xfce.thunar
-    xfce.thunar-archive-plugin
-    xfce.tumbler
-    mpv mpvpaper spotube cava playerctl
-    discord vesktop firefox
-    scrcpy android-tools brightnessctl sassc
-    galaxy-buds-client micro
-    bibata-cursors
-    nwg-look
+    waybar
+   rofi
+   waypaper
+   nwg-look
+   nwg-displays
+  mpv
+  mpvpaper
+  cava
+  firefox
+  discord
+  micro
+  kitty
+  thunar
+  thunar-archive-plugin
+  tumbler
+  scrcpy
+  android-tools
+  remmina
+  pavucontrol
+  libnotify
+  cliphist
+  bibata-cursors
+  sassc
+   galaxy-buds-client
     inputs.ayugram-desktop.packages.${pkgs.system}.default
   ];
 
