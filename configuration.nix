@@ -159,23 +159,26 @@ security.rtkit.enable = true;
   # Packages (system-wide — только необходимое)
   # ────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    btop
-    xrandr hyprlock pkgs.opentabletdriver
-    nwg-look
-    fastfetch unrar
-    kitty
-    zip unzip
-    git
-    nwg-displays
-    wlr-randr cliphist wl-clipboard
-
-    mako mpvpaper remmina
-      mpv fish
-    swww waypaper spotube scrcpy
-    grim gh wireguard-tools
-    slurp android-tools
-    rofi   playerctl
-    wl-clipboard libnotify
+    osu-lazer-bin
+  git
+  gh
+  wireguard-tools
+  zip
+  unzip
+  unrar
+  xrandr
+  brightnessctl
+  opentabletdriver
+  grim
+  slurp
+  wl-clipboard
+  mako
+  swww
+  hyprlock
+  btop
+  fastfetch
+  playerctl
+    
 
     # apps
     pavucontrol
