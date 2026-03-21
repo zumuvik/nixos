@@ -24,19 +24,7 @@
   networking.hostName = "nixlensk323";
   programs.fish.enable = true;
   time.timeZone = "Europe/Moscow";
-  systemd.network.networks."40-enp8s0" = {
-    matchConfig.Name = "enp8s0";
-    address = [ "192.168.3.155/24" ];
-    routes = [
-      {
-        Destination = "0.0.0.0/0";
-        Gateway = "192.168.3.1";
-        Metric = 1024;
-      }
-    ];
-    DHCP = "no";
-    DNS = [ "1.1.1.1" "8.8.8.8" ];
-  };
+  networking.networkmanager.enable = true;
 
 
   services.xserver.xkb = {
@@ -178,7 +166,7 @@ security.rtkit.enable = true;
   btop
   fastfetch
   playerctl
-    
+  networkmanagerapplet
 
     # apps
     pavucontrol
