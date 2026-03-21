@@ -162,7 +162,7 @@ security.rtkit.enable = true;
     btop
     xrandr hyprlock pkgs.opentabletdriver
     nwg-look
-    fastfetch
+    fastfetch unrar
     kitty
     zip unzip
     git
