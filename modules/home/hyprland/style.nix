@@ -19,7 +19,7 @@
            enabled = true;
            range = 8;
            render_power = 4;
-           color = "rgba(1a1a1aee)"
+           color = "rgba(1a1a1aee)";
        };
 
        blur = {
@@ -34,7 +34,7 @@
    };
 
    animations = {
-       enabled = yes;
+       enabled = true;
        bezier = [
         "easeOutQuint, 0.23, 1, 0.32, 1"
         "quick, 0.15, 0, 0.1, 1"
