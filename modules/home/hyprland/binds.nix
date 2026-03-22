@@ -20,7 +20,7 @@
 
       # NixOS Configuration
       "R_CONTROL, Delete, exec, $terminal --class floating_config -e micro /etc/nixos/configuration.nix"
-
+      "$mainMod, space, togglefloating"
       # Config Picker
       "$mainMod, T, exec, bash ~/.config/hypr/scripts/config_picker.sh"
       "R_CONTROL, code:110, exec, bash ~/.config/hypr/scripts/config_picker.sh"

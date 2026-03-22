@@ -10,29 +10,34 @@
     };
 
     nixvim = {
-          url = "github:nix-community/nixvim";
-          inputs.nixpkgs.follows = "nixpkgs";
-        };
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     ayugram-desktop = {
       type = "git";
       submodules = true;
       url = "https://github.com/ndfined-crp/ayugram-desktop/";
     };
-     ags = {
-       url = "github:Aylur/ags";
-       inputs.nixpkgs.follows = "nixpkgs";
-     };
+
+    ags = {
+      url = "github:Aylur/ags";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-
-
-  outputs = { self, nixpkgs, home-manager, ... } @ inputs: {
+  outputs = { self, nixpkgs, home-manager, ... } @ inputs:
+  let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in
+  {
     nixosConfigurations.nixlensk323 = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+      inherit system;
       specialArgs = { inherit inputs; };
+
       modules = [
-        ./configuration.nix
+        ./hosts/nixlensk323
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
