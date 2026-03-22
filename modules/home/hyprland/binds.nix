@@ -1,14 +1,10 @@
 { config, ... }:
-let
-  sD = "${config.home.homeDirectory}/.config/hypr/scripts";
-  term = "kitty";
-  fileManager = "Thunar";
-in
 {
   wayland.windowManager.hyprland.settings = {
     "$mainMod" = "SUPER";
-    "$terminal" = term;
-    "$fileManager" = fileManager;
+    "$terminal" = "kitty";
+    "$fileManager" = "Thunar";
+    "$sD" = "${config.home.homeDirectory}/.config/hypr/scripts";
 
     bind = [
       # General
@@ -18,7 +14,22 @@ in
       "$mainMod, M, exit,"
       "$mainMod, V, togglefloating"
       "$mainMod SHIFT, R, exec, hyprctl reload"
+      "$mainMod SHIFT, F, fullscreen, 0"
+      "$mainMod CTRL, F, fullscreen, 1"
+      "$mainMod, D, exec, pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,window"
+
+      # NixOS Configuration
       "R_CONTROL, Delete, exec, $terminal --class floating_config -e micro /etc/nixos/configuration.nix"
+
+      # Config Picker
+      "$mainMod, T, exec, bash ~/.config/hypr/scripts/config_picker.sh"
+      "R_CONTROL, code:110, exec, bash ~/.config/hypr/scripts/config_picker.sh"
+
+      # Window Navigation
+      "$mainMod, left, movefocus, l"
+      "$mainMod, right, movefocus, r"
+      "$mainMod, up, movefocus, u"
+      "$mainMod, down, movefocus, d"
 
       # Workspaces
       "$mainMod, 1, workspace, 1"
@@ -44,9 +55,11 @@ in
       "$mainMod SHIFT, 9, movetoworkspace, 9"
       "$mainMod SHIFT, 0, movetoworkspace, 10"
 
-      # Custom
+      # Screenshot
       "SUPER_SHIFT, S, exec, grim -g \"$(slurp)\" - | wl-copy"
       "SHIFT, Print, exec, grim - | wl-copy"
+
+      # Custom
       "$mainMod, P, exec, ~/.local/bin/nix-pkg-manage.sh"
       "SUPER, Caps_Lock, exec, ~/.local/bin/ayu-toggle.sh"
     ];
@@ -60,8 +73,25 @@ in
       ",XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"
       ",XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
       ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+      ",XF86AudioMicMute, exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
       ",XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+"
       ",XF86MonBrightnessDown, exec, brightnessctl -e4 -n2 set 5%-"
+    ];
+
+    bindl = [
+      ",XF86AudioNext, exec, playerctl next"
+      ",XF86AudioPause, exec, playerctl play-pause"
+      ",XF86AudioPlay, exec, playerctl play-pause"
+      ",XF86AudioPrev, exec, playerctl previous"
+    ];
+
+
+    bindd = [
+    "$mainMod ALT, V, clipboard manager, exec, $sD/ClipManager.sh"
+    ];
+    binde = [
+      "$mainMod, mouse_down, workspace, e+1"
+      "$mainMod, mouse_up, workspace, e-1"
     ];
   };
 }
