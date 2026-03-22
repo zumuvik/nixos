@@ -178,6 +178,6 @@
     galaxy-buds-client
 
     # Custom packages from inputs
-    inputs.ayugram-desktop.packages.${pkgs.system}.default
+    inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
