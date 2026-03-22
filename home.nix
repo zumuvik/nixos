@@ -2,18 +2,19 @@
 {
   imports = [
     inputs.ags.homeManagerModules.default
-    inputs.nixvim.homeManagerModules.nixvim  
+    inputs.nixvim.homeModules.nixvim
+     ./modules/home/hyprland
   ];
 
 
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
-
+    plugins.web-devicons.enable = true;
     viAlias = true;
     vimAlias = true;
 
-    
+
     opts = {
       number = true;
       relativenumber = true;
@@ -35,22 +36,22 @@
       swapfile = false;
     };
 
-    
+
     colorschemes.gruvbox = {
       enable = true;
       settings.contrast = "hard";
     };
 
-    # 
+    #
     globals.mapleader = " ";
 
-    
+
     keymaps = [
       { mode = "n"; key = "<leader>w"; action = "<cmd>w<CR>"; }
       { mode = "n"; key = "<leader>q"; action = "<cmd>q<CR>"; }
     ];
 
-  
+
     plugins = {
       lualine.enable = true;
       treesitter.enable = true;
@@ -67,7 +68,7 @@
         };
       };
 
-      
+
       cmp = {
         enable = true;
         autoEnableSources = true;
@@ -79,23 +80,38 @@
   home.homeDirectory = "/home/zumuvik";
 
   home.packages = with pkgs; [
-    
-    osu-lazer-bin
-    fastfetch kitty zip unzip git
-    mako swww waypaper waybar rofi
-    grim slurp wl-clipboard libnotify
-    pavucontrol nix-search
-    xfce.thunar
-    xfce.thunar-archive-plugin
-    xfce.tumbler
-    mpv mpvpaper spotube cava playerctl
-    discord vesktop firefox
-    scrcpy android-tools brightnessctl sassc
-    galaxy-buds-client micro
-    bibata-cursors
-    nwg-look 
+
+    waybar
+   rofi
+   waypaper
+   nwg-look
+   nwg-displays
+  mpv
+  mpvpaper
+  cava
+  firefox
+  discord
+  micro
+  kitty
+  thunar
+  thunar-archive-plugin
+  tumbler
+  scrcpy
+  android-tools
+  remmina
+  pavucontrol
+  libnotify
+  cliphist
+  bibata-cursors
+  sassc
+   galaxy-buds-client
     inputs.ayugram-desktop.packages.${pkgs.system}.default
   ];
+
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscodium.fhs;
+  };
 
   programs.ags = {
     enable = true;
@@ -117,7 +133,7 @@
   };
 
   home.sessionVariables = {
-    EDITOR = "nvim";   
+    EDITOR = "nvim";
     VISUAL = "nvim";
   };
 
@@ -126,6 +142,7 @@
   home.language = {
     base = "ru_RU.UTF-8";
   };
+  dconf.enable = false;
 
   gtk = {
     enable = true;
