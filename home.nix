@@ -2,8 +2,8 @@
 {
   imports = [
     inputs.ags.homeManagerModules.default
-    inputs.nixvim.homeManagerModules.nixvim
-    ./modules/home/hyprland
+    inputs.nixvim.homeModules.nixvim
+     ./modules/home/hyprland
   ];
 
 
@@ -142,6 +142,7 @@
   home.language = {
     base = "ru_RU.UTF-8";
   };
+  dconf.enable = false;
 
   gtk = {
     enable = true;
