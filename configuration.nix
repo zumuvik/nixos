@@ -4,6 +4,10 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./hosts/nixlensk323/system.nix
+    ./hosts/nixlensk323/zumuvik.nix
+    ./modules/system/services.nix
+    ./modules/system/hardware.nix
   ];
 
   # ────────────────────────────────────────────────
@@ -25,7 +29,7 @@
   programs.fish.enable = true;
   time.timeZone = "Europe/Moscow";
   networking.networkmanager.enable = true;
-
+  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
 
   services.xserver.xkb = {
     layout = "us,ru";
@@ -37,14 +41,8 @@
   nix.gc = {
   automatic = true;
       dates = "daily";
-      options = "--delete-older-than 3d";
+      options = "--delete-older-than 7d";
     };
-
-  systemd.timers.nix_gc = {
-    enable = true;
-    unitConfig.Timer = "OnCalendar=daily";
-  };
-
 
     nixpkgs.config.allowUnfree = true;
 
@@ -88,18 +86,11 @@
   # ────────────────────────────────────────────────
   # Desktop / Wayland / Hyprland
   # ────────────────────────────────────────────────
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-     withUWSM = true;                     # ← можно включить в 2025+ для лучшей стабильности сессии
-  };
-
-  # Throne (GUI прокси-менеджер с TUN-режимом)
   programs.throne = {
     enable = true;
     tunMode = {
       enable = true;
-      setuid = true;                     # создаёт SUID-враппер
+      setuid = true;
     };
   };
 
@@ -113,16 +104,16 @@
     enable = true;
 
     plugins = with pkgs.obs-studio-plugins; [
-      obs-vaapi                # аппаратное ускорение AMD (Vega)
+      obs-vaapi
       obs-pipewire-audio-capture
-      wlrobs                   # захват экрана на Wayland
-      obs-vkcapture            # захват игр через Vulkan
+      wlrobs
+      obs-vkcapture
       obs-gstreamer
     ];
   };
 
   # Важно для AMD VAAPI
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
 
   };
@@ -138,7 +129,7 @@ security.rtkit.enable = true;
     powerOnBoot = true;
   };
 
-  services.blueman.enable = true;           # удобный bluetooth gui
+  services.blueman.enable = true;
   networking.wireguard.enable = true;
 
 
@@ -183,12 +174,12 @@ security.rtkit.enable = true;
     enable = true;
     settings = {
         PermitRootLogin = "no";
-        PasswordAuthentication = true;
+        PasswordAuthentication = false;
     };
   };
 
   # ────────────────────────────────────────────────
   # Misc / Compatibility
   # ────────────────────────────────────────────────
-  system.stateVersion = "26.05";            # НЕ МЕНЯЙ без прочтения комментария!
+  system.stateVersion = "25.11";            # НЕ МЕНЯЙ без прочтения комментария!
 }

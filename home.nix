@@ -3,13 +3,14 @@
   imports = [
     inputs.ags.homeManagerModules.default
     inputs.nixvim.homeManagerModules.nixvim
+    ./modules/home/hyprland
   ];
 
 
   programs.nixvim = {
     enable = true;
     defaultEditor = true;
-
+    plugins.web-devicons.enable = true;
     viAlias = true;
     vimAlias = true;
 
