@@ -86,6 +86,7 @@
   environment.systemPackages = with pkgs; [
     osu-lazer-bin
     git
+    wget
     gh
     wireguard-tools
     zip
