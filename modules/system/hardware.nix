@@ -25,6 +25,9 @@
   hardware.uinput.enable = true;
   boot.kernelModules = [ "uinput" ];
 
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
+
   # ────────────────────────────────────────────────────────
   # Real-Time Audio
   # ────────────────────────────────────────────────────────

@@ -141,6 +141,11 @@
     ];
   };
 
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode.fhs;
+  };
+
   # ────────────────────────────────────────────────────────
   # Core Packages
   # ────────────────────────────────────────────────────────
@@ -176,6 +181,10 @@
     bibata-cursors
     sassc
     galaxy-buds-client
+    virt-manager
+    qemu
+    libvirt
+    virt-viewer
 
     # Custom packages from inputs
     inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default

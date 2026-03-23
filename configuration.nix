@@ -39,11 +39,25 @@
   # ────────────────────────────────────────────────────────
   # Fonts (общее для всех)
   # ────────────────────────────────────────────────────────
-  fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.iosevka
+  i18n.supportedLocales = [
+    "en_US.UTF-8/UTF-8"
+    "ru_RU.UTF-8/UTF-8"
+    "ja_JP.UTF-8/UTF-8"
   ];
 
+
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.iosevka
+      noto-fonts-cjk-serif
+      noto-fonts
+      noto-fonts-color-emoji
+      dejavu_fonts
+      liberation_ttf          # ← Правильно!
+    ];
+  };
   # ────────────────────────────────────────────────────────
   # Home Manager (общее)
   # ────────────────────────────────────────────────────────
