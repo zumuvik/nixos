@@ -25,6 +25,13 @@
       "$mainMod, T, exec, bash ~/.config/hypr/scripts/config_picker.sh"
       "R_CONTROL, code:110, exec, bash ~/.config/hypr/scripts/config_picker.sh"
 
+
+      "SUPER, Tab, workspace, e+1"
+
+
+      "ALT, Tab, cyclenext,"
+      "ALT, Tab, bringactivetotop,"
+
       # Window Navigation
       "$mainMod, left, movefocus, l"
       "$mainMod, right, movefocus, r"
@@ -63,6 +70,7 @@
       "$mainMod, P, exec, ~/.local/bin/nix-pkg-manage.sh"
       "SUPER, Caps_Lock, exec, ~/.local/bin/ayu-toggle.sh"
     ];
+
 
     bindm = [
       "$mainMod, mouse:272, movewindow"

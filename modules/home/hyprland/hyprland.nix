@@ -21,6 +21,11 @@
         follow_mouse = 1;
         sensitivity = 0;
         touchpad.natural_scroll = false;
+        scroll_method = "on_button_down";
+        scroll_button = 276;
+        scroll_button_lock = false;
+        scroll_factor = 1.0;
+        natural_scroll = false;
       };
       misc = {
         force_default_wallpaper = 0;
@@ -37,7 +42,7 @@
       ];
       windowrule = [
         "suppress_event maximize, match:class .*"
-        "no_focus on, match:title ^$"
+
       ];
     }
   ];
