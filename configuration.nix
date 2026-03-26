@@ -4,20 +4,23 @@
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ./hosts/nixlensk323/hardware-configuration.nix
     ./modules/system
   ];
 
   # ────────────────────────────────────────────────────────
   # Boot & Kernel (общее для всех хостов)
   # ────────────────────────────────────────────────────────
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
+    boot.loader = {
       efi.canTouchEfiVariables = true;
+      grub = {
+        enable = true;
+        device = "nodev";
+        efiSupport = true;
+        useOSProber = false;
+        theme = pkgs.nixos-grub2-theme;
+      };
     };
-    kernelPackages = pkgs.linuxPackages_latest;
-  };
 
   # ────────────────────────────────────────────────────────
   # Nix Settings (общее)
@@ -30,6 +33,9 @@
     dates = "daily";
     options = "--delete-older-than 7d";
   };
+
+  programs.nix-ld.enable = true;
+
 
   # ────────────────────────────────────────────────────────
   # Console (общее)

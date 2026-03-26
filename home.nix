@@ -1,6 +1,7 @@
 { pkgs, inputs, ... }:
 {
   imports = [
+    inputs.nixcord.homeModules.nixcord
     inputs.ags.homeManagerModules.default
     inputs.nixvim.homeModules.nixvim
     ./modules/home
@@ -44,6 +45,38 @@
     enable = true;
     platformTheme.name = "gtk";
     style.name = "adwaita-dark";
+  };
+
+
+  services.hypridle = {
+    enable = true;
+    settings = {
+      general = {
+        lock_cmd = "pidof hyprlock || hyprlock"; # команда для блокировки
+        before_sleep_cmd = "loginctl lock-session";    # блокировка перед сном
+        after_sleep_cmd = "hyprctl dispatch dpms on";  # включить монитор после пробуждения
+      };
+
+      listener = [
+        # 1. Через 5 минут (300 сек) — Блокировка экрана
+        {
+          timeout = 300;
+          on-timeout = "loginctl lock-session";
+        }
+
+        # 2. Через 10 минут (600 сек) — Спящий режим (Suspend)
+        {
+          timeout = 600;
+          on-timeout = "systemctl suspend";
+        }
+
+        # 3. Через 20 минут (1200 сек) — Гибернация
+        {
+          timeout = 1200;
+          on-timeout = "systemctl hibernate";
+        }
+      ];
+    };
   };
 
   # ────────────────────────────────────────────────────────
@@ -116,6 +149,10 @@
     package = pkgs.vscodium.fhs;
   };
 
+  xdg.configFile."xfce4/helpers.rc".text = ''
+    TerminalEmulator=kitty
+  '';
+
   # ────────────────────────────────────────────────────────
   # AGS (System tray/widgets)
   # ────────────────────────────────────────────────────────
@@ -141,10 +178,29 @@
     ];
   };
 
-  programs.vscode = {
-    enable = true;
-    package = pkgs.vscode.fhs;
-  };
+   programs.nixcord = {
+     enable = true;
+     vesktop.enable = true;
+
+     config = {
+       useQuickCss = true;
+       themeLinks = [
+         "https://raw.githubusercontent.com/refact0r/midnight-discord/master/midnight.css"
+       ];
+       frameless = true;
+
+       plugins = {
+         fakeNitro.enable = true;
+         shikiCodeblocks.enable = true;
+         noTypingAnimation.enable = true;
+
+
+       };
+     };
+   };
+
+
+
 
   # ────────────────────────────────────────────────────────
   # Core Packages
@@ -164,7 +220,6 @@
     firefox
 
     # Communication
-    discord
 
     # Utilities
     micro
