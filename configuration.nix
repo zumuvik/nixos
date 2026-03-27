@@ -4,26 +4,25 @@
 
 {
   imports = [
-    ./hosts/nixlensk323/hardware-configuration.nix
     ./modules/system
   ];
 
   # ────────────────────────────────────────────────────────
   # Boot & Kernel (общее для всех хостов)
   # ────────────────────────────────────────────────────────
-    boot.loader = {
-      efi.canTouchEfiVariables = true;
-      grub = {
-        enable = true;
-        device = "nodev";
-        efiSupport = true;
-        useOSProber = false;
-      };
-      grub2-theme = {
-        enable = true;
-        theme = "tela";
-      };
+  boot.loader = {
+    efi.canTouchEfiVariables = true;
+    grub = {
+      enable = true;
+      device = lib.mkDefault "nodev";
+      efiSupport = true;
+      useOSProber = false;
     };
+    grub2-theme = {
+      enable = true;
+      theme = "tela";
+    };
+  };
 
   # ────────────────────────────────────────────────────────
   # Nix Settings (общее)
@@ -39,7 +38,6 @@
 
   programs.nix-ld.enable = true;
 
-
   # ────────────────────────────────────────────────────────
   # Console (общее)
   # ────────────────────────────────────────────────────────
@@ -48,25 +46,12 @@
   # ────────────────────────────────────────────────────────
   # Locale & i18n (общее для всех)
   # ────────────────────────────────────────────────────────
-  i18n.defaultLocale = "ru_RU.UTF-8";
+  i18n.defaultLocale = lib.mkDefault "ru_RU.UTF-8";
   i18n.extraLocaleSettings = {
     LC_ALL = "en_US.UTF-8";
     LANG = "ja_JP.UTF-8";
   };
 
-
-  fonts = {
-    enableDefaultPackages = true;
-    packages = with pkgs; [
-      nerd-fonts.jetbrains-mono
-      nerd-fonts.iosevka
-      noto-fonts-cjk-serif
-      noto-fonts
-      noto-fonts-color-emoji
-      dejavu_fonts
-      liberation_ttf          # ← Правильно!
-    ];
-  };
   # ────────────────────────────────────────────────────────
   # Home Manager (общее)
   # ────────────────────────────────────────────────────────
