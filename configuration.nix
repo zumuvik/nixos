@@ -44,6 +44,22 @@
   console.useXkbConfig = true;
 
   # ────────────────────────────────────────────────────────
+  # Fonts (общее для всех)
+  # ────────────────────────────────────────────────────────
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.iosevka
+      noto-fonts-cjk-serif
+      noto-fonts
+      noto-fonts-color-emoji
+      dejavu_fonts
+      liberation_ttf
+    ];
+  };
+
+  # ────────────────────────────────────────────────────────
   # Locale & i18n (общее для всех)
   # ────────────────────────────────────────────────────────
   i18n.defaultLocale = lib.mkDefault "ru_RU.UTF-8";
