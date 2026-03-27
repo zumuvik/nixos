@@ -12,7 +12,7 @@
   # ────────────────────────────────────────────────────────
   home.username = "zumuvik";
   home.homeDirectory = "/home/zumuvik";
-  home.stateVersion = "25.11";
+  home.stateVersion = "24.11";
 
   # ────────────────────────────────────────────────────────
   # Environment Variables
@@ -39,6 +39,8 @@
     };
     gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
     gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
+    gtk4.theme.name = "Adwaita-dark";
+    gtk4.theme.package = pkgs.gnome-themes-extra;
   };
 
   qt = {
@@ -47,30 +49,27 @@
     style.name = "adwaita-dark";
   };
 
-
+  # ────────────────────────────────────────────────────────
+  # Hypridle (Screen lock/sleep/hibernate)
+  # ────────────────────────────────────────────────────────
   services.hypridle = {
     enable = true;
     settings = {
       general = {
-        lock_cmd = "pidof hyprlock || hyprlock"; # команда для блокировки
-        before_sleep_cmd = "loginctl lock-session";    # блокировка перед сном
-        after_sleep_cmd = "hyprctl dispatch dpms on";  # включить монитор после пробуждения
+        lock_cmd = "pidof hyprlock || hyprlock";
+        before_sleep_cmd = "loginctl lock-session";
+        after_sleep_cmd = "hyprctl dispatch dpms on";
       };
 
       listener = [
-        # 1. Через 5 минут (300 сек) — Блокировка экрана
         {
           timeout = 300;
           on-timeout = "loginctl lock-session";
         }
-
-        # 2. Через 10 минут (600 сек) — Спящий режим (Suspend)
         {
           timeout = 600;
           on-timeout = "systemctl suspend";
         }
-
-        # 3. Через 20 минут (1200 сек) — Гибернация
         {
           timeout = 1200;
           on-timeout = "systemctl hibernate";
