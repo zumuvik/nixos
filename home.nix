@@ -207,7 +207,4 @@
     # Custom packages from inputs
     inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
-
-  # Hyprlock configuration
-  home.file.".config/hypr/hyprlock.conf".source = ./modules/home/hyprland/hyprlock.conf;
 }
