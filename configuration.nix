@@ -52,12 +52,6 @@
     QT_STYLE_OVERRIDE = "adwaita-dark";
   };
 
-  # GTK dark theme settings
-  gtk = {
-    enable = true;
-    theme.name = "Adwaita-dark";
-  };
-
   # ────────────────────────────────────────────────────────
   # Fonts (общее для всех)
   # ────────────────────────────────────────────────────────
