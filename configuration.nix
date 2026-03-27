@@ -71,11 +71,7 @@
   # ────────────────────────────────────────────────────────
   # Locale & i18n (общее для всех)
   # ────────────────────────────────────────────────────────
-  i18n.defaultLocale = lib.mkDefault "ru_RU.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ALL = "en_US.UTF-8";
-    LANG = "ja_JP.UTF-8";
-  };
+  i18n.defaultLocale = "ru_RU.UTF-8";
 
   # ────────────────────────────────────────────────────────
   # Home Manager (общее)
