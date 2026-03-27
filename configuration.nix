@@ -44,6 +44,21 @@
   console.useXkbConfig = true;
 
   # ────────────────────────────────────────────────────────
+  # Dark Theme (общее для всех)
+  # ────────────────────────────────────────────────────────
+  environment.sessionVariables = {
+    QT_QPA_PLATFORMTHEME = "gtk";
+    GTK_THEME = "Adwaita-dark";
+    QT_STYLE_OVERRIDE = "adwaita-dark";
+  };
+
+  # GTK dark theme settings
+  gtk = {
+    enable = true;
+    theme.name = "Adwaita-dark";
+  };
+
+  # ────────────────────────────────────────────────────────
   # Fonts (общее для всех)
   # ────────────────────────────────────────────────────────
   fonts = {
