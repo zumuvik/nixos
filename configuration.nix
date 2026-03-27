@@ -18,7 +18,10 @@
         device = "nodev";
         efiSupport = true;
         useOSProber = false;
-        theme = pkgs.nixos-grub2-theme;
+      };
+      grub2-theme = {
+        enable = true;
+        theme = "tela";
       };
     };
 
@@ -43,13 +46,13 @@
   console.useXkbConfig = true;
 
   # ────────────────────────────────────────────────────────
-  # Fonts (общее для всех)
+  # Locale & i18n (общее для всех)
   # ────────────────────────────────────────────────────────
-  i18n.supportedLocales = [
-    "en_US.UTF-8/UTF-8"
-    "ru_RU.UTF-8/UTF-8"
-    "ja_JP.UTF-8/UTF-8"
-  ];
+  i18n.defaultLocale = "ru_RU.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_ALL = "en_US.UTF-8";
+    LANG = "ja_JP.UTF-8";
+  };
 
 
   fonts = {
@@ -72,5 +75,5 @@
   # ────────────────────────────────────────────────────────
   # System State Version (НЕ МЕНЯЙ)
   # ────────────────────────────────────────────────────────
-  system.stateVersion = "25.11";
+  system.stateVersion = "24.11";
 }

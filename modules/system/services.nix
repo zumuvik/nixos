@@ -39,11 +39,10 @@
   # ────────────────────────────────────────────────────────
   xdg.portal = {
     enable = true;
-    config.common.default = "*";  # ← добавить эту строку
+    config.common.default = "*";
     extraPortals = with pkgs; [
       xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
     ];
   };
-
 }

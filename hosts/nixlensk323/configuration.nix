@@ -24,6 +24,8 @@
   # ────────────────────────────────────────────────────────
   # Swap (хост-специфичный)
   # ────────────────────────────────────────────────────────
+  # Примечание: swapDevices в hardware-configuration.nix = [],
+  # этот swapfile добавляется отдельно
   swapDevices = [
     {
       device = "/swap/swapfile";
@@ -32,11 +34,11 @@
   ];
 
   zramSwap = {
-      enable = true;
-      algorithm = "zstd";
-      memoryPercent = 50;
-      priority = 10;
-    };
+    enable = true;
+    algorithm = "zstd";
+    memoryPercent = 50;
+    priority = 10;
+  };
 
   # ────────────────────────────────────────────────────────
   # Про zumuvik
@@ -86,18 +88,8 @@
   # ────────────────────────────────────────────────────────
   # Hardware-specific (для этого ПК)
   # ────────────────────────────────────────────────────────
-  hardware.graphics.enable = true;
-  hardware.opentabletdriver.enable = true;
-  hardware.uinput.enable = true;
-  boot.kernelModules = [ "uinput" ];
-
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
-  };
-
-  services.blueman.enable = true;
-  networking.wireguard.enable = true;
+  # hardware.graphics, bluetooth, opentabletdriver, uinput
+  # уже определены в modules/system/hardware.nix
 
   # ────────────────────────────────────────────────────────
   # System packages (хост-специфичные, если нужны)
@@ -121,6 +113,7 @@
     swww
     hyprlock
     btop
+    opencode
     fastfetch
     playerctl
     networkmanagerapplet

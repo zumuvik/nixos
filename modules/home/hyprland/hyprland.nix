@@ -25,7 +25,6 @@
         scroll_button = 276;
         scroll_button_lock = false;
         scroll_factor = 1.0;
-        natural_scroll = false;
       };
       misc = {
         force_default_wallpaper = 0;
