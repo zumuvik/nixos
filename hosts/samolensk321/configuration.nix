@@ -4,49 +4,24 @@
   # ────────────────────────────────────────────────────────
   # Networking & Hostname
   # ────────────────────────────────────────────────────────
-  networking.hostName = "nixlensk323";
+  networking.hostName = "samolensk321";
   time.timeZone = "Europe/Moscow";
 
-  boot = {
-    resumeDevice = "/dev/disk/by-uuid/6703b7a2-d8ba-4f63-8fc0-5d770b59df7f";
-    kernelParams = [
-      "resume_offset=4988160"
-    ];
-  };
+  networking.networkmanager.enable = true;
 
   services.xserver.xkb = {
     layout = "us,ru";
     options = "grp:alt_shift_toggle";
   };
 
-  networking.networkmanager.enable = true;
-  networking.firewall.checkReversePath = "loose";
-
   programs.fish.enable = true;
-
-  # ────────────────────────────────────────────────────────
-  # Swap
-  # ────────────────────────────────────────────────────────
-  swapDevices = [
-    {
-      device = "/swap/swapfile";
-      size = 32768;
-    }
-  ];
-
-  zramSwap = {
-    enable = true;
-    algorithm = "zstd";
-    memoryPercent = 50;
-    priority = 10;
-  };
 
   # ────────────────────────────────────────────────────────
   # User
   # ────────────────────────────────────────────────────────
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" "disk" ];
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" ];
     shell = pkgs.fish;
   };
 
@@ -66,20 +41,17 @@
   ];
 
   # ────────────────────────────────────────────────────────
-  # Steam + Gaming
+  # Swap + Zram
   # ────────────────────────────────────────────────────────
-  programs.steam = {
+  zramSwap = {
     enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    extraPackages = with pkgs; [
-      mangohud
-      gamemode
-    ];
+    algorithm = "zstd";
+    memoryPercent = 50;
+    priority = 10;
   };
 
   # ────────────────────────────────────────────────────────
-  # System packages (host-specific)
+  # System packages (laptop-specific)
   # ────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
     osu-lazer-bin
@@ -87,10 +59,6 @@
     wget
     gh
     wireguard-tools
-    zip
-    unzip
-    unrar
-    xrandr
     brightnessctl
     opentabletdriver
     grim
@@ -100,11 +68,9 @@
     swww
     hyprlock
     btop
-    opencode
     fastfetch
     playerctl
     networkmanagerapplet
     pavucontrol
-    nix-search
   ];
 }

@@ -1,4 +1,5 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, username, ... }:
+
 {
   imports = [
     inputs.nixcord.homeModules.nixcord
@@ -10,44 +11,15 @@
   # ────────────────────────────────────────────────────────
   # Home Manager Base Settings
   # ────────────────────────────────────────────────────────
-  home.username = "zumuvik";
-  home.homeDirectory = "/home/zumuvik";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
   home.stateVersion = "24.11";
-
-  # ────────────────────────────────────────────────────────
-  # Environment Variables
-  # ────────────────────────────────────────────────────────
-  home.sessionVariables = {
-    EDITOR = "nvim";
-    VISUAL = "nvim";
-  };
 
   home.language = {
     base = "ru_RU.UTF-8";
   };
 
-  # ────────────────────────────────────────────────────────
-  # Theme & Appearance
-  # ────────────────────────────────────────────────────────
   dconf.enable = false;
-
-  gtk = {
-    enable = true;
-    theme = {
-      name = "Adwaita-dark";
-      package = pkgs.gnome-themes-extra;
-    };
-    gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
-    gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
-    gtk4.theme.name = "Adwaita-dark";
-    gtk4.theme.package = pkgs.gnome-themes-extra;
-  };
-
-  qt = {
-    enable = true;
-    platformTheme.name = "gtk";
-    style.name = "adwaita-dark";
-  };
 
   # ────────────────────────────────────────────────────────
   # Hypridle (Screen lock/sleep/hibernate)
@@ -148,10 +120,6 @@
     package = pkgs.vscodium.fhs;
   };
 
-  xdg.configFile."xfce4/helpers.rc".text = ''
-    TerminalEmulator=kitty
-  '';
-
   # ────────────────────────────────────────────────────────
   # AGS (System tray/widgets)
   # ────────────────────────────────────────────────────────
@@ -177,29 +145,27 @@
     ];
   };
 
-   programs.nixcord = {
-     enable = true;
-     vesktop.enable = true;
+  # ────────────────────────────────────────────────────────
+  # NixCord (Discord)
+  # ────────────────────────────────────────────────────────
+  programs.nixcord = {
+    enable = true;
+    vesktop.enable = true;
 
-     config = {
-       useQuickCss = true;
-       themeLinks = [
-         "https://raw.githubusercontent.com/refact0r/midnight-discord/master/midnight.css"
-       ];
-       frameless = true;
+    config = {
+      useQuickCss = true;
+      themeLinks = [
+        "https://raw.githubusercontent.com/refact0r/midnight-discord/master/midnight.css"
+      ];
+      frameless = true;
 
-       plugins = {
-         fakeNitro.enable = true;
-         shikiCodeblocks.enable = true;
-         noTypingAnimation.enable = true;
-
-
-       };
-     };
-   };
-
-
-
+      plugins = {
+        fakeNitro.enable = true;
+        shikiCodeblocks.enable = true;
+        noTypingAnimation.enable = true;
+      };
+    };
+  };
 
   # ────────────────────────────────────────────────────────
   # Core Packages
@@ -217,8 +183,6 @@
     mpvpaper
     cava
     firefox
-
-    # Communication
 
     # Utilities
     micro

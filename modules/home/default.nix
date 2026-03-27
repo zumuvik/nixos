@@ -1,7 +1,6 @@
 { ... }: {
   imports = [
+    ./common
     ./hyprland
-    # ./waybar
-    # ./kitty
   ];
 }

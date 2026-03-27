@@ -1,5 +1,5 @@
 {
-  description = "My NixOS config";
+  description = "NixOS configuration for zumuvik's machines";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -33,25 +33,65 @@
 
   outputs = { self, nixpkgs, home-manager, grub2-themes, ... } @ inputs:
   let
-    system = "x86_64-linux";
-    pkgs = nixpkgs.legacyPackages.${system};
+    lib = import ./lib;
+    username = lib.username;
+
+    makeNixosHost = { hostName, enableSteam ? false, enableBluetooth ? false, enableRouter ? false }:
+      nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { 
+          inherit inputs username;
+          inherit grub2-themes;
+        };
+
+        modules = [
+          ./hosts/${hostName}
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          grub2-themes.nixosModules.default
+
+          # System modules
+          ./modules/system/services.nix
+          ./modules/system/hardware.nix
+
+          # Home Manager configuration
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs username; };
+            home-manager.users.${username} = import ./home.nix;
+          }
+
+          # Conditional system modules
+        ] ++ (nixpkgs.lib.optionals enableBluetooth [
+          ./modules/system/bluetooth.nix
+        ]) ++ (nixpkgs.lib.optionals enableRouter [
+          ./modules/system/router.nix
+        ]);
+      };
+
   in
   {
-    nixosConfigurations.nixlensk323 = nixpkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = { inherit inputs; inherit grub2-themes; };
+    nixosConfigurations = {
+      nixlensk323 = makeNixosHost {
+        hostName = "nixlensk323";
+        enableSteam = true;
+        enableBluetooth = true;
+      };
 
-      modules = [
-        ./hosts/nixlensk323
-        home-manager.nixosModules.home-manager
-        grub2-themes.nixosModules.default
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-          home-manager.users.zumuvik = import ./home.nix;
-        }
-      ];
+      nixlensk322 = makeNixosHost {
+        hostName = "nixlensk322";
+        enableRouter = true;
+      };
+
+      samolensk321 = makeNixosHost {
+        hostName = "samolensk321";
+      };
+    };
+
+    templates.basic = {
+      description = "Basic NixOS host template";
+      path = ./hosts/template;
     };
   };
 }
