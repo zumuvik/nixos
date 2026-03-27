@@ -72,6 +72,11 @@
   # Locale & i18n (общее для всех)
   # ────────────────────────────────────────────────────────
   i18n.defaultLocale = "ru_RU.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_MESSAGES = "ru_RU.UTF-8";
+    LC_COLLATE = "ru_RU.UTF-8";
+    LC_CTYPE = "ru_RU.UTF-8";
+  };
 
   # ────────────────────────────────────────────────────────
   # Home Manager (общее)
