@@ -4,7 +4,7 @@
     "$mainMod" = "SUPER";
     "$terminal" = "kitty";
     "$fileManager" = "Thunar";
-    "$sD" = "${config.home.homeDirectory}/.config/hypr/scripts";
+    # $sD is defined in exec-once.nix
 
     bind = [
       # General

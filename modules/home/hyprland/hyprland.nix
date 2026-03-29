@@ -5,7 +5,9 @@
     ./style.nix
     ./monitors.nix
     ./workspaces.nix
-    ./startup_apps.nix
+    ./exec-once.nix
+    ./scripts.nix
+    ./hyprlock.nix
   ];
 
   wayland.windowManager.hyprland = {
