@@ -27,14 +27,16 @@
     };
   };
 
-  # Hyprland session for LightDM
-  services.xserver.displayManager.session = [
-    {
-      manage = "desktop";
-      name = "Hyprland";
-      start = ''
-        exec Hyprland
-      '';
-    }
-  ];
+  # Register Hyprland as a Wayland session for LightDM
+  environment.etc."wayland-sessions/hyprland.desktop".text = ''
+    [Desktop Entry]
+    Name=Hyprland
+    Comment=An intelligent dynamic tiling Wayland compositor
+    Exec=Hyprland
+    Type=Application
+    DesktopNames=Hyprland
+  '';
+
+  # Set Hyprland as default session
+  services.xserver.displayManager.defaultSession = "hyprland";
 }
