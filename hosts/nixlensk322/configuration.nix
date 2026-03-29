@@ -1,4 +1,4 @@
-{ config, pkgs, username, ... }:
+{ config, lib, pkgs, username, ... }:
 
 {
   # ────────────────────────────────────────────────────────
@@ -79,7 +79,7 @@
 
   boot.loader.grub = {
     enable = true;
-    device = "/dev/nvme0n1";
-    useOSProber = true;
+    device = lib.mkForce "/dev/nvme0n1";
+    useOSProber = lib.mkForce true;
   };
 }
