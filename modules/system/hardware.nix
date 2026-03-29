@@ -6,6 +6,11 @@
     enable = true;
   };
 
+  # AMD GPU - Vega 56
+  services.xserver.videoDrivers = [ "amdgpu" ];
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.kernelParams = [ "amdgpu.dc=1" ];
+
   # Tablet Driver (OpenTabletDriver)
   hardware.opentabletdriver.enable = true;
   hardware.opentabletdriver.daemon.enable = true;
