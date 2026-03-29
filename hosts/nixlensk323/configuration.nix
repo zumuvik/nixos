@@ -20,6 +20,7 @@
   };
 
   networking.networkmanager.enable = true;
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
   networking.firewall.checkReversePath = "loose";
 
   programs.fish.enable = true;

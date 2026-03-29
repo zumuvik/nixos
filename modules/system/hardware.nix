@@ -8,6 +8,7 @@
 
   # Tablet Driver (OpenTabletDriver)
   hardware.opentabletdriver.enable = true;
+  hardware.opentabletdriver.daemon.enable = true;
 
   # Input Devices (для аналоговых джойстиков, etc)
   hardware.uinput.enable = true;
