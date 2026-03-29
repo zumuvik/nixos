@@ -31,38 +31,35 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, grub2-themes, ... } @ inputs:
+  outputs = { self, nixpkgs, home-manager, ayugram-desktop, ags, grub2-themes, ... } @ inputs:
   let
     lib = import ./lib;
     username = lib.username;
 
-    makeNixosHost = { hostName, enableSteam ? false, enableBluetooth ? false, enableRouter ? false }:
+    makeHost = { hostName, enableSteam ? false, enableBluetooth ? false, enableRouter ? false }:
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { 
           inherit inputs username;
-          inherit grub2-themes;
+          inherit ayugram-desktop ags grub2-themes;
         };
 
         modules = [
-          ./hosts/${hostName}
+          ./hosts/${hostName}/default.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager
           grub2-themes.nixosModules.default
-
-          # System modules
           ./modules/system/services.nix
           ./modules/system/hardware.nix
+          ./modules/system/swap.nix
+          ./modules/system/zram.nix
 
-          # Home Manager configuration
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { inherit inputs username; };
             home-manager.users.${username} = import ./home.nix;
           }
-
-          # Conditional system modules
         ] ++ (nixpkgs.lib.optionals enableBluetooth [
           ./modules/system/bluetooth.nix
         ]) ++ (nixpkgs.lib.optionals enableRouter [
@@ -73,19 +70,33 @@
   in
   {
     nixosConfigurations = {
-      nixlensk323 = makeNixosHost {
+      nixlensk323 = makeHost {
         hostName = "nixlensk323";
         enableSteam = true;
         enableBluetooth = true;
       };
 
-      nixlensk322 = makeNixosHost {
+      nixlensk322 = makeHost {
         hostName = "nixlensk322";
         enableRouter = true;
       };
 
-      samolensk321 = makeNixosHost {
+      samolensk321 = makeHost {
         hostName = "samolensk321";
+      };
+    };
+
+    nixosModules = {
+      base-system = {
+        imports = [
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          grub2-themes.nixosModules.default
+          ./modules/system/services.nix
+          ./modules/system/hardware.nix
+          ./modules/system/swap.nix
+          ./modules/system/zram.nix
+        ];
       };
     };
 
