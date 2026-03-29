@@ -4,6 +4,6 @@
     ./hardware.nix
     ./swap.nix
     ./zram.nix
-    ./greetd.nix
+    ./lightdm.nix
   ];
 }
