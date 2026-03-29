@@ -207,8 +207,4 @@
     # Custom packages from inputs
     inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
-
-  # ────────────────────────────────────────────────────────
-  # Hyprlock - imported via hyprland modules
-  # ────────────────────────────────────────────────────────
 }

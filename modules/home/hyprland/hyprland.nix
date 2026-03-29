@@ -6,7 +6,6 @@
     ./monitors.nix
     ./workspaces.nix
     ./startup_apps.nix
-    ./hyprlock.conf
   ];
 
   wayland.windowManager.hyprland = {
