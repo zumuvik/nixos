@@ -58,7 +58,7 @@
   # ────────────────────────────────────────────────────────
   # Locale
   # ────────────────────────────────────────────────────────
-  i18n.defaultLocale = "en_US.UTF-8";
+  i18n.defaultLocale = lib.mkForce "en_US.UTF-8";
   services.xserver.xkb.layout = "us";
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "ru_RU.UTF-8";
