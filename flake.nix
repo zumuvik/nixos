@@ -49,10 +49,6 @@
           ./configuration.nix
           home-manager.nixosModules.home-manager
           grub2-themes.nixosModules.default
-          ./modules/system/services.nix
-          ./modules/system/hardware.nix
-          ./modules/system/swap.nix
-          ./modules/system/zram.nix
 
           {
             home-manager.useGlobalPkgs = true;
@@ -90,12 +86,6 @@
       base-system = {
         imports = [
           ./configuration.nix
-          home-manager.nixosModules.home-manager
-          grub2-themes.nixosModules.default
-          ./modules/system/services.nix
-          ./modules/system/hardware.nix
-          ./modules/system/swap.nix
-          ./modules/system/zram.nix
         ];
       };
     };
