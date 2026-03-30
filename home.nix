@@ -20,6 +20,10 @@
     base = "ru_RU.UTF-8";
   };
 
+  home.sessionVariables = {
+    TERMINAL = "kitty";
+  };
+
   dconf.enable = false;
 
   # ────────────────────────────────────────────────────────
