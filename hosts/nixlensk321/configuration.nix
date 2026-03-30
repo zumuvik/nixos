@@ -4,7 +4,7 @@
   # ────────────────────────────────────────────────────────
   # Networking & Hostname
   # ────────────────────────────────────────────────────────
-  networking.hostName = "samolensk321";
+  networking.hostName = "nixlensk321";
   time.timeZone = "Europe/Moscow";
 
   networking.networkmanager.enable = true;

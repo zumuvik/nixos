@@ -77,8 +77,8 @@
         enableRouter = true;
       };
 
-      samolensk321 = makeHost {
-        hostName = "samolensk321";
+      nixlensk321 = makeHost {
+        hostName = "nixlensk321";
       };
     };
 
