@@ -36,10 +36,8 @@
         pseudotile = true;
         preserve_split = true;
       };
-      gestures = {
-        workspace_swipe = true;
-        workspace_swipe_fingers = 3;
-      };
+      # gestures (disabled - causes errors)
+      # workspace_swipe config moved to binds/KeyBinds.sh
       env = [
         "XCURSOR_THEME,Bibata-Modern-Classic"
         "XCURSOR_SIZE,24"
