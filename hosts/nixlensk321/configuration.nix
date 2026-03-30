@@ -69,10 +69,8 @@
     wl-clipboard
     mako
     swww
-    hyprlock
     btop
     fastfetch
-    playerctl
     networkmanagerapplet
     pavucontrol
   ];

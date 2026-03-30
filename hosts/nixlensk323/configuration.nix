@@ -117,11 +117,9 @@
     wl-clipboard
     mako
     swww
-    hyprlock
     btop
     opencode
     fastfetch
-    playerctl
     networkmanagerapplet
     pavucontrol
     nix-search
