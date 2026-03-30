@@ -40,7 +40,7 @@
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { 
-          inherit inputs username;
+          inherit inputs username hostName;
           inherit ayugram-desktop ags grub2-themes;
         };
 
@@ -53,7 +53,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs username; };
+            home-manager.extraSpecialArgs = { inherit inputs username hostName; };
             home-manager.users.${username} = import ./home.nix;
           }
         ] ++ (nixpkgs.lib.optionals enableBluetooth [
