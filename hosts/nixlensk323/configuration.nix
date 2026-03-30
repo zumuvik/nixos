@@ -25,9 +25,7 @@
 
   programs.fish.enable = true;
 
-  users.users.${username}.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEP3GKg44+5QOaTUj7kHMO9x4sMhShdVuK4NR1yMtleQ zumuvik@nixlensk323"
-  ];
+  
 
   # ────────────────────────────────────────────────────────
   # Remote Builder
@@ -65,6 +63,9 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" "disk" ];
     shell = pkgs.fish;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEP3GKg44+5QOaTUj7kHMO9x4sMhShdVuK4NR1yMtleQ zumuvik@nixlensk323"
+    ];
   };
 
   # ────────────────────────────────────────────────────────
