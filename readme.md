@@ -13,7 +13,7 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 ├── hosts/
 │   ├── nixlensk323/           # Gaming PC
 │   ├── nixlensk322/           # Server/Router
-│   ├── nixlensk321/          # Laptop
+│   ├── nixlensk321/           # Laptop
 │   └── template/              # Template for new hosts
 └── modules/
     ├── system/
