@@ -42,7 +42,7 @@
 
   # ────────────────────────────────────────────────────────
   # Remote Build
-  # ────────────────────────────────────────────────────────
+  # ───────────────────────────────────────────────────────-
   nix.distributedBuilds = true;
   nix.buildMachines = [
     {
@@ -51,6 +51,7 @@
       maxJobs = 4;
       sshKey = "/home/zumuvik/.ssh/id_ed25519";
       supportedFeatures = [ "big-parallel" "kvm" "nixos-test" ];
+      sshExtraArgs = "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
     }
   ];
 
