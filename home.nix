@@ -6,7 +6,7 @@
     inputs.ags.homeManagerModules.default
     inputs.nixvim.homeModules.nixvim
     ./modules/home
-    ./programs
+    ./modules/programs
   ];
 
   # ────────────────────────────────────────────────────────
