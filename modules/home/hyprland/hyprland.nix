@@ -36,6 +36,10 @@
         pseudotile = true;
         preserve_split = true;
       };
+      gestures = {
+        workspace_swipe = true;
+        workspace_swipe_fingers = 3;
+      };
       env = [
         "XCURSOR_THEME,Bibata-Modern-Classic"
         "XCURSOR_SIZE,24"

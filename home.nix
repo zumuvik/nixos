@@ -148,7 +148,7 @@
     libvirt
     virt-viewer
 
-    # Custom packages from inputs
-    inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # Custom packages from inputs (only for nixlensk323)
+    # inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
