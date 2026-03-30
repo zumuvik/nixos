@@ -1,4 +1,4 @@
-{ pkgs, inputs, username, ... }:
+{ pkgs, inputs, username, hostName, lib, ... }:
 
 {
   imports = [
@@ -149,6 +149,9 @@
     virt-viewer
 
     # Custom packages from inputs (only for nixlensk323)
+    # It will be added conditionally below
     # inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ] ++ lib.optionals (hostName == "nixlensk323") [
+    inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
