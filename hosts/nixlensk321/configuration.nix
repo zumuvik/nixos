@@ -40,9 +40,8 @@
     }
   ];
 
-  # Remote Build
-nix.distributedBuilds = true;
-nix.builders = "ssh://zumuvik@192.168.1.146 x86_64-linux - 4 -o StrictHostKeyChecking=no";
+  # Remote Build (пока отключён - не работает)
+# nix.distributedBuilds = true;
 
   # ────────────────────────────────────────────────────────
   # Swap + Zram
