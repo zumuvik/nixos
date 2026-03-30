@@ -24,6 +24,12 @@
     TERMINAL = "kitty";
   };
 
+  home.sessionPath = [ "/run/current-system/sw/bin" ];
+
+  xdg.configFile."kitty/kitty.conf".text = ''
+    shell zsh
+  '';
+
   dconf.enable = false;
 
   # ────────────────────────────────────────────────────────
