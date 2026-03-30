@@ -14,7 +14,7 @@
       background = [
         {
           monitor = "";
-          path = "~/.config/hypr/hyprlock.png";
+          path = "$HOME/.config/hypr/hyprlock.png";
           blur_passes = 2;
           contrast = 0.8916;
           brightness = 0.8172;
@@ -47,7 +47,7 @@
       image = [
         {
           monitor = "";
-          path = "/home/zumuvik/.config/hypr/zumuvik.png";
+          path = "$HOME/.config/hypr/zumuvik.png";
           border_color = "0xffdddddd";
           border_size = 0;
           size = 120;
@@ -97,7 +97,7 @@
         # Current Song
         {
           monitor = "";
-          text = ''cmd[update:1000] echo "$(~/.config/hypr/scripts/songdetail.sh)"'';
+          text = ''cmd[update:1000] echo "$($HOME/.config/hypr/scripts/songdetail.sh)"'';
           color = "rgba(255, 255, 255, 0.7)";
           font_size = 18;
           font_family = "JetBrainsMono Nerd Font, JetBrains Mono Bold";
