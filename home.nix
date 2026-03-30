@@ -54,72 +54,10 @@
       ];
     };
   };
-
-  # ────────────────────────────────────────────────────────
-  # Neovim (nixvim)
-  # ────────────────────────────────────────────────────────
-
-
-  # ────────────────────────────────────────────────────────
-  # VSCode
-  # ────────────────────────────────────────────────────────
-  programs.vscode = {
-    enable = true;
-    package = pkgs.vscodium.fhs;
-  };
-
-  # ────────────────────────────────────────────────────────
-  # AGS (System tray/widgets)
-  # ────────────────────────────────────────────────────────
-  programs.ags = {
-    enable = true;
-    extraPackages = with pkgs; [
-      gtksourceview
-      webkitgtk_6_0
-      accountsservice
-    ];
-  };
-
   xdg.terminal-exec = {
     enable = true;
     package = pkgs.kitty;
   };
-
-  # ────────────────────────────────────────────────────────
-  # OBS Studio
-  # ────────────────────────────────────────────────────────
-  programs.obs-studio = {
-    enable = true;
-    plugins = with pkgs.obs-studio-plugins; [
-      obs-vaapi
-      obs-pipewire-audio-capture
-      wlrobs
-      obs-vkcapture
-    ];
-  };
-
-  # ────────────────────────────────────────────────────────
-  # NixCord (Discord)
-  # ────────────────────────────────────────────────────────
-  programs.nixcord = {
-    enable = true;
-    vesktop.enable = true;
-
-    config = {
-      useQuickCss = true;
-      themeLinks = [
-        "https://raw.githubusercontent.com/refact0r/midnight-discord/master/midnight.css"
-      ];
-      frameless = true;
-
-      plugins = {
-        fakeNitro.enable = true;
-        shikiCodeblocks.enable = true;
-        noTypingAnimation.enable = true;
-      };
-    };
-  };
-
   # ────────────────────────────────────────────────────────
   # Core Packages
   # ────────────────────────────────────────────────────────
@@ -157,9 +95,6 @@
     libvirt
     virt-viewer
 
-    # Custom packages from inputs (only for nixlensk323)
-    # It will be added conditionally below
-    # inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ] ++ lib.optionals (hostName == "nixlensk323") [
     inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
