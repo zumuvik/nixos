@@ -15,7 +15,7 @@
       findNoDups = true;
       ignoreSpace = true;
     };
-    initExtra = ''
+    initContent = ''
       set -o vi
       set -o ignoreeof
       set -o correct
