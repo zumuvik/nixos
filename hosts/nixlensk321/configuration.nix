@@ -1,4 +1,4 @@
-{ config, pkgs, username, ... }:
+{ config, lib, pkgs, username, ... }:
 
 {
   # ────────────────────────────────────────────────────────
@@ -49,7 +49,7 @@
     memoryPercent = 50;
     priority = 10;
   };
-
+  swapDevices = lib.mkForce [];
   # ────────────────────────────────────────────────────────
   # System packages (laptop-specific)
   # ────────────────────────────────────────────────────────
