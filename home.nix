@@ -205,6 +205,6 @@
     virt-viewer
 
     # Custom packages from inputs
-    inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
+#    inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
