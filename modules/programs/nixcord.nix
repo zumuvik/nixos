@@ -1,0 +1,20 @@
+{ ... }:{
+    programs.nixcord = {
+      enable = true;
+      vesktop.enable = true;
+
+      config = {
+        useQuickCss = true;
+        themeLinks = [
+          "https://raw.githubusercontent.com/refact0r/midnight-discord/master/midnight.css"
+        ];
+        frameless = true;
+
+        plugins = {
+          fakeNitro.enable = true;
+          shikiCodeblocks.enable = true;
+          noTypingAnimation.enable = true;
+        };
+      };
+    };
+}
