@@ -42,16 +42,7 @@
 
   # Remote Build
 nix.distributedBuilds = true;
-nix.buildMachines = [
-  {
-    hostName = "192.168.1.146";
-    sshUser = "zumuvik";
-    system = "x86_64-linux";
-    maxJobs = 4;
-    sshKey = "/root/.ssh/id_ed25519";
-    supportedFeatures = [ "big-parallel" "kvm" ];
-  }
-];
+nix.builders = "ssh://zumuvik@192.168.1.146 x86_64-linux - 4 -o StrictHostKeyChecking=no";
 
   # ────────────────────────────────────────────────────────
   # Swap + Zram
