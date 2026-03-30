@@ -14,7 +14,6 @@
     settings = {
       PermitRootLogin = "no";
       PasswordAuthentication = true;
-      PermitRemoteOpenPorts = "true";
     };
   };
 
