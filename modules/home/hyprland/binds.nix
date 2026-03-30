@@ -98,8 +98,8 @@
     "$mainMod ALT, V, clipboard manager, exec, $sD/ClipManager.sh"
     ];
     binde = [
-      "$mainMod, mouse_down, workspace, e+1"
-      "$mainMod, mouse_up, workspace, e-1"
+      # "$mainMod, mouse_down, workspace, e+1"
+      # "$mainMod, mouse_up, workspace, e-1"
     ];
   };
 }
