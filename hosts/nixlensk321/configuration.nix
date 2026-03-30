@@ -14,7 +14,7 @@
     options = "grp:alt_shift_toggle";
   };
 
-  programs.fish.enable = true;
+  programs.zsh.enable = true;
 
   # ────────────────────────────────────────────────────────
   # User
@@ -22,7 +22,7 @@
   users.users.${username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" ];
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
   };
 
   # ────────────────────────────────────────────────────────
