@@ -27,6 +27,10 @@
       alias la='ls -a'
       alias grep='grep --color=auto'
     '';
+
+    autosuggestion.enable = true;
+
+    syntaxHighlighting.enable = true;
   };
 
   home.packages = with pkgs; [
