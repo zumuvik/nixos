@@ -43,17 +43,18 @@
   # ────────────────────────────────────────────────────────
   # Remote Build
   # ───────────────────────────────────────────────────────-
-  nix.distributedBuilds = true;
-  nix.buildMachines = [
-    {
-      hostName = "192.168.1.146";
-      system = "x86_64-linux";
-      maxJobs = 4;
-      sshKey = "/home/zumuvik/.ssh/id_ed25519";
-      supportedFeatures = [ "big-parallel" "kvm" "nixos-test" ];
-      sshExtraArgs = "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null";
-    }
-  ];
+  # nix.distributedBuilds = true;
+  # nix.buildMachines = [
+  #   {
+  #     hostName = "192.168.1.146";
+  #     system = "x86_64-linux";
+  #     maxJobs = 4;
+  #     sshKey = "/home/zumuvik/.ssh/id_ed25519";
+  #     supportedFeatures = [ "big-parallel" "kvm" "nixos-test" ];
+  #   }
+  # ];
+
+  nix.builders = "ssh://zumuvik@192.168.1.146 x86_64-linux - 4";
 
   # ────────────────────────────────────────────────────────
   # Swap + Zram
