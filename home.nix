@@ -6,6 +6,7 @@
     inputs.ags.homeManagerModules.default
     inputs.nixvim.homeModules.nixvim
     ./modules/home
+    ./programs
   ];
 
   # ────────────────────────────────────────────────────────
@@ -148,6 +149,6 @@
     virt-viewer
 
     # Custom packages from inputs
-#    inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
+    inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }
