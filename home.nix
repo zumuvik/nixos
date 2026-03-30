@@ -76,7 +76,7 @@
     ];
   };
 
-  xdg.terminalExec = {
+  xdg.terminal-exec = {
     enable = true;
     name = "kitty.desktop";
   };
