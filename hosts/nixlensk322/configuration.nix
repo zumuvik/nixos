@@ -14,14 +14,14 @@
   networking.networkmanager.enable = true;
   networking.networkmanager.unmanaged = [ "enp8s0" "br0" "interface-name:enp8s0" "interface-name:br0" ];
 
-  programs.fish.enable = true;
+  programs.zsh.enable = true;
 
   # ────────────────────────────────────────────────────────
   # User
   # ────────────────────────────────────────────────────────
   users.users.${username} = {
     isNormalUser = true;
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     description = "${username}";
     extraGroups = [ "wheel" "networkmanager" "docker" "libvirtd" ];
   };
