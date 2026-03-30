@@ -13,7 +13,7 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 ├── hosts/
 │   ├── nixlensk323/           # Gaming PC
 │   ├── nixlensk322/           # Server/Router
-│   ├── samolensk321/          # Laptop
+│   ├── nixlensk321/          # Laptop
 │   └── template/              # Template for new hosts
 └── modules/
     ├── system/
@@ -141,7 +141,7 @@ sudo nixos-rebuild switch --flake .#myhost
 |------|------|----------|
 | `nixlensk323` | Gaming PC | Steam, Bluetooth, Hyprland |
 | `nixlensk322` | Server/Router | Docker, NAT, dnsmasq, firewall |
-| `samolensk321` | Laptop | Hyprland, battery management |
+| `nixlensk321` | Laptop | Hyprland, battery management |
 
 ## Optional Modules
 
