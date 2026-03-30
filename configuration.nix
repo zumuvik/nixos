@@ -69,6 +69,7 @@
       (pkgs.stdenv.mkDerivation {
         pname = "sf-pro-display";
         version = "1.0";
+        dontUnpack = true;
         srcs = [
           (pkgs.fetchurl {
             name = "sf-pro-bold.otf";
@@ -81,10 +82,11 @@
             sha256 = "1kxj8hc9ckzgskwz78b9ijikbpy755808xzfllg9wbya01wd3d6z";
           })
         ];
-        sourceRoot = ".";
         installPhase = ''
           mkdir -p $out/share/fonts/opentype
-          cp *.otf $out/share/fonts/opentype/
+          for src in $srcs; do
+            cp $src $out/share/fonts/opentype/
+          done
         '';
       })
     ];
