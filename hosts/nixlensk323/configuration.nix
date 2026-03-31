@@ -55,6 +55,7 @@
   # ────────────────────────────────────────────────────────
   # User
   # ────────────────────────────────────────────────────────
+  programs.zsh.enable = true;
   users.users.${username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" "disk" ];
