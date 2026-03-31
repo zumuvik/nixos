@@ -5,6 +5,5 @@
   ./obs.nix #Запись экрана/стримы
   ./ags.nix #В планах
   ./nixcord.nix #Декларативный vesktope
-  ./zsh.nix
   ];
 }
