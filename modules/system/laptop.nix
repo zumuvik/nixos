@@ -23,18 +23,18 @@
   # ────────────────────────────────────────────────────────
   # Suspend / Hibernate
   # ────────────────────────────────────────────────────────
-  systemd.sleep.extraConfig = ''
-    AllowSuspend=yes
-    AllowHibernation=yes
-    AllowSuspendThenHibernate=yes
-    AllowHybridSleep=yes
-    HibernateDelaySec=120min
-  '';
+  systemd.sleep.settings.Sleep = {
+    AllowSuspend = "yes";
+    AllowHibernation = "yes";
+    AllowSuspendThenHibernate = "yes";
+    AllowHybridSleep = "yes";
+    HibernateDelaySec = "120min";
+  };
 
   # ────────────────────────────────────────────────────────
   # Touchpad (libinput)
   # ────────────────────────────────────────────────────────
-  services.xserver.libinput = {
+  services.libinput = {
     enable = true;
     touchpad = {
       tapping = true;
@@ -71,7 +71,7 @@
     jack.enable = true;
   };
   # Disable PulseAudio if it's enabled
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   
   # ────────────────────────────────────────────────────────
   # VGA / GPU (AMD) - уже включено в hardware.nix, но на случай если hardware.nix не импортирован
@@ -84,13 +84,9 @@
   # ────────────────────────────────────────────────────────
   # Power Button / Lid
   # ────────────────────────────────────────────────────────
-  services.logind = {
-    lidSwitch = "suspend";
-    lidSwitchExternalPower = "lock";
-    extraConfig = ''
-      HandlePowerKey=suspend
-      HandleLidSwitch=suspend
-      HandleLidSwitchExternalPower=suspend
-    '';
+  services.logind.settings.Login = {
+    HandlePowerKey = "suspend";
+    HandleLidSwitch = "suspend";
+    HandleLidSwitchExternalPower = lib.mkForce "suspend";
   };
 }
