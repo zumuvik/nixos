@@ -5,5 +5,6 @@
   ./obs.nix #Запись экрана/стримы
   ./ags.nix #В планах
   ./nixcord.nix #Декларативный vesktope
+  ./spotify-player.nix #CLI музыкальный плеер для Spotify
   ];
 }
