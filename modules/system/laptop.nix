@@ -77,9 +77,8 @@
   # VGA / GPU (AMD) - уже включено в hardware.nix, но на случай если hardware.nix не импортирован
   # ────────────────────────────────────────────────────────
   hardware.graphics.enable = true;
-  services.xserver.videoDrivers = [ "amdgpu" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
-  boot.kernelParams = [ "amdgpu.dc=1" "rtw88_pci.disable_aspm=1" ];
+  boot.kernelParams = [ "rtw88_pci.disable_aspm=1" ];
 
   # ────────────────────────────────────────────────────────
   # Power Button / Lid
