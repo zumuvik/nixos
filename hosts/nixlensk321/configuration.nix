@@ -72,5 +72,6 @@
     fastfetch
     networkmanagerapplet
     pavucontrol
+    spotify-player
   ];
 }
