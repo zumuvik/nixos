@@ -79,6 +79,8 @@
     mpv
     mpvpaper
     cava
+    ytermusic
+    yt-dlp
     firefox
 
     # Utilities
