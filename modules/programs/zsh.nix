@@ -3,6 +3,12 @@
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+    shellInit = ''
+      # nix-index database for package search and completions
+      if [ -f /etc/profile.d/nix-index.sh ]; then
+        source /etc/profile.d/nix-index.sh
+      fi
+    '';
     initContent = ''
       # Suppress zsh-newuser-install
       unsetopt BEEP
@@ -14,5 +20,7 @@
 
   home.packages = with pkgs; [
     nix-zsh-completions
+    nix-index
+    nix-index-database-comma
   ];
 }
