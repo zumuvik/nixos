@@ -44,7 +44,7 @@
   console.useXkbConfig = true;
 
   # ────────────────────────────────────────────────────────
-#  # Dark Theme (общее для всех)
+  # Dark Theme (общее для всех)
   # ────────────────────────────────────────────────────────
   environment.sessionVariables = {
     QT_QPA_PLATFORMTHEME = "gtk";
