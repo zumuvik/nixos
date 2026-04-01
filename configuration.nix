@@ -60,6 +60,7 @@
     packages = with pkgs; [
       nerd-fonts.jetbrains-mono
       nerd-fonts.iosevka
+      nerd-fonts.fantasque-sans-mono
       jetbrains-mono
       noto-fonts-cjk-serif
       noto-fonts
