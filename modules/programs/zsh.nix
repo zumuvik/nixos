@@ -1,6 +1,8 @@
-{ ... }: {
+{ pkgs, ... }: {
   programs.zsh = {
     enable = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
     initContent = ''
       # Suppress zsh-newuser-install
       unsetopt BEEP
