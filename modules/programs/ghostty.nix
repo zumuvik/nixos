@@ -33,7 +33,7 @@
 
       # Misc
       confirm-close-surface = false;
-      bell = "none";
+      bell-features = "";
       auto-update = "off";
     };
   };
