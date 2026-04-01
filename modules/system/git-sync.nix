@@ -10,6 +10,7 @@ in
   systemd.services.git-sync-install-hook = {
     description = "Install git-sync post-commit hook";
     after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
