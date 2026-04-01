@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
+let
+  username = (import ../../lib).username;
+in
 {
   networking.firewall.allowedUDPPorts = [ 9876 ];
 
@@ -13,11 +16,16 @@
 
     serviceConfig = {
       Type = "simple";
+      User = username;
+      Group = "users";
       ExecStart = "${pkgs.python3}/bin/python3 ${./git-sync-listener.py}";
       Restart = "always";
       RestartSec = 5;
       WorkingDirectory = "/etc/nixos";
-      Environment = "PATH=${pkgs.git}/bin:${pkgs.python3}/bin:/run/current-system/sw/bin";
+      Environment = [
+        "HOME=/home/${username}"
+        "PATH=${pkgs.git}/bin:${pkgs.python3}/bin:/run/current-system/sw/bin"
+      ];
     };
   };
 }
