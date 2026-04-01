@@ -213,3 +213,4 @@ The config uses `home-manager.backupFileExtension = "backup"` to handle conflict
 sudo nixos-rebuild switch --rollback
 # or select at boot in GRUB
 ```
+hook test
