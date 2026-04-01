@@ -11,4 +11,8 @@
       export PATH="/run/wrappers/bin:$PATH"
     '';
   };
+
+  home.packages = with pkgs; [
+    nix-zsh-completions
+  ];
 }
