@@ -214,3 +214,4 @@ sudo nixos-rebuild switch --rollback
 # or select at boot in GRUB
 ```
 hook test
+sync test Ср 01 апр 2026 23:16:30 MSK
