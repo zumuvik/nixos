@@ -21,14 +21,10 @@
   };
 
   home.sessionVariables = {
-    TERMINAL = "kitty";
+    TERMINAL = "ghostty";
   };
 
   home.sessionPath = [ "/run/current-system/sw/bin" ];
-
-  xdg.configFile."kitty/kitty.conf".text = ''
-    shell zsh
-  '';
 
   dconf.enable = false;
 
@@ -50,20 +46,22 @@
           on-timeout = "loginctl lock-session";
         }
         {
-          timeout = 600;
-          on-timeout = "systemctl suspend";
+          timeout = 900;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
         }
         {
           timeout = 1200;
-          on-timeout = "systemctl hibernate";
+          on-timeout = "systemctl suspend";
         }
       ];
     };
   };
   xdg.terminal-exec = {
     enable = true;
-    package = pkgs.kitty;
+    package = pkgs.ghostty;
   };
+
   # ────────────────────────────────────────────────────────
   # Core Packages
   # ────────────────────────────────────────────────────────
@@ -85,7 +83,7 @@
 
     # Utilities
     micro
-    kitty
+    ghostty
     thunar
     thunar-archive-plugin
     tumbler
