@@ -8,13 +8,11 @@
   services.tlp = {
     enable = true;
     settings = {
-      # Оптимизация для батареи
       CPU_SCALING_GOVERNOR_ON_AC = "performance";
       CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
-      # Отключение ненужных устройств
-      STOP_CHARGE_THRESH_BAT0 = 0;  # Не останавливать зарядку
+      STOP_CHARGE_THRESH_BAT0 = 0;
       DEVICES_TO_DISABLE_ON_STARTUP = [ "bluetooth" "wlan" ];
       DEVICES_TO_ENABLE_ON_STARTUP = [ "wifi" ];
     };
@@ -59,26 +57,6 @@
   # Thermal Management
   # ────────────────────────────────────────────────────────
   services.thermald.enable = true;
-
-  # ────────────────────────────────────────────────────────
-  # Audio (PipeWire)
-  # ────────────────────────────────────────────────────────
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-  };
-  # Disable PulseAudio if it's enabled
-  services.pulseaudio.enable = false;
-  
-  # ────────────────────────────────────────────────────────
-  # VGA / GPU (AMD) - уже включено в hardware.nix, но на случай если hardware.nix не импортирован
-  # ────────────────────────────────────────────────────────
-  hardware.graphics.enable = true;
-  boot.initrd.kernelModules = [ "amdgpu" ];
-  boot.kernelParams = [ "rtw88_pci.disable_aspm=1" ];
 
   # ────────────────────────────────────────────────────────
   # Power Button / Lid

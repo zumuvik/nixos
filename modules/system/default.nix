@@ -1,10 +1,8 @@
 { ... }: {
   imports = [
     ./services.nix
-#    ./hardware.nix
-    ./swap.nix
+    ./hardware.nix
     ./zram.nix
     ./greetd.nix
-    ./laptop.nix
   ];
 }
