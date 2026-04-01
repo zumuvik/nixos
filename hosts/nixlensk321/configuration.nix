@@ -39,19 +39,6 @@
     }
   ];
 
-  # Remote Build (пока отключён - не работает)
-# nix.distributedBuilds = true;
-
-  # ────────────────────────────────────────────────────────
-  # Swap + Zram
-  # ────────────────────────────────────────────────────────
-  zramSwap = {
-    enable = true;
-    algorithm = "zstd";
-    memoryPercent = 50;
-    priority = 10;
-  };
-  swapDevices = lib.mkForce [];
   # ────────────────────────────────────────────────────────
   # System packages (laptop-specific)
   # ────────────────────────────────────────────────────────
@@ -62,7 +49,6 @@
     gh
     wireguard-tools
     brightnessctl
-    opentabletdriver
     grim
     slurp
     wl-clipboard

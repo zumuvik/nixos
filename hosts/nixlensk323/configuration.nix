@@ -36,23 +36,6 @@
   ];
 
   # ────────────────────────────────────────────────────────
-  # Swap
-  # ────────────────────────────────────────────────────────
-  swapDevices = [
-    {
-      device = "/swap/swapfile";
-      size = 32768;
-    }
-  ];
-
-  zramSwap = {
-    enable = true;
-    algorithm = "zstd";
-    memoryPercent = 50;
-    priority = 10;
-  };
-
-  # ────────────────────────────────────────────────────────
   # User
   # ────────────────────────────────────────────────────────
   programs.zsh.enable = true;
@@ -95,6 +78,14 @@
   };
 
   # ────────────────────────────────────────────────────────
+  # Tablet Driver & Input Devices
+  # ────────────────────────────────────────────────────────
+  hardware.opentabletdriver.enable = true;
+  hardware.opentabletdriver.daemon.enable = true;
+  hardware.uinput.enable = true;
+  boot.kernelModules = [ "uinput" ];
+
+  # ────────────────────────────────────────────────────────
   # System packages (host-specific)
   # ────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
@@ -108,7 +99,6 @@
     unrar
     xrandr
     brightnessctl
-    opentabletdriver
     grim
     slurp
     wl-clipboard
