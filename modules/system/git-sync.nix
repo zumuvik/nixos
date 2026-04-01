@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  networking.firewall.allowedUDPPorts = [ 9876 ];
+
   systemd.services.git-sync-listener = {
     description = "Git sync listener — auto git pull on UDP signal";
     after = [ "network-online.target" ];
