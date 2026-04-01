@@ -18,14 +18,25 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 └── modules/
     ├── system/
     │   ├── services.nix       # PipeWire, SSH, VPN, XDG
-    │   ├── hardware.nix       # GPU, Tablet, Virtualization
-    │   ├── swap.nix           # Swap config
+    │   ├── hardware.nix       # GPU, Virtualization
     │   ├── zram.nix           # ZRAM config
+    │   ├── swap.nix           # Swap config (nixlensk323 only)
+    │   ├── greetd.nix         # Login manager
+    │   ├── laptop.nix         # Laptop-specific (nixlensk321 only)
     │   ├── bluetooth.nix      # Bluetooth (optional)
-    │   └── router.nix         # Router/DHCP/NAT (optional)
-    └── home/
-        ├── common/            # Shared home settings
-        └── hyprland/          # Hyprland WM config
+    │   ├── router.nix         # Router/DHCP/NAT (optional)
+    │   └── git-sync.nix       # Auto git-sync across LAN
+    ├── home/
+    │   ├── common/            # Shared home settings
+    │   └── hyprland/          # Hyprland WM config
+    └── programs/
+        ├── nixvim.nix         # Declarative Neovim
+        ├── ghostty.nix        # Terminal
+        ├── vscodium.nix       # VSCode without telemetry
+        ├── obs.nix            # OBS Studio
+        ├── ags.nix            # Aylur's Gtk Shell
+        ├── nixcord.nix        # Declarative Vesktop
+        └── zsh.nix            # Zsh config
 ```
 
 ## Requirements
@@ -186,6 +197,12 @@ nix flake update
 sudo nixos-rebuild switch --flake .#myhost
 ```
 
+## Git Sync (LAN)
+
+After each commit, a post-commit hook sends a UDP signal to all other hosts on the LAN. Each host runs a listener that automatically runs `git pull --rebase --autostash`.
+
+No manual sync needed — commit on one machine, others update automatically.
+
 ## Troubleshooting
 
 ### Build fails with conflicting options
@@ -213,6 +230,3 @@ The config uses `home-manager.backupFileExtension = "backup"` to handle conflict
 sudo nixos-rebuild switch --rollback
 # or select at boot in GRUB
 ```
-hook test
-sync test Ср 01 апр 2026 23:16:30 MSK
-sync test Ср 01 апр 2026 23:17:02 MSK
