@@ -4,5 +4,6 @@
     ./hardware.nix
     ./zram.nix
     ./greetd.nix
+    ./git-sync.nix
   ];
 }
