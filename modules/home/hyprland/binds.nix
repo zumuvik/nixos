@@ -2,7 +2,7 @@
 {
   wayland.windowManager.hyprland.settings = {
     "$mainMod" = "SUPER";
-    "$terminal" = "kitty";
+    "$terminal" = "ghostty";
     "$fileManager" = "Thunar";
     # $sD is defined in exec-once.nix
 
@@ -18,12 +18,9 @@
       "$mainMod CTRL, F, fullscreen, 1"
       "$mainMod, D, exec, pkill rofi || true && rofi -show drun -modi drun,filebrowser,run,window"
 
-      # NixOS Configuration
-      "R_CONTROL, Delete, exec, $terminal --class floating_config -e micro /etc/nixos/configuration.nix"
       "$mainMod, space, togglefloating"
       # Config Picker
       "$mainMod, T, exec, bash ~/.config/hypr/scripts/config_picker.sh"
-      "R_CONTROL, code:110, exec, bash ~/.config/hypr/scripts/config_picker.sh"
 
 
       "SUPER, Tab, workspace, e+1"
