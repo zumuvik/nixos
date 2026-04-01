@@ -25,11 +25,7 @@ def check_prerequisites():
     if not os.path.isdir(os.path.join(REPO_DIR, ".git")):
         log.error("Git repo not found at %s", REPO_DIR)
         return False
-    git_bin = subprocess.run(["which", "git"], capture_output=True, text=True)
-    if git_bin.returncode != 0:
-        log.error("git binary not found")
-        return False
-    log.info("Prerequisites OK: git=%s repo=%s", git_bin.stdout.strip(), REPO_DIR)
+    log.info("Prerequisites OK: repo=%s", REPO_DIR)
     return True
 
 
