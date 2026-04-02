@@ -20,6 +20,5 @@
   home.packages = with pkgs; [
     nix-zsh-completions
     nix-index
-    nix-index-database-comma
   ];
 }
