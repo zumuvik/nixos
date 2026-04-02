@@ -85,12 +85,21 @@
   hardware.opentabletdriver.enable = true;
   hardware.opentabletdriver.daemon.enable = true;
   hardware.uinput.enable = true;
-  boot.kernelModules = [ "uinput" ];
+  boot.kernelModules = [ "uinput" "v4l2loopback" ];
+
+  # ────────────────────────────────────────────────────────
+  # OBS Virtual Camera
+  # ────────────────────────────────────────────────────────
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+  boot.extraModprobeConfig = ''
+    options v4l2loopback devices=1 video_nr=10 card_label="OBS Cam" exclusive_caps=1
+  '';
 
   # ────────────────────────────────────────────────────────
   # System packages (host-specific)
   # ────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
+    v4l-utils
     osu-lazer-bin
     git
     wget
