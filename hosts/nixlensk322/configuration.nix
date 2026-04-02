@@ -11,7 +11,7 @@
   networking.networkmanager.dns = "none";
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 3389 ];
+  networking.firewall.allowedTCPPorts = [ 5900 ];
   networking.firewall.allowedUDPPorts = [ ];
 
   # ────────────────────────────────────────────────────────
@@ -105,10 +105,12 @@
   };
 
   # ────────────────────────────────────────────────────────
-  # VNC (wayvnc для Wayland/Hyprland)
+  # VNC (tigervnc для X11)
   # ────────────────────────────────────────────────────────
-  services.wayvnc.enable = true;
-  services.wayvnc.address = "0.0.0.0";
-  services.wayvnc.port = 5900;
-  services.wayvnc.openFirewall = true;
+  services.tigervnc = {
+    enable = true;
+    port = 5900;
+    display = "0";
+    https = false;
+  };
 }
