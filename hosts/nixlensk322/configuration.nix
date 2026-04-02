@@ -108,5 +108,7 @@
   # VNC (wayvnc для Wayland/Hyprland)
   # ────────────────────────────────────────────────────────
   services.wayvnc.enable = true;
+  services.wayvnc.address = "0.0.0.0";
+  services.wayvnc.port = 5900;
   services.wayvnc.openFirewall = true;
 }
