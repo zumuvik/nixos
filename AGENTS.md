@@ -25,11 +25,24 @@ Flake-based NixOS configuration with Home Manager. Language: Nix.
 │   └── programs/                  # Program configs (nixvim, ghostty, zsh, etc.)
 ```
 
-## Build & Deployment Commands
+## Build / Test / Deploy
 
 ```bash
-# Build system config (dry run - no changes)
+# ── Verification (run BEFORE applying) ──────────────────────
+
+# Dry-run build — catches errors without changing anything
 sudo nixos-rebuild build --flake .#<hostname>
+
+# Build only Home Manager config (faster iteration)
+home-manager build --flake .#<hostname>
+
+# Evaluate a specific value (debugging)
+nix eval .#nixosConfigurations.nixlensk321.pkgs.hyprland.outPath
+
+# Check flake outputs
+nix flake check
+
+# ── Apply changes ───────────────────────────────────────────
 
 # Apply system config
 sudo nixos-rebuild switch --flake .#<hostname>
@@ -37,112 +50,83 @@ sudo nixos-rebuild switch --flake .#<hostname>
 # Apply Home Manager config
 home-manager switch --flake .#<hostname>
 
-# Rollback to previous generation
+# ── Rollback ────────────────────────────────────────────────
+
 sudo nixos-rebuild switch --rollback
+home-manager switch --rollback
+
+# ── Maintenance ─────────────────────────────────────────────
 
 # Update flake inputs
 nix flake update
 
-# Build a specific host (examples)
-sudo nixos-rebuild build --flake .#nixlensk321
-sudo nixos-rebuild build --flake .#nixlensk322
-sudo nixos-rebuild build --flake .#nixlensk323
-
-# Shell with Nix tools for debugging
-nix develop .#nixosConfigurations.nixlensk321.config.system.build.toplevel
+# Garbage collect old generations
+nix-collect-garbage -d
 ```
 
-## Code Style Guidelines
+## Code Style
 
 ### Formatting
-
-- **Indentation**: 2 spaces (no tabs)
-- Verified in nixvim: `tabstop = 2`, `shiftwidth = 2`, `expandtab = true`
-- No automated formatters (alejandra/nixfmt) — follow existing style
+- **Indentation**: 2 spaces, no tabs
+- **No automated formatter** (no alejandra/nixfmt) — follow existing style
+- One attribute per line in attrsets
+- Lists: one item per line when > 2 items or any item is complex
 
 ### Naming Conventions
 
 | Element | Convention | Example |
 |---------|------------|---------|
 | Files | kebab-case | `git-sync.nix`, `hardware-configuration.nix` |
-| Nix options | camelCase | `hardware.opengl.enable`, `services.openssh.enable` |
-| Nix variables | camelCase | `nixpkgsHost`, `hardwareConfig` |
+| Options | camelCase | `hardware.opengl.enable` |
+| Variables | camelCase | `nixpkgsHost`, `hardwareConfig` |
 | Folders | lowercase | `modules/system/`, `modules/home/` |
 
 ### Module Patterns
 
-**Standard module structure:**
 ```nix
-# default.nix — re-exports sibling modules
-{ ... }: {
-  imports = [
-    ./module1.nix
-    ./module2.nix
-  ];
-}
+# default.nix — re-exports siblings
+{ ... }: { imports = [ ./module1.nix ./module2.nix ]; }
 
-# module.nix — actual configuration
-{ config, pkgs, lib, ... }:
-
-{
-  # Configuration options
-}
-```
-
-**Host-specific modules:**
-```nix
-{ ... }: {
-  imports = [
-    ./configuration.nix
-    ./hardware-configuration.nix
-    ../../modules/system/some-module.nix
-  ];
+# module.nix — actual config
+{ config, pkgs, lib, ... }: {
+  # use mkIf, mkMerge, mkDefault as needed
 }
 ```
 
 ### Imports
-
-- Use `imports = [ ./file.nix ];` for module imports
-- `default.nix` imports sibling modules via `./module.nix`
-- Hosts import shared configs: `../../configuration.nix`, `../../modules/system/`
-- Use flake inputs directly in home.nix: `inputs.nixvim.homeModules.nixvim`
+- Use `imports = [ ./file.nix ];` — always include `.nix` extension
+- `default.nix` imports siblings via `./module.nix`
+- Flake inputs: `inputs.nixvim.homeModules.nixvim`
 
 ### Nix Idioms
 
 ```nix
-# Conditional activation
-mkIf condition [ ]
+# Conditionals
+mkIf condition { }
+lib.optionals (hostName == "nixlensk323") [ pkgs.something ]
 
-# Conditional packages (string comparison)
-lib.optionals (hostName == "nixlensk323") [ ]
-
-# Merging configurations
-lib.mkMerge [ config1 config2 ]
+# Merging
+lib.mkMerge [ baseOverrides hostOverrides ]
 
 # Multi-line strings
 ''
-  first line
-  second line
+  line one
+  line two
 ''
 
-# with pkgs for package lists (home.packages, etc.)
-home.packages = with pkgs; [
-  package1
-  package2
-];
+# Package lists
+home.packages = with pkgs; [ pkg1 pkg2 ];
 ```
 
 ### Comments
-
 - Section separators: `# ──────────────────────────────────────────────`
-- Comments in Russian are acceptable
-- Descriptive section headers: `# Services`, `# Hardware`, `# Hyprland`
+- Russian comments are acceptable
+- Descriptive headers: `# Services`, `# Hardware`, `# Hyprland`
 
 ### Error Handling
-
-- Nix is declarative — errors surface during build validation
-- For shell scripts (`modules/home/hyprland/scripts/`): `set -euo pipefail`
-- Always verify syntax with `nixos-rebuild build` before committing
+- Nix errors surface at build time — always run `nixos-rebuild build` first
+- Shell scripts (`modules/home/hyprland/scripts/`): `set -euo pipefail`
+- **Binary naming**: Hyprland package provides `Hyprland` (for DM) and `start-hyprland` (for shell). Do NOT use `Hyprland-start` — it doesn't exist.
 
 ## Git Workflow
 
@@ -152,19 +136,10 @@ home.packages = with pkgs; [
 
 ## Adding a New Host
 
-1. Create directory: `hosts/<hostname>/`
-2. Generate hardware config: `sudo nixos-generate-config --dir hosts/<hostname>`
-3. Create `hosts/<hostname>/default.nix` with imports
-4. Register in `flake.nix` under `nixosConfigurations`
-5. Build and test: `sudo nixos-rebuild build --flake .#<hostname>`
+1. Create `hosts/<hostname>/` with `default.nix`, `configuration.nix`, `hardware-configuration.nix`
+2. Register in `flake.nix` under `nixosConfigurations` via `makeHost`
+3. Build: `sudo nixos-rebuild build --flake .#<hostname>`
 
-## Optional Modules
-
-Enable in `flake.nix` via `makeHost`:
 ```nix
-makeHost {
-  hostName = "myhost";
-  enableBluetooth = true;  # or false
-  enableRouter = true;     # or false
-}
+makeHost { hostName = "myhost"; enableBluetooth = true; }
 ```
