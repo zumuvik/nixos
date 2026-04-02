@@ -24,7 +24,7 @@
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ ];
   networking.firewall.allowedUDPPorts = [ ];
-
+  networking.firewall.checkReversePath = "loose";
   # ────────────────────────────────────────────────────────
   # Remote Builder
   # ────────────────────────────────────────────────────────
