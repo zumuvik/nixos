@@ -21,7 +21,9 @@
 
   networking.networkmanager.enable = true;
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
-  networking.firewall.checkReversePath = "loose";
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedUDPPorts = [ ];
 
   # ────────────────────────────────────────────────────────
   # Remote Builder
@@ -41,7 +43,7 @@
   programs.zsh.enable = true;
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" "disk" ];
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" ];
     shell = pkgs.zsh;
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEP3GKg44+5QOaTUj7kHMO9x4sMhShdVuK4NR1yMtleQ zumuvik@nixlensk323"
@@ -69,8 +71,8 @@
   # ────────────────────────────────────────────────────────
   programs.steam = {
     enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
+    remotePlay.openFirewall = false;
+    dedicatedServer.openFirewall = false;
     extraPackages = with pkgs; [
       mangohud
       gamemode

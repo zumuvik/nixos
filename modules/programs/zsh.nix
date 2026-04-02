@@ -3,18 +3,17 @@
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    shellInit = ''
-      # nix-index database for package search and completions
-      if [ -f /etc/profile.d/nix-index.sh ]; then
-        source /etc/profile.d/nix-index.sh
-      fi
-    '';
     initContent = ''
       # Suppress zsh-newuser-install
       unsetopt BEEP
 
       # Ensure wrappers (setuid binaries like sudo) are found first
       export PATH="/run/wrappers/bin:$PATH"
+
+      # nix-index database for package search and completions
+      if [ -f /etc/profile.d/nix-index.sh ]; then
+        source /etc/profile.d/nix-index.sh
+      fi
     '';
   };
 

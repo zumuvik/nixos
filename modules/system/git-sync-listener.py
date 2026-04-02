@@ -9,6 +9,7 @@ import sys
 PORT = 9876
 REPO_DIR = "/etc/nixos"
 PID_FILE = "/run/git-sync-listener.pid"
+SECRET = os.environ.get("GIT_SYNC_SECRET", "")
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -61,6 +62,9 @@ def main():
         log.error("Prerequisites check failed, exiting")
         sys.exit(1)
 
+    if not SECRET:
+        log.warning("No GIT_SYNC_SECRET set, authentication disabled")
+
     # Write PID file
     try:
         with open(PID_FILE, "w") as f:
@@ -80,7 +84,12 @@ def main():
             msg = data.decode("utf-8", errors="replace").strip()
             log.info("Received from %s: raw=%s msg='%s'", addr, raw, msg)
 
-            if msg == "git-pull":
+            if SECRET:
+                if msg != f"git-pull:{SECRET}":
+                    log.info("Invalid secret from %s, ignoring", addr)
+                    continue
+
+            if msg == "git-pull" or (SECRET and msg == f"git-pull:{SECRET}"):
                 log.info("Matched 'git-pull' command")
                 git_pull()
             else:
