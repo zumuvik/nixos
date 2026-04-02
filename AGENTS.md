@@ -1,109 +1,170 @@
-# AGENTS.md — инструкции для агентов
+# AGENTS.md — NixOS Configuration
 
-## О проекте
+## Project Overview
 
-Это flake-based NixOS конфигурация с Home Manager. Язык — Nix.
-Управление окнами — Hyprland (Wayland). Редактор — Neovim (через nixvim).
-Терминал — Ghostty. Объявлено 3 хоста: `nixlensk321` (ноутбук), `nixlensk322` (сервер/роутер), `nixlensk323` (игровой ПК).
+Flake-based NixOS configuration with Home Manager. Language: Nix.
+- **WM**: Hyprland (Wayland)
+- **Editor**: Neovim (via nixvim)
+- **Terminal**: Ghostty
+- **Hosts**: `nixlensk321` (laptop), `nixlensk322` (server/router), `nixlensk323` (gaming PC)
 
-## Структура
+## Directory Structure
 
 ```
-├── flake.nix / flake.lock          — точка входа, хосты, inputs
-├── configuration.nix               — общие системные настройки (все хосты)
-├── home.nix                        — общие пользовательские настройки
-├── lib/default.nix                 — общие переменные (username = "zumuvik")
-├── hosts/<host>/                   — конфигурация конкретного хоста
-│   ├── default.nix                 — импорты модулей хоста
-│   ├── configuration.nix           — специфичные system-настройки
-│   └── hardware-configuration.nix  — автогенерированная аппаратная конфигурация
-├── modules/system/                 — NixOS-модули (services, hardware, greetd, и т.д.)
-├── modules/home/                   — Home Manager модули (common, hyprland)
-└── modules/programs/               — конфигурации программ (nixvim, ghostty, zsh, и т.д.)
+├── flake.nix / flake.lock          # Entry point, hosts, inputs
+├── configuration.nix              # Shared system config
+├── home.nix                       # Shared Home Manager config
+├── lib/default.nix                # Shared variables (username = "zumuvik")
+├── hosts/<host>/                  # Host-specific configs
+│   ├── default.nix                # Imports for the host
+│   ├── configuration.nix          # Host system settings
+│   └── hardware-configuration.nix  # Auto-generated hardware config
+├── modules/
+│   ├── system/                    # NixOS modules (services, hardware, etc.)
+│   ├── home/                      # Home Manager modules (common, hyprland)
+│   └── programs/                  # Program configs (nixvim, ghostty, zsh, etc.)
 ```
 
-## Команды
-
-### Сборка и применение
+## Build & Deployment Commands
 
 ```bash
-# Применить системную конфигурацию для конкретного хоста
+# Build system config (dry run - no changes)
+sudo nixos-rebuild build --flake .#<hostname>
+
+# Apply system config
 sudo nixos-rebuild switch --flake .#<hostname>
 
-# Применить Home Manager конфигурацию
+# Apply Home Manager config
 home-manager switch --flake .#<hostname>
 
-# Обновить все flake inputs
+# Rollback to previous generation
+sudo nixos-rebuild switch --rollback
+
+# Update flake inputs
 nix flake update
 
-# Откат к предыдущей генерации
-sudo nixos-rebuild switch --rollback
+# Build a specific host (examples)
+sudo nixos-rebuild build --flake .#nixlensk321
+sudo nixos-rebuild build --flake .#nixlensk322
+sudo nixos-rebuild build --flake .#nixlensk323
+
+# Shell with Nix tools for debugging
+nix develop .#nixosConfigurations.nixlensk321.config.system.build.toplevel
 ```
 
-### Проверка конфигурации (без применения)
+## Code Style Guidelines
 
-```bash
-# Проверить системную конфигурацию
-nixos-rebuild build --flake .#<hostname>
+### Formatting
 
-# Проверить Home Manager
-home-manager build --flake .#<hostname>
+- **Indentation**: 2 spaces (no tabs)
+- Verified in nixvim: `tabstop = 2`, `shiftwidth = 2`, `expandtab = true`
+- No automated formatters (alejandra/nixfmt) — follow existing style
+
+### Naming Conventions
+
+| Element | Convention | Example |
+|---------|------------|---------|
+| Files | kebab-case | `git-sync.nix`, `hardware-configuration.nix` |
+| Nix options | camelCase | `hardware.opengl.enable`, `services.openssh.enable` |
+| Nix variables | camelCase | `nixpkgsHost`, `hardwareConfig` |
+| Folders | lowercase | `modules/system/`, `modules/home/` |
+
+### Module Patterns
+
+**Standard module structure:**
+```nix
+# default.nix — re-exports sibling modules
+{ ... }: {
+  imports = [
+    ./module1.nix
+    ./module2.nix
+  ];
+}
+
+# module.nix — actual configuration
+{ config, pkgs, lib, ... }:
+
+{
+  # Configuration options
+}
 ```
 
-### Тестирование
-
-Тестов как таковых нет. Валидация — успешная сборка через `nixos-rebuild build`.
-
-## Стиль кода
-
-### Форматирование
-
-- Отступ: **2 пробела**, без табуляций
-- Подтверждено настройками nixvim: `tabstop = 2`, `shiftwidth = 2`, `expandtab = true`
-- Форматтеры Nix (alejandra/nixfmt) не настроены — следуй существующему стилю
-
-### Именование
-
-- Файлы: `kebab-case` (`git-sync.nix`, `exec-once.nix`, `hardware-configuration.nix`)
-- Опции Nix: `camelCase` (`hardware.opengl.enable`, `services.openssh.enable`)
-- Переменные Nix: `camelCase` (`nixpkgsHost`, `hardwareConfig`)
-- Папки: строчные буквы (`modules/system/`, `modules/home/`, `modules/programs/`)
-
-### Организация файлов
-
-- Каждый модуль имеет `default.nix` для реэкспорта/импортов
-- Разделение: `modules/system/` — системные, `modules/home/` — пользовательские, `modules/programs/` — программы
-- Хосты живут в `hosts/<hostname>/`
-- Конфигурация Hyprland разбита на логические файлы: `hyprland.nix`, `binds.nix`, `style.nix`, `exec-once.nix`, и т.д.
-
-### Комментарии
-
-- Разделители секций: `# ──────────────────────────────────────────────`
-- Комментарии на русском допустимы
-- Описательные заголовки секций: `# Services`, `# Hardware`, `# Hyprland`
+**Host-specific modules:**
+```nix
+{ ... }: {
+  imports = [
+    ./configuration.nix
+    ./hardware-configuration.nix
+    ../../modules/system/some-module.nix
+  ];
+}
+```
 
 ### Imports
 
-- Используй `imports = [ ./file.nix ];` для подключения модулей
-- `default.nix` импортирует все sibling-модули через `./module.nix`
-- Хосты импортируют общие конфиги: `../../configuration.nix`, `../../modules/system/`
+- Use `imports = [ ./file.nix ];` for module imports
+- `default.nix` imports sibling modules via `./module.nix`
+- Hosts import shared configs: `../../configuration.nix`, `../../modules/system/`
+- Use flake inputs directly in home.nix: `inputs.nixvim.homeModules.nixvim`
 
-### Конвенции Nix
+### Nix Idioms
 
-- `options` / `config` паттерн для модулей (через `{ config, pkgs, lib, ... }:`)
-- `with pkgs;` допустим для списков пакетов
-- `mkIf`, `mkEnableOption` — для условной активации
-- `extraConfig` — для raw-конфигов (Hyprland, ghostty)
-- Строки с несколькими строками: `''` (multi-line string)
+```nix
+# Conditional activation
+mkIf condition [ ]
 
-### Error handling
+# Conditional packages (string comparison)
+lib.optionals (hostName == "nixlensk323") [ ]
 
-- Nix — декларативный язык, обработка ошибок через валидацию сборки
-- Для shell-скриптов (`modules/home/hyprland/scripts/`): `set -euo pipefail`
-- Проверяй синтаксис через `nixos-rebuild build` перед коммитом
+# Merging configurations
+lib.mkMerge [ config1 config2 ]
 
-### Git
+# Multi-line strings
+''
+  first line
+  second line
+''
 
-- Ветки: `master`, `main`, `alpha`, `beta`
-- Настроен auto-sync по LAN (UDP порт 9876) — коммит на одной машине распространяется на все
-- Не коммить изменения без явного запроса пользователя
+# with pkgs for package lists (home.packages, etc.)
+home.packages = with pkgs; [
+  package1
+  package2
+];
+```
+
+### Comments
+
+- Section separators: `# ──────────────────────────────────────────────`
+- Comments in Russian are acceptable
+- Descriptive section headers: `# Services`, `# Hardware`, `# Hyprland`
+
+### Error Handling
+
+- Nix is declarative — errors surface during build validation
+- For shell scripts (`modules/home/hyprland/scripts/`): `set -euo pipefail`
+- Always verify syntax with `nixos-rebuild build` before committing
+
+## Git Workflow
+
+- Branches: `master`, `main`, `alpha`, `beta`
+- Auto-sync via LAN (UDP port 9876) — commits propagate to all hosts
+- **Do not commit without explicit user request**
+
+## Adding a New Host
+
+1. Create directory: `hosts/<hostname>/`
+2. Generate hardware config: `sudo nixos-generate-config --dir hosts/<hostname>`
+3. Create `hosts/<hostname>/default.nix` with imports
+4. Register in `flake.nix` under `nixosConfigurations`
+5. Build and test: `sudo nixos-rebuild build --flake .#<hostname>`
+
+## Optional Modules
+
+Enable in `flake.nix` via `makeHost`:
+```nix
+makeHost {
+  hostName = "myhost";
+  enableBluetooth = true;  # or false
+  enableRouter = true;     # or false
+}
+```
