@@ -2,6 +2,7 @@
 
 let
   username = (import ../../lib).username;
+  secret = "nix-git-sync-2026";
 in
 {
   networking.firewall.allowedUDPPorts = [ 9876 ];
@@ -37,6 +38,7 @@ in
       Environment = [
         "HOME=/home/${username}"
         "PATH=${pkgs.git}/bin:${pkgs.python3}/bin:/run/current-system/sw/bin"
+        "GIT_SYNC_SECRET=${secret}"
       ];
     };
   };

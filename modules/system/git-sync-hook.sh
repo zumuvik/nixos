@@ -3,6 +3,7 @@
 
 REPO_DIR="/etc/nixos"
 PORT=9876
+SECRET="nix-git-sync-2026"
 MY_HOSTNAME=$(hostname)
 
 # Map hostnames to IPs
@@ -18,7 +19,7 @@ MY_IP="${HOST_MAP[$MY_HOSTNAME]}"
 for HOST_NAME in "${!HOST_MAP[@]}"; do
     HOST_IP="${HOST_MAP[$HOST_NAME]}"
     if [[ "$HOST_IP" != "$MY_IP" ]]; then
-        (echo -n "git-pull" > /dev/udp/"$HOST_IP"/"$PORT") 2>/dev/null || true
+        (echo -n "git-pull:${SECRET}" > /dev/udp/"$HOST_IP"/"$PORT") 2>/dev/null || true
     fi
 done
 

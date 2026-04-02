@@ -36,7 +36,7 @@
     lib = import ./lib;
     username = lib.username;
 
-    makeHost = { hostName, enableSteam ? false, enableBluetooth ? false, enableRouter ? false }:
+    makeHost = { hostName, enableBluetooth ? false, enableRouter ? false }:
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { 
@@ -68,7 +68,6 @@
     nixosConfigurations = {
       nixlensk323 = makeHost {
         hostName = "nixlensk323";
-        enableSteam = true;
         enableBluetooth = true;
       };
 

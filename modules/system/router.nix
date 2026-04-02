@@ -84,7 +84,7 @@
   networking.firewall = {
     enable = true;
 
-    trustedInterfaces = [ "br0" "tun0" "docker0" ];
+    trustedInterfaces = [ "br0" "tun0" ];
 
     allowedTCPPorts = [
       22      # ssh
@@ -112,7 +112,7 @@
   };
 
   # ────────────────────────────────────────────────────────
-  # Docker
+  # Podman (rootless containers)
   # ────────────────────────────────────────────────────────
-  virtualisation.docker.enable = true;
+  virtualisation.podman.enable = true;
 }

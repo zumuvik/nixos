@@ -8,6 +8,9 @@
   time.timeZone = "Europe/Moscow";
 
   networking.networkmanager.enable = true;
+  networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ ];
+  networking.firewall.allowedUDPPorts = [ ];
 
   services.xserver.xkb = {
     layout = "us,ru";
