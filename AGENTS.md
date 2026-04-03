@@ -21,6 +21,10 @@ Flake-based NixOS configuration with Home Manager. Language: Nix.
 │   └── hardware-configuration.nix  # Auto-generated hardware config
 ├── modules/
 │   ├── system/                    # NixOS modules (services, hardware, etc.)
+│   │   ├── sites/                 # Web sites (nginx, applications)
+│   │   │   ├── nginx.nix          # Base nginx config + ACME/Let's Encrypt
+│   │   │   ├── roundcube.nix      # Mail web client (mail.samolensk.ru)
+│   │   │   └── default.nix        # Imports all site modules
 │   ├── home/                      # Home Manager modules (common, hyprland)
 │   └── programs/                  # Program configs (nixvim, ghostty, zsh, etc.)
 ```
@@ -142,4 +146,37 @@ home.packages = with pkgs; [ pkg1 pkg2 ];
 
 ```nix
 makeHost { hostName = "myhost"; enableBluetooth = true; }
+```
+
+## Sites & Nginx (Server nixlensk322)
+
+Web-сайты управляются через модули в `modules/system/sites/`.
+
+### Adding a New Site
+
+1. Create `modules/system/sites/<sitename>.nix` with nginx virtualHost config
+2. Import in `modules/system/sites/default.nix`
+3. Add `enableACME = true` and `forceSSL = true` for HTTPS
+4. Files go to `/var/www/sites/<domain>/`
+
+### Current Sites
+
+| Site | Domain | Module |
+|------|--------|--------|
+| Roundcube | mail.samolensk.ru | `roundcube.nix` |
+
+### Nginx Commands
+
+```bash
+# Test nginx config
+sudo nginx -t
+
+# Reload nginx
+sudo systemctl reload nginx
+
+# Check nginx status
+sudo systemctl status nginx
+
+# View logs
+sudo journalctl -u nginx -f
 ```

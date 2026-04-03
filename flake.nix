@@ -73,6 +73,7 @@
 
       nixlensk322 = makeHost {
         hostName = "nixlensk322";
+        enableRouter = true;
       };
 
       nixlensk321 = makeHost {
