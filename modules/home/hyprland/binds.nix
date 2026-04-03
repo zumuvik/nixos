@@ -1,4 +1,15 @@
-{ config, ... }:
+{ config, pkgs, lib, hostName, ... }:
+
+let
+  osuScript = "${pkgs.writeShellScript "osu-launch" ''
+    hyprctl dispatch workspace 9
+    otd-daemon &
+    sleep 1
+    otd-gui &
+    sleep 0.5
+    osu-lazer-bin &
+  ''}";
+in
 {
   wayland.windowManager.hyprland.settings = {
     "$mainMod" = "SUPER";
@@ -44,7 +55,6 @@
       "$mainMod, 6, workspace, 6"
       "$mainMod, 7, workspace, 7"
       "$mainMod, 8, workspace, 8"
-      "$mainMod, 9, workspace, 9"
       "$mainMod, 0, workspace, 10"
 
       # Move to workspace
@@ -56,7 +66,6 @@
       "$mainMod SHIFT, 6, movetoworkspace, 6"
       "$mainMod SHIFT, 7, movetoworkspace, 7"
       "$mainMod SHIFT, 8, movetoworkspace, 8"
-      "$mainMod SHIFT, 9, movetoworkspace, 9"
       "$mainMod SHIFT, 0, movetoworkspace, 10"
 
       # Screenshot
@@ -66,6 +75,10 @@
       # Custom
       "$mainMod, P, exec, ~/.local/bin/nix-pkg-manage.sh"
       "SUPER, Caps_Lock, exec, ~/.local/bin/ayu-toggle.sh"
+    ] ++ lib.optionals (hostName == "nixlensk323") [
+      "$mainMod, 9, exec, ${osuScript}"
+    ] ++ lib.optionals (hostName != "nixlensk323") [
+      "$mainMod, 9, workspace, 9"
     ];
 
 
