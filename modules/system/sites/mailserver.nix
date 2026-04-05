@@ -25,7 +25,7 @@ in
       smtpd_sasl_security_options = "noanonymous";
       smtpd_recipient_restrictions = "permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination";
       smtpd_relay_restrictions = "permit_mynetworks, permit_sasl_authenticated, defer_unauth_destination";
-      message_size_limit = "26214400"; # 25MB
+      message_size_limit = 26214400; # 25MB
 
       # LMTP delivery via Dovecot
       virtual_transport = "lmtp:unix:/var/spool/postfix/dovecot-lmtp";
