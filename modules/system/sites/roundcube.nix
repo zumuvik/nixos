@@ -103,11 +103,11 @@ in
         if [ ! -f "${rootDir}/index.php" ]; then
           cp -r ${pkgs.roundcube}/* ${rootDir}/
           chown -R nginx:nginx ${rootDir}
-
-          # Копируем конфигурацию
-          cp /etc/roundcube/config.inc.php ${rootDir}/config/config.inc.php
-          chown nginx:nginx ${rootDir}/config/config.inc.php
         fi
+
+        # Symlink на конфигурацию (environment.etc уже создал /etc/roundcube/config.inc.php)
+        mkdir -p ${rootDir}/config
+        ln -sf /etc/roundcube/config.inc.php ${rootDir}/config/config.inc.php
 
         # Инициализируем базу данных SQL-схемой
         if [ -f "${rootDir}/SQL/mysql.initial.sql" ]; then
