@@ -8,7 +8,6 @@ import sys
 
 PORT = 9876
 REPO_DIR = "/etc/nixos"
-PID_FILE = "/run/git-sync-listener.pid"
 SECRET = os.environ.get("GIT_SYNC_SECRET", "")
 
 logging.basicConfig(
@@ -65,13 +64,6 @@ def main():
     if not SECRET:
         log.warning("No GIT_SYNC_SECRET set, authentication disabled")
 
-    # Write PID file
-    try:
-        with open(PID_FILE, "w") as f:
-            f.write(str(os.getpid()))
-    except Exception as e:
-        log.warning("Cannot write PID file: %s", e)
-
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     sock.bind(("0.0.0.0", PORT))
@@ -99,13 +91,6 @@ def main():
             break
         except Exception as e:
             log.error("Loop error: %s", e, exc_info=True)
-
-    # Cleanup
-    try:
-        os.unlink(PID_FILE)
-    except OSError:
-        pass
-
 
 if __name__ == "__main__":
     main()
