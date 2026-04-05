@@ -16,7 +16,7 @@ in
     hostname = "mail.${domain}";
 
     config = {
-      smtpd_tls_chain_files = "${sslCertDir}/fullchain.pem ${sslCertDir}/key.pem";
+      smtpd_tls_chain_files = [ "${sslCertDir}/fullchain.pem" "${sslCertDir}/key.pem" ];
       smtpd_tls_security_level = "may";
       smtp_tls_security_level = "may";
       smtpd_sasl_auth_enable = "yes";
