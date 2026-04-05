@@ -104,6 +104,12 @@ in
     info@${domain}:{PLAIN}info123
   '';
 
+  # ── Директории ─────────────────────────────────────────
+  systemd.tmpfiles.rules = [
+    "d /var/spool/postfix 0755 root root -"
+    "d /var/spool/postfix/private 0700 postfix postfix -"
+  ];
+
   # ── Firewall ───────────────────────────────────────────
   networking.firewall.allowedTCPPorts = [ 25 465 587 993 ];
 }
