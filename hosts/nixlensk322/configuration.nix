@@ -101,6 +101,7 @@
   boot.loader.grub = {
     enable = true;
     device = lib.mkForce "/dev/nvme0n1";
+    efiSupport = lib.mkForce false;
     useOSProber = lib.mkForce true;
   };
 
