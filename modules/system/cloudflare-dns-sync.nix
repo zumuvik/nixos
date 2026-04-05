@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.cloudflare-dns-sync;
-  json = pkgs.writeText "domains.json" (builtins.toJSON cfg.domains);
+  domainsJson = builtins.toJSON cfg.domains;
 in
 {
   options.services.cloudflare-dns-sync = {
@@ -37,7 +37,7 @@ in
           API_TOKEN="$CLOUDFLARE_API_TOKEN"
           CURL=${pkgs.curl}/bin/curl
           CURRENT_IP=$($CURL -s https://ifconfig.me)
-          DOMAINS=${json}
+          DOMAINS='${domainsJson}'
           update_record() {
             local zone_name="$1" record_name="$2"
             zone_id=$($CURL -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone_name" \
