@@ -14,6 +14,10 @@
       if [ -f /etc/profile.d/nix-index.sh ]; then
         source /etc/profile.d/nix-index.sh
       fi
+
+      # SSH aliases
+      alias lp='ssh 192.168.1.80'
+      alias sr='ssh 192.168.1.145'
     '';
   };
 
