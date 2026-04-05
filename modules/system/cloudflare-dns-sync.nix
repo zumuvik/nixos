@@ -35,28 +35,29 @@ in
         ExecStart = pkgs.writeShellScript "cloudflare-dns-sync" ''
           set -euo pipefail
           API_TOKEN="$CLOUDFLARE_API_TOKEN"
-          CURRENT_IP=$(curl -s https://ifconfig.me)
+          CURL=${pkgs.curl}/bin/curl
+          CURRENT_IP=$($CURL -s https://ifconfig.me)
           DOMAINS=${json}
           update_record() {
             local zone_name="$1" record_name="$2"
-            zone_id=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone_name" \
+            zone_id=$($CURL -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone_name" \
               -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" | \
               ${pkgs.jq}/bin/jq -r '.result[0].id // empty')
             [ -z "$zone_id" ] && echo "[ERROR] Zone not found: $zone_name" && return 1
-            record_id=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records?name=$record_name.$zone_name&type=A" \
+            record_id=$($CURL -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records?name=$record_name.$zone_name&type=A" \
               -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" | \
               ${pkgs.jq}/bin/jq -r '.result[0].id // empty')
             if [ -z "$record_id" ]; then
-              curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" \
+              $CURL -s -X POST "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" \
                 -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
                 --data "{\"type\":\"A\",\"name\":\"$record_name.$zone_name\",\"content\":\"$CURRENT_IP\",\"ttl\":300,\"proxied\":false}" | \
                 ${pkgs.jq}/bin/jq -r '.success // false' | grep -q true && \
                 echo "[OK] Created $record_name.$zone_name -> $CURRENT_IP"
             else
-              old_ip=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_id" \
+              old_ip=$($CURL -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_id" \
                 -H "Authorization: Bearer $API_TOKEN" | ${pkgs.jq}/bin/jq -r '.result.content')
               [ "$old_ip" != "$CURRENT_IP" ] && \
-                curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_id" \
+                $CURL -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records/$record_id" \
                   -H "Authorization: Bearer $API_TOKEN" -H "Content-Type: application/json" \
                   --data "{\"type\":\"A\",\"name\":\"$record_name.$zone_name\",\"content\":\"$CURRENT_IP\",\"ttl\":300,\"proxied\":false}" | \
                   ${pkgs.jq}/bin/jq -r '.success // false' | grep -q true && \
