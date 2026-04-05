@@ -29,8 +29,6 @@ in
       wants = [ "network-online.target" ];
       serviceConfig = {
         Type = "oneshot";
-        Restart = "on-failure";
-        RestartSec = "5m";
         Environment = "CLOUDFLARE_API_TOKEN=${cfg.apiToken}";
         ExecStart = pkgs.writeShellScript "cloudflare-dns-sync" ''
           set -euo pipefail
