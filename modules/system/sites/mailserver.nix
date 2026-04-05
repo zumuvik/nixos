@@ -94,7 +94,6 @@ in
 
       ssl = required
       ssl_min_protocol = TLSv1.2
-      ssl_dh_parameters_length = 0
     '';
   };
 
