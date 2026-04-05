@@ -99,14 +99,20 @@ in
 
   # ── Пользователи почты ─────────────────────────────────
   environment.etc."dovecot/users".text = ''
-    admin@${domain}:{PLAIN}admin123
-    info@${domain}:{PLAIN}info123
+    admin@${domain}:{PLAIN}admin123::::
+    info@${domain}:{PLAIN}info123::::
   '';
 
   # ── Директории ─────────────────────────────────────────
   systemd.tmpfiles.rules = [
     "d /var/spool/postfix 0755 root root -"
     "d /var/spool/postfix/private 0700 postfix postfix -"
+    "d /var/vmail 0770 vmail vmail -"
+    "d /var/vmail/${domain} 0770 vmail vmail -"
+    "d /var/vmail/${domain}/admin 0770 vmail vmail -"
+    "d /var/vmail/${domain}/admin/Maildir 0770 vmail vmail -"
+    "d /var/vmail/${domain}/info 0770 vmail vmail -"
+    "d /var/vmail/${domain}/info/Maildir 0770 vmail vmail -"
   ];
 
   # ── Firewall ───────────────────────────────────────────
