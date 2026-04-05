@@ -16,8 +16,8 @@ in
     hostname = "mail.${domain}";
 
     # TLS
-    tlsCert = "${sslCertDir}/fullchain.pem";
-    tlsKey = "${sslCertDir}/key.pem";
+    sslCert = "${sslCertDir}/fullchain.pem";
+    sslKey = "${sslCertDir}/key.pem";
 
     config = {
       smtpd_tls_security_level = "may";
