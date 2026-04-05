@@ -1,6 +1,23 @@
-{ config, lib, pkgs, username, ... }:
+{ config, lib, pkgs, inputs, username, ... }:
+
+let
+  cloudflareApiToken = lib.fileContents ./.secret;
+in
 
 {
+  imports = [
+    ../../modules/system/cloudflare-dns-sync.nix
+  ];
+
+  services.cloudflare-dns-sync = {
+    enable = true;
+    apiToken = cloudflareApiToken;
+    checkInterval = "hourly";
+    domains = [
+      { zone = "samolensk.ru"; records = [ "mail" "@" ]; }
+    ];
+  };
+
   # ────────────────────────────────────────────────────────
   # Networking & Hostname
   # ────────────────────────────────────────────────────────
@@ -11,7 +28,7 @@
   networking.networkmanager.settings.main.dns = "none";
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
   networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ 3389 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 3389 ];
   networking.firewall.allowedUDPPorts = [ ];
 
   # ────────────────────────────────────────────────────────

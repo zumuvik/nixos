@@ -1,68 +1,56 @@
 # AGENTS.md — NixOS Configuration
 
-## Project Overview
-
-Flake-based NixOS configuration with Home Manager. Language: Nix.
-- **WM**: Hyprland (Wayland)
-- **Editor**: Neovim (via nixvim)
-- **Terminal**: Ghostty
-- **Hosts**: `nixlensk321` (laptop), `nixlensk322` (server/router), `nixlensk323` (gaming PC)
+Flake-based NixOS + Home Manager. Language: Nix.
+- **WM**: Hyprland | **Editor**: nixvim | **Terminal**: Ghostty
+- **Hosts**: `nixlensk321` (laptop), `nixlensk322` (server), `nixlensk323` (gaming PC)
 
 ## Directory Structure
 
 ```
-├── flake.nix / flake.lock          # Entry point, hosts, inputs
-├── configuration.nix              # Shared system config
-├── home.nix                       # Shared Home Manager config
-├── lib/default.nix                # Shared variables (username = "zumuvik")
-├── hosts/<host>/                  # Host-specific configs
-│   ├── default.nix                # Imports for the host
-│   ├── configuration.nix          # Host system settings
-│   └── hardware-configuration.nix  # Auto-generated hardware config
-├── modules/
-│   ├── system/                    # NixOS modules (services, hardware, etc.)
-│   │   ├── sites/                 # Web sites (nginx, applications)
-│   ├── home/                      # Home Manager modules (common, hyprland)
-│   └── programs/                  # Program configs (nixvim, ghostty, zsh, etc.)
+flake.nix / flake.lock          # Entry point, hosts, inputs
+configuration.nix               # Shared system config
+home.nix                        # Shared Home Manager config
+lib/default.nix                 # Shared variables (username = "zumuvik")
+hosts/<host>/                  # Host-specific configs
+  ├── default.nix               # Imports
+  ├── configuration.nix         # Host settings
+  └── hardware-configuration.nix # Auto-generated
+modules/
+  ├── system/                   # NixOS modules (services, hardware, sites)
+  │   └── sites/               # Web sites (nginx)
+  ├── home/                     # Home Manager (hyprland, common)
+  │   └── hyprland/scripts/     # Shell scripts
+  └── programs/                 # Program configs (nixvim, ghostty, zsh)
 ```
 
 ## Build / Test / Deploy
 
 ```bash
-# ── Verification (run BEFORE applying) ──────────────────────
+# Verification (run BEFORE applying)
+sudo nixos-rebuild build --flake .#<hostname>   # dry-run
+home-manager build --flake .#<hostname>         # Home Manager only
+nix flake check                                 # check flake outputs
 
-# Dry-run build — catches errors without changing anything
-sudo nixos-rebuild build --flake .#<hostname>
-
-# Build only Home Manager config (faster iteration)
-home-manager build --flake .#<hostname>
-
-# Evaluate a specific value (debugging)
+# Evaluate value (debugging)
 nix eval .#nixosConfigurations.nixlensk321.pkgs.hyprland.outPath
 
-# Check flake outputs
-nix flake check
-
-# ── Apply changes ───────────────────────────────────────────
-
-# Apply system config
+# Apply
 sudo nixos-rebuild switch --flake .#<hostname>
-
-# Apply Home Manager config
 home-manager switch --flake .#<hostname>
 
-# ── Rollback ────────────────────────────────────────────────
-
+# Rollback
 sudo nixos-rebuild switch --rollback
 home-manager switch --rollback
 
-# ── Maintenance ─────────────────────────────────────────────
+# Maintenance
+nix flake update && nix-collect-garbage -d
+```
 
-# Update flake inputs
-nix flake update
+## Linting / Static Analysis
 
-# Garbage collect old generations
-nix-collect-garbage -d
+```bash
+deadnix -W .    # detect unused variables
+statix check .  # static analysis for Nix patterns
 ```
 
 ## Code Style
@@ -77,10 +65,10 @@ nix-collect-garbage -d
 
 | Element | Convention | Example |
 |---------|------------|---------|
-| Files | kebab-case | `git-sync.nix`, `hardware-configuration.nix` |
+| Files | kebab-case | `git-sync.nix` |
 | Options | camelCase | `hardware.opengl.enable` |
-| Variables | camelCase | `nixpkgsHost`, `hardwareConfig` |
-| Folders | lowercase | `modules/system/`, `modules/home/` |
+| Variables | camelCase | `nixpkgsHost` |
+| Folders | lowercase | `modules/system/` |
 
 ### Module Patterns
 
@@ -90,12 +78,13 @@ nix-collect-garbage -d
 
 # module.nix — actual config
 { config, pkgs, lib, ... }: {
+  imports = [ ./binds.nix ./style.nix ];
   # use mkIf, mkMerge, mkDefault as needed
 }
 ```
 
 ### Imports
-- Use `imports = [ ./file.nix ];` — always include `.nix` extension
+- `imports = [ ./file.nix ];` — always include `.nix` extension
 - `default.nix` imports siblings via `./module.nix`
 - Flake inputs: `inputs.nixvim.homeModules.nixvim`
 
@@ -103,70 +92,63 @@ nix-collect-garbage -d
 
 ```nix
 # Conditionals
-mkIf condition { }
+mkIf condition { option = value; }
 lib.optionals (hostName == "nixlensk323") [ pkgs.something ]
-
-# Merging
-lib.mkMerge [ baseOverrides hostOverrides ]
-
-# Multi-line strings
-''
-  line one
-  line two
-''
+lib.mkMerge [ baseConfig hostOverrides ]
 
 # Package lists
 home.packages = with pkgs; [ pkg1 pkg2 ];
 ```
 
+### Attribute Ordering
+1. `imports` 2. `environment` 3. `boot` 4. `nix` 5. `services`
+6. `programs` 7. `users` 8. `system stateVersion`
+
 ### Comments
 - Section separators: `# ──────────────────────────────────────────────`
 - Russian comments are acceptable
-- Descriptive headers: `# Services`, `# Hardware`, `# Hyprland`
+- Disable options: `# gestures (disabled - causes errors)`
 
 ### Error Handling
-- Nix errors surface at build time — always run `nixos-rebuild build` first
-- Shell scripts (`modules/home/hyprland/scripts/`): `set -euo pipefail`
-- **Binary naming**: Hyprland package provides `Hyprland` (for DM) and `start-hyprland` (for shell). Do NOT use `Hyprland-start` — it doesn't exist.
-- **Option existence**: Always verify options exist in your nixpkgs version. E.g., `services.nsncd` does NOT exist — use `services.nscd` instead.
+- Nix errors surface at build time — run `nixos-rebuild build` first
+- Shell scripts: `set -euo pipefail`
+- Verify options exist in your nixpkgs version
+
+### Shell Scripts (`modules/home/hyprland/scripts/`)
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "$1" in
+    "--get")  echo "value" ;;
+    "--inc")  echo "increased" ;;
+    *)        echo "Usage: $0 --get|--inc" ;;
+esac
+```
 
 ## Git Workflow
-
-- Branches: `main` (default), `alpha`, `beta`
-- Auto-sync via LAN (UDP port 9876) — commits propagate to all hosts
+- Branches: `main`, `alpha`, `beta`
+- Auto-sync via LAN (UDP port 9876)
 - **Do not commit without explicit user request**
 
 ## Adding a New Host
-
 1. Create `hosts/<hostname>/` with `default.nix`, `configuration.nix`, `hardware-configuration.nix`
-2. Register in `flake.nix` under `nixosConfigurations` via `makeHost`
+2. Register in `flake.nix` via `makeHost { hostName = "myhost"; }`
 3. Build: `sudo nixos-rebuild build --flake .#<hostname>`
-
-```nix
-makeHost { hostName = "myhost"; enableBluetooth = true; }
-```
 
 ## Sites & Nginx (Server nixlensk322)
 
-Web-сайты управляются через модули в `modules/system/sites/`.
-
-### Adding a New Site
-
-1. Create `modules/system/sites/<sitename>.nix` with nginx virtualHost config
-2. Import in `modules/system/sites/default.nix`
-3. Add `enableACME = true` and `forceSSL = true` for HTTPS
-4. Files go to `/var/www/sites/<domain>/`
-
-### Current Sites
+Sites in `modules/system/sites/`.
 
 | Site | Domain | Module |
 |------|--------|--------|
 | Roundcube | mail.samolensk.ru | `roundcube.nix` |
 
-### Nginx Commands
-
 ```bash
-sudo nginx -t          # Test config
-sudo systemctl reload nginx
+sudo nginx -t && sudo systemctl reload nginx
 sudo journalctl -u nginx -f
 ```
+
+Add HTTPS: `enableACME = true; forceSSL = true;`
+Files go to `/var/www/sites/<domain>/`
