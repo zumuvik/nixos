@@ -1,6 +1,9 @@
 { config, pkgs, ... }:
 
 {
+  # Кэширование NSS (nscd)
+  services.nscd.enable = true;
+
   # Audio (PipeWire)
   services.pipewire = {
     enable = true;
@@ -35,10 +38,10 @@
   # XDG Desktop Portal (для Wayland)
   xdg.portal = {
     enable = true;
-    config.common.default = "*";
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland
-      xdg-desktop-portal-gtk
+    extraPortals = [
+      pkgs.xdg-desktop-portal-hyprland
+      pkgs.xdg-desktop-portal-gtk
     ];
+    config.common.default = "*";
   };
 }

@@ -11,7 +11,7 @@
 
       command = let
 
-        tui = "${pkgs.greetd.tuigreet}/bin/tuigreet";
+        tui = "${pkgs.tuigreet}/bin/tuigreet";
 
         cmd = "${pkgs.hyprland}/bin/start-hyprland";
 

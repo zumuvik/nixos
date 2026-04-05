@@ -3,11 +3,10 @@
 let
   osuScript = "${pkgs.writeShellScript "osu-launch" ''
     hyprctl dispatch workspace 9
-    otd-daemon &
     sleep 1
     otd-gui &
-    sleep 0.5
-    osu-lazer-bin &
+    sleep 1
+    osu\! &
   ''}";
 in
 {
@@ -76,7 +75,7 @@ in
       "$mainMod, P, exec, ~/.local/bin/nix-pkg-manage.sh"
       "SUPER, Caps_Lock, exec, ~/.local/bin/ayu-toggle.sh"
     ] ++ lib.optionals (hostName == "nixlensk323") [
-      "$mainMod, 9, exec, ${osuScript}"
+      "$mainMod, 9, execr, ${osuScript}"
     ] ++ lib.optionals (hostName != "nixlensk323") [
       "$mainMod, 9, workspace, 9"
     ];
