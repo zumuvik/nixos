@@ -72,7 +72,7 @@ in
             done
           done
         '';
-      '';
+      };
     };
     environment.systemPackages = with pkgs; [ curl jq ];
   };
