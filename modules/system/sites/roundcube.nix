@@ -98,19 +98,21 @@ in
 
         # Создаём директорию
         mkdir -p ${rootDir}
-        
+
         # Копируем файлы Roundcube
         if [ ! -f "${rootDir}/index.php" ]; then
-          cp -r ${pkgs.roundcube}/share/roundcube/* ${rootDir}/
+          cp -r ${pkgs.roundcube}/* ${rootDir}/
           chown -R nginx:nginx ${rootDir}
-          
+
           # Копируем конфигурацию
           cp /etc/roundcube/config.inc.php ${rootDir}/config/config.inc.php
           chown nginx:nginx ${rootDir}/config/config.inc.php
         fi
 
-        # Инициализируем базу данных
-        ${pkgs.roundcube}/bin/roundcube-dbinit --dir=${rootDir} --db=mysql://roundcube:roundcube_password@localhost/roundcube || true
+        # Инициализируем базу данных SQL-схемой
+        if [ -f "${rootDir}/SQL/mysql.initial.sql" ]; then
+          ${pkgs.mariadb}/bin/mysql -u root roundcube < "${rootDir}/SQL/mysql.initial.sql" || true
+        fi
       '';
     };
   };
