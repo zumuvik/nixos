@@ -8,6 +8,7 @@
   time.timeZone = "Europe/Moscow";
 
   networking.networkmanager.enable = true;
+  networking.networkmanager.settings.main.dns = "none";
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 3389 ];
