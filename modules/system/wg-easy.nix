@@ -68,7 +68,7 @@
     environment = {
       WG_HOST = "vpn.samolensk.ru";
       WG_PORT = "44321";
-      WEBUI_HOST = "127.0.0.1";
+      WEBUI_HOST = "0.0.0.0";
       WEBUI_PORT = "51821";
 
       # Unattended setup — создаёт пользователя при первом запуске
@@ -81,7 +81,7 @@
 
     ports = [
       "44321:44321/udp"
-      "127.0.0.1:51821:51821/tcp"
+      "51821:51821/tcp"
     ];
 
     extraOptions = [
