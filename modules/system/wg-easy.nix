@@ -1,12 +1,17 @@
 { config, pkgs, lib, ... }:
 
+let
+  extIf = "enp6s0";
+  wgSubnet = "10.8.0.0/24";
+in
+
 {
   # ────────────────────────────────────────────────────────
   # WireGuard Easy — VPN сервер с веб-интерфейсом
   # Работает через podman (без Docker)
   # ────────────────────────────────────────────────────────
 
-  # Kernel modules для NAT и iptables (нужны контейнеру)
+  # Kernel modules для NAT и iptables
   boot.kernelModules = [
     "wireguard"
     "ip_tables"
@@ -71,6 +76,9 @@
       WEBUI_HOST = "0.0.0.0";
       WEBUI_PORT = "51821";
 
+      # Отключаем iptables внутри контейнера (NAT на хосте)
+      IPTABLES_BACKEND = "nft";
+
       # Unattended setup — создаёт пользователя при первом запуске
       INIT_ENABLED = "true";
       INIT_USERNAME = "admin";
@@ -95,6 +103,30 @@
     ];
   };
 
+  # ────────────────────────────────────────────────────────
+  # NAT на хосте (вместо iptables внутри контейнера)
+  # ────────────────────────────────────────────────────────
+  networking.nftables.enable = true;
+  networking.nftables.ruleset = ''
+    table ip nat {
+      chain postrouting {
+        type nat hook postrouting priority 100; policy accept;
+        ip saddr ${wgSubnet} oifname "${extIf}" masquerade
+      }
+    }
+    table ip filter {
+      chain forward {
+        type filter hook forward priority 0; policy accept;
+        iifname "wg0" accept
+        oifname "wg0" accept
+      }
+      chain input {
+        type filter hook input priority 0; policy accept;
+        udp dport 44321 accept
+      }
+    }
+  '';
+
   # Хранилище конфигурации WireGuard
   systemd.tmpfiles.rules = [
     "d /var/lib/containers/storage/volumes/wg-easy-config 0755 root root -"
@@ -104,4 +136,5 @@
   # Firewall
   # ────────────────────────────────────────────────────────
   networking.firewall.allowedUDPPorts = [ 44321 ];
+  networking.firewall.allowedTCPPorts = [ 51821 ];
 }
