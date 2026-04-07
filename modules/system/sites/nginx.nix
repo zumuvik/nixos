@@ -23,6 +23,18 @@
     logError = "stderr info";
     appendHttpConfig = ''
       access_log /var/log/nginx/access.log;
+
+      # Блокируем доступ по IP и неизвестным доменам
+      server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+        server_name _;
+        ssl_certificate /var/lib/acme/mail.samolensk.ru/fullchain.pem;
+        ssl_certificate_key /var/lib/acme/mail.samolensk.ru/key.pem;
+        return 444;
+      }
     '';
   };
 
