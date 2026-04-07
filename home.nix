@@ -69,6 +69,7 @@
     # Desktop Environment
     waybar
     rofi
+    swaynotificationcenter
     waypaper
     nwg-look
     nwg-displays

@@ -152,3 +152,4 @@ sudo journalctl -u nginx -f
 
 Add HTTPS: `enableACME = true; forceSSL = true;`
 Files go to `/var/www/sites/<domain>/`
+Не забывай делать комиты при изменении

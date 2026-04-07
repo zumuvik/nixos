@@ -8,6 +8,7 @@
     ./exec-once.nix
     ./scripts.nix
     ./hyprlock.nix
+    ./swaync.nix
   ];
 
   wayland.windowManager.hyprland = {
