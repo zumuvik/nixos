@@ -18,7 +18,8 @@
        "wl-paste --type image --watch cliphist store"
        "wl-paste --type text --watch cliphist store"
        "hyprctl setcursor Bibata-Modern-Classic 24"
-       "waybar & swww-daemon"
-     ];
+        "waybar & swww-daemon"
+        "swaync"
+      ];
   };
 }

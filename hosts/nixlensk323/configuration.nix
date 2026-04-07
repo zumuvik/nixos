@@ -7,11 +7,30 @@
   networking.hostName = "nixlensk323";
   time.timeZone = "Europe/Moscow";
 
+  # ────────────────────────────────────────────────────────
+  # Network Bridge (for VMs)
+  # ────────────────────────────────────────────────────────
+  networking.bridges.br0.interfaces = [ "enp8s0" ];
+  networking.interfaces.br0.ipv4.addresses = [
+    {
+      address = "192.168.1.146";
+      prefixLength = 24;
+    }
+  ];
+  networking.defaultGateway = {
+    address = "192.168.1.1";
+    interface = "br0";
+  };
+
+  networking.networkmanager.enable = false;
+
   boot = {
-    resumeDevice = "/dev/disk/by-uuid/6703b7a2-d8ba-4f63-8fc0-5d770b59df7f";
+    kernelModules = [ "bridge" "uinput" "v4l2loopback" ];
     kernelParams = [
+      "net.ipv4.ip_forward=1"
       "resume_offset=4988160"
     ];
+    resumeDevice = "/dev/disk/by-uuid/6703b7a2-d8ba-4f63-8fc0-5d770b59df7f";
   };
 
   services.xserver.xkb = {
@@ -19,12 +38,12 @@
     options = "grp:alt_shift_toggle";
   };
 
-  networking.networkmanager.enable = true;
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ ];
   networking.firewall.allowedUDPPorts = [ ];
   networking.firewall.checkReversePath = "loose";
+  networking.firewall.trustedInterfaces = [ "br0" ];
   # ────────────────────────────────────────────────────────
   # Remote Builder
   # ────────────────────────────────────────────────────────
@@ -85,7 +104,6 @@
   hardware.opentabletdriver.enable = true;
   hardware.opentabletdriver.daemon.enable = true;
   hardware.uinput.enable = true;
-  boot.kernelModules = [ "uinput" "v4l2loopback" ];
 
   # ────────────────────────────────────────────────────────
   # OBS Virtual Camera
