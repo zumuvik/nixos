@@ -12,11 +12,13 @@ in
   # ── Postfix (SMTP) ─────────────────────────────────────
   services.postfix = {
     enable = true;
-    domain = domain;
-    hostname = "mail.${domain}";
+    enableSubmission = true;
+    enableSubmissions = true;
 
-    config = {
-      smtpd_tls_chain_files = [ "${sslCertDir}/fullchain.pem" "${sslCertDir}/key.pem" ];
+    settings.main = {
+      mydomain = domain;
+      myhostname = "mail.${domain}";
+      smtpd_tls_chain_files = [ "${sslCertDir}/key.pem" "${sslCertDir}/fullchain.pem" ];
       smtpd_tls_security_level = "may";
       smtp_tls_security_level = "may";
       smtpd_sasl_auth_enable = "yes";
@@ -27,16 +29,19 @@ in
       smtpd_relay_restrictions = "permit_mynetworks, permit_sasl_authenticated, defer_unauth_destination";
       message_size_limit = 26214400; # 25MB
 
-      # LMTP delivery via Dovecot
       virtual_transport = "lmtp:unix:/var/spool/postfix/dovecot-lmtp";
       virtual_mailbox_domains = domain;
+      virtual_mailbox_maps = "hash:/etc/postfix/virtual_mailbox_maps";
+      virtual_mailbox_base = "/var/vmail";
+      virtual_uid_maps = "static:vmail";
+      virtual_gid_maps = "static:vmail";
+    };
+
+    mapFiles = {
       virtual_mailbox_maps = pkgs.writeText "virtual-mailbox-maps" ''
         admin@${domain}    ${domain}/admin/
         info@${domain}     ${domain}/info/
       '';
-      virtual_mailbox_base = "/var/vmail";
-      virtual_uid_maps = "static:999";
-      virtual_gid_maps = "static:999";
     };
   };
 

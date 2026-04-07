@@ -64,6 +64,22 @@ in
           command = "/run/current-system/sw/bin/nixos-rebuild switch";
           options = [ "NOPASSWD" ];
         }
+        {
+          command = "/run/current-system/sw/bin/systemctl restart podman-wg-easy.service";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/systemctl status podman-wg-easy.service";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/journalctl -u podman-wg-easy.service";
+          options = [ "NOPASSWD" ];
+        }
+        {
+          command = "/run/current-system/sw/bin/podman";
+          options = [ "NOPASSWD" ];
+        }
       ];
     }
   ];
@@ -114,6 +130,7 @@ in
   # Boot
   # ────────────────────────────────────────────────────────
   boot.kernelModules = [ "kvm" "kvm-amd" ];
+  boot.kernelParams = [ "idle=nomwait" ];
 
   boot.loader.grub = {
     enable = true;

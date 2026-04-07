@@ -3,6 +3,24 @@
 let
   extIf = "enp6s0";
   wgSubnet = "10.8.0.0/24";
+
+  # Заглушки для iptables — контейнер v15 требует legacy iptables,
+  # но на ядре 6.18+ модуль iptable_nat отсутствует.
+  # NAT настраивается через nftables на хосте.
+  # Статический бинарник через musl (в контейнере нет bash).
+  iptablesStub = pkgs.pkgsMusl.stdenv.mkDerivation {
+    name = "iptables-stub";
+    src = pkgs.writeText "main.c" "int main(void) { return 0; }";
+    dontUnpack = true;
+    buildPhase = ''
+      $CC $src -o iptables -static
+    '';
+    installPhase = ''
+      mkdir -p $out/bin
+      cp iptables $out/bin/iptables
+      ln -s $out/bin/iptables $out/bin/ip6tables
+    '';
+  };
 in
 
 {
@@ -16,7 +34,6 @@ in
     "wireguard"
     "ip_tables"
     "iptable_filter"
-    "iptable_nat"
     "ipt_MASQUERADE"
     "nf_nat"
     "nf_conntrack"
@@ -39,28 +56,7 @@ in
   virtualisation.podman.dockerCompat = true;
 
   # ────────────────────────────────────────────────────────
-  # Создание podman сети для wg-easy
-  # ────────────────────────────────────────────────────────
-  systemd.services.podman-wg-network-create = {
-    description = "Create wg Podman network";
-    before = [ "podman-wg-easy.service" ];
-    requires = [ "podman.service" ];
-    wantedBy = [ "podman-wg-easy.service" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    script = ''
-      ${pkgs.podman}/bin/podman network rm wg 2>/dev/null || true
-      ${pkgs.podman}/bin/podman network create \
-        --driver bridge \
-        --subnet 10.42.42.0/24 \
-        wg 2>/dev/null || true
-    '';
-  };
-
-  # ────────────────────────────────────────────────────────
-  # wg-easy контейнер
+  # wg-easy контейнер — host network (прямой доступ к сети хоста)
   # ────────────────────────────────────────────────────────
   virtualisation.oci-containers.containers."wg-easy" = {
     image = "ghcr.io/wg-easy/wg-easy:15";
@@ -68,6 +64,8 @@ in
 
     volumes = [
       "wg-easy-config:/etc/wireguard"
+      "${iptablesStub}:/usr/sbin/iptables:ro"
+      "${iptablesStub}:/usr/sbin/ip6tables:ro"
     ];
 
     environment = {
@@ -76,35 +74,23 @@ in
       WEBUI_HOST = "0.0.0.0";
       WEBUI_PORT = "51821";
 
-      # Отключаем iptables внутри контейнера (NAT на хосте)
-      IPTABLES_BACKEND = "nft";
-
       # Unattended setup — создаёт пользователя при первом запуске
       INIT_ENABLED = "true";
       INIT_USERNAME = "admin";
       INIT_PASSWORD = "zxczxczxc";
     };
 
-    networks = [ "wg" ];
-
-    ports = [
-      "44321:44321/udp"
-      "51821:51821/tcp"
-    ];
-
     extraOptions = [
-      "--privileged=true"
-      "--ip=10.42.42.42"
+      "--network=host"
+      "--privileged"
       "--cap-add=NET_ADMIN"
       "--cap-add=SYS_MODULE"
       "--cap-add=NET_RAW"
-      "--sysctl=net.ipv4.ip_forward=1"
-      "--sysctl=net.ipv4.conf.all.src_valid_mark=1"
     ];
   };
 
   # ────────────────────────────────────────────────────────
-  # NAT на хосте (вместо iptables внутри контейнера)
+  # NAT на хосте через nftables (вместо iptables в контейнере)
   # ────────────────────────────────────────────────────────
   networking.nftables.enable = true;
   networking.nftables.ruleset = ''
