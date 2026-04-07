@@ -13,7 +13,7 @@
       CPU_ENERGY_PERF_POLICY_ON_AC = "performance";
       CPU_ENERGY_PERF_POLICY_ON_BAT = "power";
       STOP_CHARGE_THRESH_BAT0 = 0;
-      DEVICES_TO_DISABLE_ON_STARTUP = [ "bluetooth" "wlan" ];
+      DEVICES_TO_DISABLE_ON_STARTUP = [ "wlan" ];
       DEVICES_TO_ENABLE_ON_STARTUP = [ "wifi" ];
     };
   };

@@ -1,11 +1,10 @@
-{ config, pkgs, username, ... }:
+{ config, pkgs, username, hostName, lib', ... }:
 
 {
   # ────────────────────────────────────────────────────────
   # Networking & Hostname
   # ────────────────────────────────────────────────────────
   networking.hostName = "nixlensk323";
-  time.timeZone = "Europe/Moscow";
 
   # ────────────────────────────────────────────────────────
   # Network Bridge (for VMs)
@@ -33,17 +32,10 @@
     resumeDevice = "/dev/disk/by-uuid/6703b7a2-d8ba-4f63-8fc0-5d770b59df7f";
   };
 
-  services.xserver.xkb = {
-    layout = "us,ru";
-    options = "grp:alt_shift_toggle";
-  };
-
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
-  networking.firewall.enable = true;
-  networking.firewall.allowedTCPPorts = [ ];
-  networking.firewall.allowedUDPPorts = [ ];
   networking.firewall.checkReversePath = "loose";
   networking.firewall.trustedInterfaces = [ "br0" ];
+
   # ────────────────────────────────────────────────────────
   # Remote Builder
   # ────────────────────────────────────────────────────────
@@ -57,33 +49,12 @@
   ];
 
   # ────────────────────────────────────────────────────────
-  # User
+  # User (gaming PC: qemu + SSH keys)
   # ────────────────────────────────────────────────────────
-  programs.zsh.enable = true;
   users.users.${username} = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" ];
-    shell = pkgs.zsh;
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEP3GKg44+5QOaTUj7kHMO9x4sMhShdVuK4NR1yMtleQ zumuvik@nixlensk323"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK9RWNYncLPCFQm4vcL0Ln3f8CG14g/JtUc42fPBjyJN laptop"
-    ];
+    extraGroups = [ "qemu" ];
+    openssh.authorizedKeys.keys = lib'.sshKeys;
   };
-
-  # ────────────────────────────────────────────────────────
-  # sudo без пароля на nixos-rebuild switch
-  # ────────────────────────────────────────────────────────
-  security.sudo.extraRules = [
-    {
-      users = [ "${username}" ];
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/nixos-rebuild switch";
-          options = [ "NOPASSWD" ];
-        }
-      ];
-    }
-  ];
 
   # ────────────────────────────────────────────────────────
   # Steam + Gaming
@@ -119,25 +90,11 @@
   environment.systemPackages = with pkgs; [
     v4l-utils
     osu-lazer-bin
-    git
-    wget
-    gh
-    wireguard-tools
     zip
     unzip
     unrar
     xrandr
-    brightnessctl
-    grim
-    slurp
-    wl-clipboard
-    mako
-    swww
-    btop
     opencode
-    fastfetch
-    networkmanagerapplet
-    pavucontrol
     nix-search
   ];
 }

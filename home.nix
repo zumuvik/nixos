@@ -91,7 +91,6 @@
     scrcpy
     android-tools
     remmina
-    pavucontrol
     libnotify
     cliphist
     bibata-cursors

@@ -4,7 +4,6 @@
     ./binds.nix
     ./style.nix
     ./monitors.nix
-    ./workspaces.nix
     ./exec-once.nix
     ./scripts.nix
     ./hyprlock.nix
