@@ -1,10 +1,75 @@
 # /etc/nixos/configuration.nix
 
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, inputs, username, ... }:
 
 {
   imports = [
     ./modules/system
+  ];
+
+  # ────────────────────────────────────────────────────────
+  # Networking (общее для всех)
+  # ────────────────────────────────────────────────────────
+  networking.networkmanager.enable = lib.mkDefault true;
+  networking.firewall.enable = lib.mkDefault true;
+
+  # ────────────────────────────────────────────────────────
+  # Timezone & Locale (общее для всех)
+  # ────────────────────────────────────────────────────────
+  time.timeZone = "Europe/Moscow";
+
+  # ────────────────────────────────────────────────────────
+  # Keyboard (общее для всех)
+  # ────────────────────────────────────────────────────────
+  services.xserver.xkb = {
+    layout = "us,ru";
+    options = "grp:alt_shift_toggle";
+  };
+
+  # ────────────────────────────────────────────────────────
+  # User (общее для всех)
+  # ────────────────────────────────────────────────────────
+  programs.zsh.enable = true;
+
+  users.users.${username} = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" ];
+    shell = pkgs.zsh;
+  };
+
+  # ────────────────────────────────────────────────────────
+  # sudo без пароля на nixos-rebuild switch (общее)
+  # ────────────────────────────────────────────────────────
+  security.sudo.extraRules = [
+    {
+      users = [ "${username}" ];
+      commands = [
+        {
+          command = "/run/current-system/sw/bin/nixos-rebuild switch";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
+
+  # ────────────────────────────────────────────────────────
+  # System packages (общие для всех хостов)
+  # ────────────────────────────────────────────────────────
+  environment.systemPackages = with pkgs; [
+    git
+    wget
+    gh
+    wireguard-tools
+    brightnessctl
+    grim
+    slurp
+    wl-clipboard
+    mako
+    swww
+    btop
+    fastfetch
+    networkmanagerapplet
+    pavucontrol
   ];
 
   # ────────────────────────────────────────────────────────

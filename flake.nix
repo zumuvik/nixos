@@ -42,6 +42,7 @@
         specialArgs = { 
           inherit inputs username hostName;
           inherit ayugram-desktop ags grub2-themes;
+          lib' = lib;
         };
 
         modules = [
@@ -77,6 +78,7 @@
 
       nixlensk321 = makeHost {
         hostName = "nixlensk321";
+        enableBluetooth = true;
       };
     };
 
