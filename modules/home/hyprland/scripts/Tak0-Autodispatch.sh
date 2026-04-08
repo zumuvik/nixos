@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Tak0-Autodispatch.sh
@@ -32,8 +33,6 @@
 #   - jq        → JSON client parsing
 #   - pgrep/ps  → process tree inspection
 
-set -u
-
 LOGFILE="$(dirname "$0")/dispatch.log"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -44,7 +43,7 @@ LOGFILE="$(dirname "$0")/dispatch.log"
 #   "--"          → argument separator
 #   After "--"    → command to execute (verbatim)
 
-TARGET_WS="$1"
+TARGET_WS="${1:-}"
 shift || true
 
 CAPTURE_RULES=()
@@ -54,13 +53,24 @@ while [[ "${1-}" != "--" && -n "${1-}" ]]; do
 done
 
 if [[ "${1-}" == "--" ]]; then
-  shift
+  shift || true
 fi
 
 CMD="$*"
 
 if [[ -z "$TARGET_WS" || -z "$CMD" ]]; then
   echo "Usage: $0 <workspace> [rule rule ...] -- <command>" >>"$LOGFILE"
+  exit 1
+fi
+
+# Validate dependencies
+if ! command -v hyprctl &>/dev/null; then
+  echo "Error: hyprctl not found. Is Hyprland installed?" >>"$LOGFILE"
+  exit 1
+fi
+
+if ! command -v jq &>/dev/null; then
+  echo "Error: jq not found. Please install jq." >>"$LOGFILE"
   exit 1
 fi
 
@@ -145,7 +155,7 @@ for _ in {1..20}; do
 done
 
 if [[ -z "$APP_NAME" ]]; then
-  read -r -a __toks <<<"$CMD"
+  read -r -a __toks <<<"$CMD" || true
   APP_NAME="$(basename "${__toks[0]}")"
 fi
 
@@ -153,7 +163,7 @@ echo "App gate name: $APP_NAME" >>"$LOGFILE"
 
 sleep 1.5
 
-#!TO-DO: Release the nuclear option ASAP
+# Release the nuclear option ASAP
 echo "Releasing ultra-early wide capture" >>"$LOGFILE"
 hyprctl keyword windowrulev2 "unset, initialClass:.*" >>"$LOGFILE" 2>&1 || true
 

@@ -1,48 +1,28 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
+# Optsimizirovannyj skript dlya refresh bez waybar
 
-# Modified version of Refresh.sh but waybar wont refresh
-# Used by automatic wallpaper change
-# Modified inorder to refresh rofi background, Wallust, SwayNC only
+SCRIPTSDIR="$HOME/.config/hypr/scripts"
+UserScripts="$HOME/.config/hypr/UserScripts"
 
-SCRIPTSDIR=$HOME/.config/hypr/scripts
-UserScripts=$HOME/.config/hypr/UserScripts
+# Kill rofi
+pidof rofi >/dev/null 2>&1 && pkill rofi
 
-# Define file_exists function
-file_exists() {
-    if [ -e "$1" ]; then
-        return 0  # File exists
-    else
-        return 1  # File does not exist
-    fi
-}
+# Refresh quickshell
+pkill qs 2>/dev/null || true
+qs &
 
-# Kill already running processes
-_ps=(rofi)
-for _prs in "${_ps[@]}"; do
-    if pidof "${_prs}" >/dev/null; then
-        pkill "${_prs}"
-    fi
-done
-
-# quit ags & relaunch ags
-#ags -q && ags &
-
-# quit quickshell & relaunch quickshell
-pkill qs && qs &
-
-# Wallust refresh (synchronous to ensure colors are ready)
-${SCRIPTSDIR}/WallustSwww.sh
+# Refresh wallust
+"$SCRIPTSDIR/WallustSwww.sh" 2>/dev/null || true
 sleep 0.2
 
-# reload swaync
-swaync-client --reload-config
+# Reload swaync
+swaync-client --reload-config 2>/dev/null || true
 
-# Relaunching rainbow borders if the script exists
-sleep 1
-if file_exists "${UserScripts}/RainbowBorders.sh"; then
-    ${UserScripts}/RainbowBorders.sh &
+# Rainbow borders
+if [[ -x "${UserScripts}/RainbowBorders.sh" ]]; then
+    sleep 1
+    "${UserScripts}/RainbowBorders.sh" &
 fi
-
-
-exit 0

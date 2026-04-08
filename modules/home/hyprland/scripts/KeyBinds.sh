@@ -1,39 +1,41 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# searchable enabled keybinds using rofi (supports bindd descriptions)
+# Optsimizirovannyj skript dlya keybinds parser
 
-# kill yad to not interfere with this binds
-pkill yad || true
+# Kill processes
+pkill -q yad 2>/dev/null || true
+pgrep -x rofi >/dev/null 2>&1 && pkill rofi
 
-# check if rofi is already running
-if pidof rofi > /dev/null; then
-  pkill rofi
-fi
-
-# define the config files
+# Define config files
 keybinds_conf="$HOME/.config/hypr/configs/Keybinds.conf"
 user_keybinds_conf="$HOME/.config/hypr/UserConfigs/UserKeybinds.conf"
 laptop_conf="$HOME/.config/hypr/UserConfigs/Laptops.conf"
-rofi_theme="$HOME/.config/rofi/config-keybinds.rasi"
-msg='☣️ NOTE ☣️: Clicking with Mouse or Pressing ENTER will have NO function'
 
-# collect raw bind lines (strip end-of-line comments) from available files
-files=("$keybinds_conf" "$user_keybinds_conf")
+# Check if config files exist and add them
+files=()
+[[ -f "$keybinds_conf" ]] && files+=("$keybinds_conf")
+[[ -f "$user_keybinds_conf" ]] && files+=("$user_keybinds_conf")
 [[ -f "$laptop_conf" ]] && files+=("$laptop_conf")
 
-# Parse binds using the python script for speed
-# The last argument must be the user config for override logic to work correctly
+[[ ${#files[@]} -eq 0 ]] && { echo "Oshibka: Config files ne naydeny" && exit 1; }
+
+# Parse and display keybinds
 display_keybinds=$("$HOME/.config/hypr/scripts/keybinds_parser.py" "${files[@]}")
 
-# Check for suggestions file created by python script
+# Check for suggestions file
 if [[ -f "/tmp/hypr_keybind_suggestions_file" ]]; then
-  suggestions_file=$(cat "/tmp/hypr_keybind_suggestions_file")
-  rm "/tmp/hypr_keybind_suggestions_file"
-  if [[ -n "$suggestions_file" && -f "$suggestions_file" ]]; then
-     count=$(wc -l < "$suggestions_file")
-     msg="$msg | Overrides missing unbind: $count (suggestions: $suggestions_file)"
-  fi
+    suggestions_file=$(cat "/tmp/hypr_keybind_suggestions_file")
+    rm -f "/tmp/hypr_keybind_suggestions_file"
+    if [[ -n "$suggestions_file" && -f "$suggestions_file" ]]; then
+        count=$(wc -l < "$suggestions_file")
+        msg="$msg | Overrides missing unbind: $count"
+    fi
 fi
 
-# use rofi to display the keybinds
+# Display in rofi
+rofi_theme="$HOME/.config/rofi/config-keybinds.rasi"
+msg='☣️ **prosmotr** ☣️: Klik i Enter NET'
+
 printf '%s\n' "$display_keybinds" | rofi -dmenu -i -config "$rofi_theme" -mesg "$msg"

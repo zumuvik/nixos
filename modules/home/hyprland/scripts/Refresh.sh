@@ -1,58 +1,43 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# Scripts for refreshing ags, waybar, rofi, swaync, wallust
+# Optsimizirovannyj skript dlya refresh processov
 
-SCRIPTSDIR=$HOME/.config/hypr/scripts
-UserScripts=$HOME/.config/hypr/UserScripts
+SCRIPTSDIR="$HOME/.config/hypr/scripts"
+UserScripts="$HOME/.config/hypr/UserScripts"
 
-# Define file_exists function
-file_exists() {
-  if [ -e "$1" ]; then
-    return 0 # File exists
-  else
-    return 1 # File does not exist
-  fi
-}
-
-# Kill already running processes
-_ps=(waybar rofi swaync ags)
-for _prs in "${_ps[@]}"; do
-  if pidof "${_prs}" >/dev/null; then
-    pkill "${_prs}"
-  fi
+# Kill running processes
+for proc in waybar rofi swaync ags; do
+    pidof "$proc" >/dev/null 2>&1 && pkill "$proc"
 done
 
-# added since wallust sometimes not applying
-killall -SIGUSR2 waybar
-# Added sleep for GameMode causing multiple waybar
+# Reload wallust
+killall -SIGUSR2 waybar 2>/dev/null || true
 sleep 0.1
 
-# quit ags & relaunch ags
-#ags -q && ags &
+# Refresh quickshell
+pkill qs 2>/dev/null || true
+qs &
 
-# quit quickshell & relaunch quickshell
-pkill qs && qs &
-
-# some process to kill
-for pid in $(pidof waybar rofi swaync ags swaybg); do
-  kill -SIGUSR1 "$pid"
-  sleep 0.1
+# Restart with SIGUSR1
+for proc in waybar rofi swaync ags swaybg; do
+    pkill -SIGUSR1 "$proc" 2>/dev/null || true
+    sleep 0.1
 done
 
-#Restart waybar
+# Restart waybar
 sleep 0.1
 waybar &
 
-# relaunch swaync
+# Restore swaync
 sleep 0.3
+pkill swaync 2>/dev/null || true
 swaync >/dev/null 2>&1 &
-# reload swaync
-swaync-client --reload-config
+swaync-client --reload-config 2>/dev/null || true
 
-# Relaunching rainbow borders if the script exists
-sleep 1
-if file_exists "${UserScripts}/RainbowBorders.sh"; then
-  ${UserScripts}/RainbowBorders.sh &
+# Rainbow borders
+if [[ -x "${UserScripts}/RainbowBorders.sh" ]]; then
+    sleep 1
+    "${UserScripts}/RainbowBorders.sh" &
 fi
-
-exit 0
