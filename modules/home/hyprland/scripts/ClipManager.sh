@@ -1,49 +1,28 @@
 #!/usr/bin/env bash
-# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# Clipboard Manager. This script uses cliphist, rofi, and wl-copy.
+set -euo pipefail
 
-# Variables
-rofi_theme="$HOME/.config/rofi/config-clipboard.rasi"
-msg='👀 **note**  CTRL DEL = cliphist del (entry)   or   ALT DEL - cliphist wipe (all)'
-# Actions:
-# CTRL Del to delete an entry
-# ALT Del to wipe clipboard contents
+# ClipManager - manager khipy so vsem istoriy
 
-# Check if rofi is already running
-if pidof rofi > /dev/null; then
-  pkill rofi
-fi
+ROFI_THEME="$HOME/.config/rofi/config-clipboard.rasi"
+ROFI_MSG="👀 **prosmotr**  CTRL DEL = del zapis | ALT DEL = wipe vse"
 
-while true; do
-    result=$(
-        rofi -i -dmenu \
-            -kb-custom-1 "Control-Delete" \
-            -kb-custom-2 "Alt-Delete" \
-            -config $rofi_theme < <(cliphist list) \
-			-mesg "$msg" 
-    )
+# Kill rofi esli raboтаet
+pgrep -x rofi >/dev/null 2>&1 && pkill rofi
 
-    case "$?" in
-        1)
-            exit
-            ;;
-        0)
-            case "$result" in
-                "")
-                    continue
-                    ;;
-                *)
-                    cliphist decode <<<"$result" | wl-copy
-                    exit
-                    ;;
-            esac
-            ;;
-        10)
-            cliphist delete <<<"$result"
-            ;;
-        11)
-            cliphist wipe
-            ;;
-    esac
-done
+# Main loop
+RESULT=$(rofi -i -dmenu \
+    -kb-custom-1 "Control-Delete" \
+    -kb-custom-2 "Alt-Delete" \
+    -config "$ROFI_THEME" \
+    -mesg "$ROFI_MSG" < <(cliphist list) 2>/dev/null)
 
+case "$?" in
+    1)  exit 0 ;;
+    0)  
+        [[ -z "$RESULT" ]] && exit 0
+        cliphist decode <<< "$RESULT" | wl-copy
+        ;;
+    10) cliphist delete <<< "$RESULT" ;;
+    11) cliphist wipe ;;
+    *)  exit 0 ;;
+esac

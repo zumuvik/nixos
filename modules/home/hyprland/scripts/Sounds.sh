@@ -1,90 +1,67 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# This script is used to play system sounds.
-# Script is used by Volume.Sh and ScreenShots.sh 
+# Optsimizirovannyj skript dlya zvuka
 
-theme="freedesktop" # Set the theme for the system sounds.
-mute=false          # Set to true to mute the system sounds.
+theme="freedesktop"
 
-# Mute individual sounds here.
+# Mute individual sounds
 muteScreenshots=false
 muteVolume=false
 
-# Exit if the system sounds are muted.
-if [[ "$mute" = true ]]; then
+# Exit if muted
+if [[ "$muteScreenshots" == true && "$1" == "--screenshot" ]]; then
     exit 0
 fi
+[[ "$muteVolume" == true && "$1" == "--volume" ]] && exit 0
 
-# Choose the sound to play.
-if [[ "$1" == "--screenshot" ]]; then
-    if [[ "$muteScreenshots" = true ]]; then
-        exit 0
-    fi
-    soundoption="screen-capture.*"
-elif [[ "$1" == "--volume" ]]; then
-    if [[ "$muteVolume" = true ]]; then
-        exit 0
-    fi
-    soundoption="audio-volume-change.*"
-elif [[ "$1" == "--error" ]]; then
-    if [[ "$muteScreenshots" = true ]]; then
-        exit 0
-    fi
-    soundoption="dialog-error.*"
-else
-    echo -e "Available sounds: --screenshot, --volume, --error"
-    exit 0
-fi
+# Choose sound file
+case "$1" in
+    "--screenshot") soundoption="screen-capture.*" ;;
+    "--volume")     soundoption="audio-volume-change.*" ;;
+    "--error")      soundoption="dialog-error.*" ;;
+    *)
+        echo "Dostupnye zvuki: --screenshot, --volume, --error"
+        exit 1
+        ;;
+esac
 
-# Set the directory defaults for system sounds.
-if [ -d "/run/current-system/sw/share/sounds" ]; then
-    systemDIR="/run/current-system/sw/share/sounds" # NixOS
+# Set sound directory
+if [[ -d "/run/current-system/sw/share/sounds" ]]; then
+    systemDIR="/run/current-system/sw/share/sounds"
 else
     systemDIR="/usr/share/sounds"
 fi
 userDIR="$HOME/.local/share/sounds"
 defaultTheme="freedesktop"
 
-# Prefer the user's theme, but use the system's if it doesn't exist.
+# Find theme directory
 sDIR="$systemDIR/$defaultTheme"
-if [ -d "$userDIR/$theme" ]; then
-    sDIR="$userDIR/$theme"
-elif [ -d "$systemDIR/$theme" ]; then
-    sDIR="$systemDIR/$theme"
-fi
+[[ -d "$userDIR/$theme" ]] && sDIR="$userDIR/$theme"
+[[ -d "$systemDIR/$theme" ]] && sDIR="$systemDIR/$theme"
 
-# Get the theme that it inherits.
-iTheme=$(cat "$sDIR/index.theme" | grep -i "inherits" | cut -d "=" -f 2)
+# Find inherited theme
+iTheme=$(grep -i "inherits" "$sDIR/index.theme" 2>/dev/null | cut -d= -f2 | tr -d ' ')
+[[ -z "$iTheme" ]] && iTheme="$defaultTheme"
 iDIR="$sDIR/../$iTheme"
 
-# Find the sound file and play it.
-sound_file=$(find -L $sDIR/stereo -name "$soundoption" -print -quit)
-if ! test -f "$sound_file"; then
-    sound_file=$(find -L $iDIR/stereo -name "$soundoption" -print -quit)
-    if ! test -f "$sound_file"; then
-        sound_file=$(find -L $userDIR/$defaultTheme/stereo -name "$soundoption" -print -quit)
-        if ! test -f "$sound_file"; then
-            sound_file=$(find -L $systemDIR/$defaultTheme/stereo -name "$soundoption" -print -quit)
-            if ! test -f "$sound_file"; then
-                echo "Error: Sound file not found."
-                exit 1
-            fi
-        fi
-    fi
-fi
+# Find sound file
+sound_file=""
+for dir in "$sDIR/stereo" "$iDIR/stereo" "$userDIR/$defaultTheme/stereo" "$systemDIR/$defaultTheme/stereo"; do
+    [[ -z "$sound_file" ]] && sound_file=$(find -L "$dir" -name "$soundoption" -print -quit 2>/dev/null || true)
+    [[ -f "$sound_file" ]] && break
+done
 
-# Play the sound: prefer PipeWire, then PulseAudio, then ALSA
+[[ -z "$sound_file" ]] && { echo "Oshibka: Zvukovoj fail ne nayden" && exit 1; }
+
+# Play sound
 if command -v pw-play >/dev/null 2>&1; then
-    pw-play "$sound_file" && exit 0
+    pw-play "$sound_file" 2>/dev/null || exit 1
+elif command -v paplay >/dev/null 2>&1; then
+    paplay "$sound_file" 2>/dev/null || exit 1
+elif command -v aplay >/dev/null 2>&1; then
+    aplay "$sound_file" 2>/dev/null || exit 1
+else
+    echo "Oshibka: Nykyj zvukovoj player (pw-play/paplay/aplay) ne nayden" && exit 1
 fi
-
-if command -v paplay >/dev/null 2>&1; then
-    paplay "$sound_file" && exit 0
-fi
-
-if command -v aplay >/dev/null 2>&1; then
-    aplay "$sound_file" && exit 0
-fi
-
-echo "Error: No suitable audio player (pw-play/paplay/aplay) found."
-exit 1

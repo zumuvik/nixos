@@ -1,62 +1,65 @@
 #!/usr/bin/env bash
+set -euo pipefail
+
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
-# Playerctl
+# Optsimizirovannyj playerctl
 
 music_icon="$HOME/.config/swaync/icons/music.png"
 
-# Play the next track
+# Playerctl functions
+playerctl() {
+    command -v playerctl >/dev/null 2>&1 || { echo "Oshibka: playerctl ne nayden" && exit 1; }
+    command playerctl "$@"
+}
+
 play_next() {
-  playerctl next
-  show_music_notification
+    playerctl next
+    show_music_notification
 }
 
-# Play the previous track
 play_previous() {
-  playerctl previous
-  show_music_notification
+    playerctl previous
+    show_music_notification
 }
 
-# Toggle play/pause
 toggle_play_pause() {
-  playerctl play-pause
-  sleep 0.1
-  show_music_notification
+    playerctl play-pause
+    sleep 0.1
+    show_music_notification
 }
 
-# Stop playback
 stop_playback() {
-  playerctl stop
-  notify-send -e -u low -i $music_icon " Playback:" " Stopped"
+    playerctl stop
+    notify-send -e -u low -i "$music_icon" " Playback:" " Stopped"
 }
 
-# Display notification with song information
 show_music_notification() {
-  status=$(playerctl status)
-  if [[ "$status" == "Playing" ]]; then
-    song_title=$(playerctl metadata title)
-    song_artist=$(playerctl metadata artist)
-    notify-send -e -u low -i $music_icon "Now Playing:" "$song_title by $song_artist"
-  elif [[ "$status" == "Paused" ]]; then
-    notify-send -e -u low -i $music_icon " Playback:" " Paused"
-  fi
+    local status title artist
+    status=$(playerctl status 2>/dev/null || echo "Unknown")
+    
+    case "$status" in
+        "Playing")
+            title=$(playerctl metadata title 2>/dev/null || echo "Unknown")
+            artist=$(playerctl metadata artist 2>/dev/null || echo "Unknown")
+            notify-send -e -u low -i "$music_icon" "Now Playing:" "$title by $artist"
+            ;;
+        "Paused")
+            notify-send -e -u low -i "$music_icon" " Playback:" " Paused"
+            ;;
+        *)
+            notify-send -e -u low -i "$music_icon" " Status:" " $status"
+            ;;
+    esac
 }
 
-# Get media control action from command line argument
-case "$1" in
-"--nxt")
-  play_next
-  ;;
-"--prv")
-  play_previous
-  ;;
-"--pause")
-  toggle_play_pause
-  ;;
-"--stop")
-  stop_playback
-  ;;
-*)
-  echo "Usage: $0 [--nxt|--prv|--pause|--stop]"
-  exit 1
-  ;;
+# Main
+case "${1:-}" in
+    "--nxt")   play_next ;;
+    "--prv")   play_previous ;;
+    "--pause") toggle_play_pause ;;
+    "--stop")  stop_playback ;;
+    *)
+        echo "Ispolzovanie: $0 [--nxt|--prv|--pause|--stop]"
+        exit 1
+        ;;
 esac

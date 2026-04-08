@@ -1,26 +1,37 @@
 #!/usr/bin/env bash
+set -euo pipefail
 # /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
 # This is for changing kb_layouts. Set kb_layouts in "$HOME/.config/hypr/UserConfigs/UserSettings.conf"
 
-notif_icon="$HOME/.config/swaync/images/ja.png"
-SCRIPTSDIR="$HOME/.config/hypr/scripts"
+notif_icon="${HOME}/.config/swaync/images/ja.png"
+SCRIPTSDIR="${HOME}/.config/hypr/scripts"
+
+# Validate dependencies
+if ! command -v hyprctl &>/dev/null; then
+  notify-send -u critical "Error" "hyprctl not found. Is Hyprland installed?"
+  exit 1
+fi
+
+if ! command -v jq &>/dev/null; then
+  notify-send -u critical "Error" "jq not found. Please install jq."
+  exit 1
+fi
 
 # Refined ignore list with patterns or specific device names
 ignore_patterns=(
   "--(avrcp)"
   "Bluetooth Speaker"
-  "Other Device 
-  Name"
+  "Other Device Name"
 )
 
 # Function to get keyboard names
 get_keyboard_names() {
-  hyprctl devices -j | jq -r '.keyboards[].name'
+  hyprctl devices -j 2>/dev/null | jq -r '.keyboards[].name' || return 1
 }
 
 # Function to check if a device matches any ignore pattern
 is_ignored() {
-  local device_name=$1
+  local device_name="$1"
   for pattern in "${ignore_patterns[@]}"; do
     if [[ "$device_name" == *"$pattern"* ]]; then
       return 0 # Device matches ignore pattern
@@ -38,22 +49,25 @@ get_current_layout_info() {
   while read -r name; do
     if ! is_ignored "$name"; then
       found_kb=true
-      local layout_mapping_str=$(hyprctl devices -j |
+      local layout_mapping_str=$(hyprctl devices -j 2>/dev/null |
         jq -r --arg name "$name" '.keyboards[] | select(.name==$name).layout')
       IFS="," read -r -a layout_mapping <<<"$layout_mapping_str"
 
-      local variant_mapping_str=$(hyprctl devices -j |
+      local variant_mapping_str=$(hyprctl devices -j 2>/dev/null |
         jq -r --arg name "$name" '.keyboards[] | select(.name==$name).variant')
       IFS="," read -r -a variant_mapping <<<"$variant_mapping_str"
 
-      layout_index=$(hyprctl devices -j |
+      layout_index=$(hyprctl devices -j 2>/dev/null |
         jq -r --arg name "$name" '.keyboards[] | select(.name==$name).active_layout_index')
       break
     fi
   done <<< "$(get_keyboard_names)"
 
-  $found_kb && return 0
-  return 1
+  if $found_kb; then
+    return 0
+  else
+    return 1
+  fi
 }
 
 # Function to change keyboard layout
@@ -66,35 +80,35 @@ change_layout() {
       continue
     fi
 
-    echo "Switching layout for $name to $new_layout..."
-    hyprctl switchxkblayout "$name" "$next_index"
-    if [ $? -ne 0 ]; then
+    echo "Switching layout for $name to $next_index..."
+    if ! hyprctl switchxkblayout "$name" "$next_index" 2>/dev/null; then
       echo "Error while switching layout for $name." >&2
       error_found=true
     fi
   done <<<"$(get_keyboard_names)"
 
-  $error_found && return 1
-  return 0
+  if $error_found; then
+    return 1
+  else
+    return 0
+  fi
 }
-
 
 # Stores values in layout_mapping, variant_mapping and layout_index
 if ! get_current_layout_info; then
   echo "Could not get current layout information." >&2
-  echo "There might not be any keyboards available, \
-    or some were unnecessarily set as ignored." >&2
-  notify-send -u low -t 2000 'kb_layout' " Error:" " Layout change failed"
+  echo "There might not be any keyboards available, or some were unnecessarily set as ignored." >&2
+  notify-send -u critical -t 2000 'kb_layout' "Error:" "Layout change failed"
   echo "Exiting $0 $@" >&2
   exit 1
 fi
 
-current_layout=${layout_mapping[$layout_index]}
-current_variant=${variant_mapping[$layout_index]}
+current_layout="${layout_mapping[$layout_index]}"
+current_variant="${variant_mapping[$layout_index]}"
 
-if [[ "$1" == "status" ]]; then
+if [[ "${1:-}" == "status" ]]; then
   echo "$current_layout${current_variant:+($current_variant)}"
-elif [[ "$1" == "switch" ]]; then
+elif [[ "${1:-}" == "switch" ]]; then
   echo "Current layout: $current_layout($current_variant)"
 
   layout_count=${#layout_mapping[@]}
@@ -107,7 +121,7 @@ elif [[ "$1" == "switch" ]]; then
 
   # Execute layout change and notify
   if ! change_layout; then
-    notify-send -u low -t 2000 'kb_layout' " Error:" " Layout change failed"
+    notify-send -u critical -t 2000 'kb_layout' "Error:" "Layout change failed"
     echo "Layout change failed." >&2
     exit 1
   else
@@ -116,4 +130,5 @@ elif [[ "$1" == "switch" ]]; then
   fi
 else
   echo "Usage: $0 {status|switch}"
+  exit 1
 fi
