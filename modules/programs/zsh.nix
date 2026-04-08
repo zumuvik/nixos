@@ -18,6 +18,16 @@
       # SSH aliases
       alias lp='ssh 192.168.1.80'
       alias sr='ssh 192.168.1.145'
+
+      # Improved completion system (fish-like)
+      autoload -Uz compinit && compinit
+      zstyle ':completion:*' menu select
+      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+      zstyle ':completion:*' list-colors ""
+      setopt COMPLETE_IN_WORD
+      setopt ALWAYS_TO_END
+      setopt AUTO_MENU
+      setopt COMPLETE_ALIASES
     '';
   };
 

@@ -9,19 +9,8 @@
   # ────────────────────────────────────────────────────────
   # Network Bridge (for VMs)
   # ────────────────────────────────────────────────────────
-  networking.bridges.br0.interfaces = [ "enp8s0" ];
-  networking.interfaces.br0.ipv4.addresses = [
-    {
-      address = "192.168.1.146";
-      prefixLength = 24;
-    }
-  ];
-  networking.defaultGateway = {
-    address = "192.168.1.1";
-    interface = "br0";
-  };
 
-  networking.networkmanager.enable = false;
+  networking.networkmanager.enable = true;
 
   boot = {
     kernelModules = [ "bridge" "uinput" "v4l2loopback" ];
@@ -34,8 +23,6 @@
 
   networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
   networking.firewall.checkReversePath = "loose";
-  networking.firewall.trustedInterfaces = [ "br0" ];
-
   # ────────────────────────────────────────────────────────
   # Remote Builder
   # ────────────────────────────────────────────────────────
