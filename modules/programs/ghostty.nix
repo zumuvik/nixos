@@ -2,7 +2,7 @@
   programs.ghostty = {
     enable = true;
     settings = {
-      shell-integration = "zsh";
+      shell-integration = "fish";
 
       # Theme & Colors (LiquidCarbon-like)
       background = "000000";

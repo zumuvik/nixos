@@ -29,12 +29,12 @@
   # ────────────────────────────────────────────────────────
   # User (общее для всех)
   # ────────────────────────────────────────────────────────
-  programs.zsh.enable = true;
+  programs.fish.enable = true;
 
   users.users.${username} = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" ];
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
 
   # ────────────────────────────────────────────────────────
