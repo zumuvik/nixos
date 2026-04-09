@@ -1,0 +1,2 @@
+# Disable specific lint warnings
+disable-warnings = ["W10"]
