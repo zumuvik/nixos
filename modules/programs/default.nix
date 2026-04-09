@@ -6,7 +6,7 @@
     ./ags.nix          # В планах
     ./nixcord.nix      # Декларативный discord
     ./ghostty.nix      # Терминал
-    ./zsh.nix          # Шелл
+    ./fish.nix         # Шелл
   ];
 }
 
