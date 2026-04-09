@@ -453,7 +453,13 @@ in
   home.packages = with pkgs; [
     waybar
     cava
+    bluetoothctl
   ];
+
+  # Удаляем конфликтующие файлы перед установкой
+  home.activation.removeConflictingWaybarFiles = lib.hm.dag.entryBefore ["linkGeneration"] ''
+    rm -f $HOME/.local/bin/headset-battery.sh
+  '';
 
   # Копируем скрипт cava.sh для использования в конфиге
   home.file.".config/waybar/scripts/cava.sh" = {
@@ -466,8 +472,21 @@ in
   home.file.".local/bin/headset-battery.sh" = {
     text = ''
       #!/usr/bin/env bash
-      # Placeholder для скрипта батареи наушников
-      echo '{"text": "🎧", "tooltip": "Headset Battery"}'
+      # Получаем ID подключенных устройств
+      devices=$(bluetoothctl devices Connected | awk '{print $2}')
+
+      for dev in $devices; do
+          # Ищем строку с процентом заряда
+          battery=$(bluetoothctl info "$dev" | grep "Battery Percentage" | awk -F '[()]' '{print $2}')
+
+          if [ -n "$battery" ]; then
+              echo "{\"text\": \"󰋋 $battery%\", \"class\": \"headset\", \"percentage\": $battery}"
+              exit 0
+          fi
+      done
+
+      # Если ничего не найдено
+      echo "{\"text\": \"\", \"class\": \"disconnected\"}"
     '';
     executable = true;
     force = true;
