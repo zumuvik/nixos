@@ -1,3 +1,0 @@
-# W10: statix wants _ but NixOS modules use { ... }:
-# This is a style preference conflict, not a correctness issue
-W10
