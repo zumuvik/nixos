@@ -1,4 +1,4 @@
-{ config, lib, pkgs, username, ... }:
+{ config, pkgs, ... }:
 
 let
   domain = "samolensk.ru";

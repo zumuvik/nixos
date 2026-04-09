@@ -1,4 +1,4 @@
-{ config, pkgs, lib, hostName, ... }:
+{ pkgs, lib, hostName, ... }:
 
 let
   osuScript = "${pkgs.writeShellScript "osu-launch" ''

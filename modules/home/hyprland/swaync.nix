@@ -1,11 +1,12 @@
-{ config, pkgs, ... }:
+{ ... }:
 
 {
-  home.file.".config/swaync/config.json".source = ./swaync/config.json;
-  home.file.".config/swaync/icons".source = ./swaync/icons;
-  home.file.".config/swaync/images".source = ./swaync/images;
+  home.file = {
+    ".config/swaync/config.json".source = ./swaync/config.json;
+    ".config/swaync/icons".source = ./swaync/icons;
+    ".config/swaync/images".source = ./swaync/images;
 
-  home.file.".config/swaync/style.css".text = ''
+    ".config/swaync/style.css".text = ''
     /* swaync colors - wallust from waybar.css */
 
     @define-color wallust-bg #1a1b26;
@@ -324,12 +325,13 @@
     }
 
     .widget-backlight {
-        background: @noti-bg-alt;
-        padding: 5px;
-        margin: 10px 10px 5px 10px;
-        border-radius: 10px;
-        font-size: x-large;
-        color: @text-color
-    }
-  '';
+         background: @noti-bg-alt;
+         padding: 5px;
+         margin: 10px 10px 5px 10px;
+         border-radius: 10px;
+         font-size: x-large;
+         color: @text-color
+       }
+   '';
+  };
 }

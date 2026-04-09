@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, username, hostName, lib', ... }:
+{ lib, pkgs, username, lib', ... }:
 
 let
   cloudflareApiToken = lib.fileContents ./.secret;
@@ -21,11 +21,12 @@ in
   # ────────────────────────────────────────────────────────
   # Networking & Hostname
   # ────────────────────────────────────────────────────────
-  networking.hostName = "nixlensk322";
-
-  networking.networkmanager.settings.main.dns = "none";
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
-  networking.firewall.allowedTCPPorts = [ 80 443 3389 ];
+  networking = {
+    hostName = "nixlensk322";
+    networkmanager.settings.main.dns = "none";
+    nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
+    firewall.allowedTCPPorts = [ 80 443 3389 ];
+  };
 
   # ────────────────────────────────────────────────────────
   # User (server-specific: qemu + SSH keys)

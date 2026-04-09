@@ -1,10 +1,6 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
-let
-  username = config.home.username;
-  homeDir = config.home.homeDirectory;
-
-  # ──────────────────────────────────────────────
+let  # ──────────────────────────────────────────────
   # Скрипты waybar
   # ──────────────────────────────────────────────
 
@@ -456,51 +452,51 @@ let
 in
 
 {
-  home.packages = with pkgs; [
-    waybar
-    cava
-  ];
+  home = {
+    packages = with pkgs; [
+      waybar
+      cava
+    ];
 
-  # Удаляем конфликтующие файлы перед установкой
-  home.activation.removeConflictingWaybarFiles = lib.hm.dag.entryBefore ["linkGeneration"] ''
-    rm -f $HOME/.local/bin/headset-battery.sh
-    rm -f $HOME/.config/waybar/scripts/headset-battery.sh
-  '';
-
-  # Копируем скрипт cava.sh для использования в конфиге
-  home.file.".config/waybar/scripts/cava.sh" = {
-    source = "${cavaScript}/bin/waybar-cava";
-    executable = true;
-    force = true;
-  };
-
-  # Копируем headset-battery скрипт в ~/.config/waybar/scripts
-  home.file.".config/waybar/scripts/headset-battery.sh" = {
-    text = ''
-      #!/usr/bin/env bash
-      # Получаем ID подключенных устройств
-      devices=$(bluetoothctl devices Connected | awk '{print $2}')
-
-      for dev in $devices; do
-          # Ищем строку с процентом заряда
-          battery=$(bluetoothctl info "$dev" | grep "Battery Percentage" | awk -F '[()]' '{print $2}')
-
-          if [ -n "$battery" ]; then
-              echo "{\"text\": \"󰋋 $battery%\", \"class\": \"headset\", \"percentage\": $battery}"
-              exit 0
-          fi
-      done
-
-      # Если ничего не найдено
-      echo "{\"text\": \"\", \"class\": \"disconnected\"}"
+    # Удаляем конфликтующие файлы перед установкой
+    activation.removeConflictingWaybarFiles = lib.hm.dag.entryBefore ["linkGeneration"] ''
+      rm -f $HOME/.local/bin/headset-battery.sh
+      rm -f $HOME/.config/waybar/scripts/headset-battery.sh
     '';
-    executable = true;
-    force = true;
-  };
 
-  # ──────────────────────────────────────────────
-  # Конфигурация waybar через Home Manager
-  # ──────────────────────────────────────────────
+    # Копируем скрипт cava.sh для использования в конфиге
+    file = {
+      ".config/waybar/scripts/cava.sh" = {
+        source = "${cavaScript}/bin/waybar-cava";
+        executable = true;
+        force = true;
+      };
+
+      # Копируем headset-battery скрипт в ~/.config/waybar/scripts
+      ".config/waybar/scripts/headset-battery.sh" = {
+        text = ''
+          #!/usr/bin/env bash
+          # Получаем ID подключенных устройств
+          devices=$(bluetoothctl devices Connected | awk '{print $2}')
+
+          for dev in $devices; do
+              # Ищем строку с процентом заряда
+              battery=$(bluetoothctl info "$dev" | grep "Battery Percentage" | awk -F '[()]' '{print $2}')
+
+              if [ -n "$battery" ]; then
+                  echo "{\"text\": \"󰋋 $battery%\", \"class\": \"headset\", \"percentage\": $battery}"
+                  exit 0
+              fi
+          done
+
+          # Если ничего не найдено
+          echo "{\"text\": \"\", \"class\": \"disconnected\"}"
+        '';
+        executable = true;
+        force = true;
+      };
+    };
+  };
 
   programs.waybar = {
     enable = true;

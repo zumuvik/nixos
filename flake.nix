@@ -31,10 +31,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, ayugram-desktop, ags, grub2-themes, ... } @ inputs:
+  outputs = { nixpkgs, home-manager, ayugram-desktop, ags, grub2-themes, ... } @ inputs:
   let
     lib = import ./lib;
-    username = lib.username;
+    inherit (lib) username;
 
     makeHost = { hostName, enableBluetooth ? false, enableRouter ? false }:
       nixpkgs.lib.nixosSystem {
@@ -52,10 +52,12 @@
           grub2-themes.nixosModules.default
 
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs username hostName; };
-            home-manager.users.${username} = import ./home.nix;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = { inherit inputs username hostName; };
+              users.${username} = import ./home.nix;
+            };
           }
         ] ++ (nixpkgs.lib.optionals enableBluetooth [
           ./modules/system/bluetooth.nix

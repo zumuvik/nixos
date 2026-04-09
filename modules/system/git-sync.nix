@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 let
-  username = (import ../../lib).username;
+  inherit ((import ../../lib)) username;
   secret = "nix-git-sync-2026";
 in
 {
