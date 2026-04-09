@@ -2,7 +2,7 @@
 let
   microSettings = {
     autosuccess = true;
-    clipboard = "terminal";
+    clipboard = "external";
     colorscheme = "default";
     cursorline = true;
     mkparents = true;
