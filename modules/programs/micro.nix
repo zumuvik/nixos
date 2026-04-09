@@ -1,4 +1,4 @@
-{ ... }:
+{ config, lib, pkgs, ... }:
 let
   microSettings = {
     autosuccess = true;
@@ -19,10 +19,6 @@ let
 
     filemanager.openonstart = true;
     filemanager.width = 20;
-    linter = true;
-    autoclose = true;
-    lsp.autocomplete = true;
-    lsp.formatOnSave = true;
   };
 in
 {
@@ -30,4 +26,8 @@ in
     enable = true;
     settings = microSettings;
   };
+
+  home.activation.installMicroPlugins = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    ${pkgs.micro}/bin/micro -plugin install fzf snippets pony misspell crystal editorconfig go jump autofmt detectindent palettero monokai-dark runit fish bookmark joinLines manipulator aspell wakatime bounce quickfix jlabbrev wc gotham-colors cheat nordcolors quoter
+  '';
 }
