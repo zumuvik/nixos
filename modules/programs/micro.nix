@@ -3,7 +3,7 @@ let
   microSettings = {
     autosuccess = true;
     clipboard = "terminal";
-    colorscheme = "catppuccin-macchiato";
+    colorscheme = "default";
     cursorline = true;
     mkparents = true;
     mouse = true;
