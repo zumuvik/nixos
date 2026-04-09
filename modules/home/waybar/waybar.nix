@@ -459,6 +459,7 @@ in
   home.file.".config/waybar/scripts/cava.sh" = {
     source = "${cavaScript}/bin/waybar-cava";
     executable = true;
+    force = true;
   };
 
   # Копируем скрипты в .local/bin
@@ -469,6 +470,7 @@ in
       echo '{"text": "🎧", "tooltip": "Headset Battery"}'
     '';
     executable = true;
+    force = true;
   };
 
   # ──────────────────────────────────────────────
