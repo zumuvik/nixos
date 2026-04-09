@@ -39,6 +39,7 @@
       # Media
       mpv
       mpvpaper
+      imv
       cava
       ytermusic
       yt-dlp
