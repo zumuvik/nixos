@@ -107,7 +107,7 @@ let
       format = "{}";
       return-type = "json";
       interval = 30;
-      exec = "~/.local/bin/headset-battery.sh";
+      exec = "~/.config/waybar/scripts/headset-battery.sh";
       tooltip = false;
     };
 
@@ -458,6 +458,7 @@ in
   # Удаляем конфликтующие файлы перед установкой
   home.activation.removeConflictingWaybarFiles = lib.hm.dag.entryBefore ["linkGeneration"] ''
     rm -f $HOME/.local/bin/headset-battery.sh
+    rm -f $HOME/.config/waybar/scripts/headset-battery.sh
   '';
 
   # Копируем скрипт cava.sh для использования в конфиге
@@ -467,8 +468,8 @@ in
     force = true;
   };
 
-  # Копируем скрипты в .local/bin
-  home.file.".local/bin/headset-battery.sh" = {
+  # Копируем headset-battery скрипт в ~/.config/waybar/scripts
+  home.file.".config/waybar/scripts/headset-battery.sh" = {
     text = ''
       #!/usr/bin/env bash
       # Получаем ID подключенных устройств
