@@ -166,8 +166,8 @@
       alias rebuild='nix-build-apply'
       alias check='nix-full-check'
       alias lint='nix-lint'
-      alias lp='ssh 192.168.1.80'
-      alias sr='ssh 192.168.1.145'
+      alias lp='ssh 192.168.10.242'
+      alias sr='ssh 192.168.10.120'
     '';
   };
 
