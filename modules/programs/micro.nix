@@ -20,6 +20,27 @@ let
     filemanager.openonstart = true;
     filemanager.width = 20;
   };
+
+  home.file.".config/micro/init.lua".text = ''
+    local micro = import("micro")
+    local config = import("config")
+
+    -- Close empty buffer on startup if filemanager is enabled
+    micro.Init(function()
+      if config.GetGlobalOption("filemanager.openonstart") then
+        -- Wait a moment for plugins to load
+        local function closeEmpty()
+           for _, pane in ipairs(micro.Panes) do
+             local buf = pane.Buf
+             if buf.Path == "" and buf:Modified() == false then
+               pane:Close()
+             end
+           end
+        end
+        micro.AddTimer(100):Start(closeEmpty)
+      end
+    end)
+  '';
 in
 {
   programs.micro = {
