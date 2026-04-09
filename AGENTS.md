@@ -132,6 +132,22 @@ esac
 - Auto-sync via LAN (UDP port 9876)
 - **Do not commit without explicit user request**
 
+## Remote Host Management
+
+You can manage other hosts via SSH. Example:
+
+```bash
+ssh -o ConnectTimeout=3 zumuvik@192.168.10.242 "cd /etc/nixos && git status"
+```
+
+This runs git status on nixlensk321 (laptop). Known hosts:
+
+| Host | IP | Description |
+|------|-----|-------------|
+| nixlensk321 | 192.168.10.242 | Laptop |
+| nixlensk322 | 192.168.10.120 | Server |
+| nixlensk323 | 192.168.10.210 | Gaming PC (this host)
+
 ## Adding a New Host
 1. Create `hosts/<hostname>/` with `default.nix`, `configuration.nix`, `hardware-configuration.nix`
 2. Register in `flake.nix` via `makeHost { hostName = "myhost"; }`
