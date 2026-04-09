@@ -10,6 +10,8 @@ let
 
   cavaScript = pkgs.writeShellScriptBin "waybar-cava" ''
     #!/usr/bin/env bash
+    set -o pipefail
+    
     ${pkgs.cava}/bin/cava -p <(cat << 'EOF'
     [general]
     bars = 12
@@ -24,14 +26,18 @@ let
     data_format = ascii
     ascii_max_range = 8
     EOF
-    ) | while read -r line; do
+    ) 2>/dev/null | while IFS= read -r line; do
         out=""
         for c in $(echo "$line" | sed 's/./& /g'); do
-            level=$(printf "%d" "'$c")
+            level=$(printf "%d" "'$c" 2>/dev/null || echo "48")
             bars=$((level - 48))
-            out+="$(printf '%*s' "$bars" | tr ' ' '█') "
+            if (( bars > 0 )); then
+                out+="$(printf '%*s' "$bars" | tr ' ' '█') "
+            else
+                out+="  "
+            fi
         done
-        echo "$out"
+        echo "$out" 2>/dev/null || true
     done
   '';
 
@@ -321,7 +327,7 @@ let
       format = "{}";
       exec = "~/.config/waybar/scripts/cava.sh";
       return-type = "plain";
-      interval = 0.03;
+      interval = 0.1;
     };
   };
 
