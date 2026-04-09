@@ -32,67 +32,65 @@
       # NixOS build and check functions
       # ──────────────────────────────────────────────────────────────────
 
-      function nix-build-check
-        set -l description "NixOS rebuild build check (dry-run)"
-        echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
-        echo ""
-        
-        sudo nixos-rebuild build --flake . --show-trace
-        
-        set -l status $status
-        echo ""
-        if test $status -eq 0
-          echo $C_BOLD$C_GREEN"✓ Build check passed!"$C_RESET
-        else
-          echo $C_BOLD$C_RED"✗ Build check failed with status "$status$C_RESET
-          return $status
-        end
-      end
+       function nix-build-check
+         set -l description "NixOS rebuild build check (dry-run)"
+         echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
+         echo ""
+         
+         sudo nixos-rebuild build --flake . --show-trace
+         set -l exit_code $status
+         echo ""
+         if test $exit_code -eq 0
+           echo $C_BOLD$C_GREEN"✓ Build check passed!"$C_RESET
+         else
+           echo $C_BOLD$C_RED"✗ Build check failed with status "$exit_code$C_RESET
+           return $exit_code
+         end
+       end
 
       function nix-build-apply
-        set -l description "NixOS rebuild switch (apply config)"
-        echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
-        echo ""
-        
-        # First run a dry-run check
-        echo $C_DIM"Running pre-check..."$C_RESET
-        sudo nixos-rebuild build --flake . --show-trace
-        
-        if test $status -ne 0
-          echo $C_BOLD$C_RED"✗ Pre-check failed! Aborting switch."$C_RESET
-          return 1
-        end
-        
-        echo ""
-        echo $C_BOLD$C_YELLOW"→ Applying configuration..."$C_RESET
-        sudo nixos-rebuild switch --flake . --show-trace
-        
-        set -l status $status
-        echo ""
-        if test $status -eq 0
-          echo $C_BOLD$C_GREEN"✓ Configuration applied successfully!"$C_RESET
-        else
-          echo $C_BOLD$C_RED"✗ Switch failed with status "$status$C_RESET
-          return $status
-        end
-      end
+       function nix-build-apply
+         set -l description "NixOS rebuild switch (apply config)"
+         echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
+         echo ""
+         
+         # First run a dry-run check
+         echo $C_DIM"Running pre-check..."$C_RESET
+         sudo nixos-rebuild build --flake . --show-trace
+         
+         if test $status -ne 0
+           echo $C_BOLD$C_RED"✗ Pre-check failed! Aborting switch."$C_RESET
+           return 1
+         end
+         
+         echo ""
+         echo $C_BOLD$C_YELLOW"→ Applying configuration..."$C_RESET
+         sudo nixos-rebuild switch --flake . --show-trace
+         set -l exit_code $status
+         echo ""
+         if test $exit_code -eq 0
+           echo $C_BOLD$C_GREEN"✓ Configuration applied successfully!"$C_RESET
+         else
+           echo $C_BOLD$C_RED"✗ Switch failed with status "$exit_code$C_RESET
+           return $exit_code
+         end
+       end
 
-      function flake-check
-        set -l description "Nix flake integrity check"
-        echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
-        echo ""
-        
-        nix flake check --show-trace
-        
-        set -l status $status
-        echo ""
-        if test $status -eq 0
-          echo $C_BOLD$C_GREEN"✓ Flake check passed!"$C_RESET
-        else
-          echo $C_BOLD$C_RED"✗ Flake check failed with status "$status$C_RESET
-          return $status
-        end
-      end
+       function flake-check
+         set -l description "Nix flake integrity check"
+         echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
+         echo ""
+         
+         nix flake check --show-trace
+         set -l exit_code $status
+         echo ""
+         if test $exit_code -eq 0
+           echo $C_BOLD$C_GREEN"✓ Flake check passed!"$C_RESET
+         else
+           echo $C_BOLD$C_RED"✗ Flake check failed with status "$exit_code$C_RESET
+           return $exit_code
+         end
+       end
 
       function nix-lint
         set -l description "Nix static analysis (deadnix + statix)"
@@ -106,13 +104,13 @@
           return 1
         end
         
-         echo ""
-         echo $C_DIM"Running statix check . (static analysis)..."$C_RESET
-         # Note: W10 warnings are a style preference (NixOS modules require { ... }: pattern)
-         # and W20 warnings are architectural (repeated keys at module boundaries).
-         # These don't affect correctness, only style preference.
-         statix check . || true
-         echo $C_DIM"(Ignoring W10/W20 style warnings - see AGENTS.md)"$C_RESET
+        echo ""
+        echo $C_DIM"Running statix check . (static analysis)..."$C_RESET
+        # Note: W10 warnings are a style preference (NixOS modules require { ... }: pattern)
+        # and W20 warnings are architectural (repeated keys at module boundaries).
+        # These don't affect correctness, only style preference.
+        statix check . || true
+        echo $C_DIM"(Ignoring W10/W20 style warnings - see AGENTS.md)"$C_RESET
         
         echo ""
         echo $C_BOLD$C_GREEN"✓ All linting checks passed!"$C_RESET
