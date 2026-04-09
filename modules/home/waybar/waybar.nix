@@ -517,7 +517,7 @@ in
           "custom/headset"
         ];
 
-        inherit (modules) clock wireplumber pulseaudio;
+        inherit (modules) clock wireplumber pulseaudio "custom/power";
         "pulseaudio#microphone" = modules."pulseaudio#microphone";
         inherit (modules) "custom/headset";
       }
