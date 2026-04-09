@@ -453,7 +453,6 @@ in
   home.packages = with pkgs; [
     waybar
     cava
-    bluetoothctl
   ];
 
   # Удаляем конфликтующие файлы перед установкой
