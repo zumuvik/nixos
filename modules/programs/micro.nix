@@ -21,7 +21,7 @@ let
     filemanager.width = 20;
   };
 
-  home.file.".config/micro/init.lua".text = ''
+  home.file."micro/init.lua".text = ''
     local micro = import("micro")
     local config = import("config")
 
