@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 let
   domain = "mail.samolensk.ru";
@@ -6,81 +6,71 @@ let
 in
 {
   # ────────────────────────────────────────────────────────
-  # PHP-FPM для Roundcube
+  # PHP-FPM для Roundcube, MySQL, и Nginx
   # ────────────────────────────────────────────────────────
-  services.phpfpm.pools.roundcube = {
-    user = "nginx";
-    group = "nginx";
-    settings = {
-      "listen.owner" = "nginx";
-      "listen.group" = "nginx";
-      "listen.mode" = "0660";
-      "pm" = "dynamic";
-      "pm.max_children" = 75;
-      "pm.start_servers" = 10;
-      "pm.min_spare_servers" = 5;
-      "pm.max_spare_servers" = 20;
-      "pm.max_requests" = 500;
-    };
-  };
-
-  # ────────────────────────────────────────────────────────
-  # MySQL (MariaDB) для Roundcube
-  # ────────────────────────────────────────────────────────
-  services.mysql = {
-    enable = true;
-    package = pkgs.mariadb;
-    ensureDatabases = [ "roundcube" ];
-    ensureUsers = [
-      {
-        name = "roundcube";
-        ensurePermissions = {
-          "roundcube.*" = "ALL PRIVILEGES";
-        };
-      }
-    ];
-    initialScript = pkgs.writeText "mysql-init.sql" ''
-      CREATE DATABASE IF NOT EXISTS roundcube;
-      GRANT ALL PRIVILEGES ON roundcube.* TO 'roundcube'@'localhost' IDENTIFIED BY 'roundcube_password';
-      FLUSH PRIVILEGES;
-    '';
-  };
-
-  # ────────────────────────────────────────────────────────
-  # Roundcube пакет и конфигурация
-  # ────────────────────────────────────────────────────────
-  environment.systemPackages = with pkgs; [
-    roundcube
-    php
-    phpPackages.composer
-  ];
-
-  # Копируем конфигурационный файл Roundcube
-  environment.etc."roundcube/config.inc.php".source = ./roundcube-config.inc.php;
-
-  # Nginx virtualHost для Roundcube
-  services.nginx.virtualHosts."${domain}" = {
-    root = "${rootDir}";
-    enableACME = true;
-    forceSSL = true;
-
-    locations."/" = {
-      index = "index.php";
-      tryFiles = "$uri $uri/ /index.php?$args";
+  services = {
+    phpfpm.pools.roundcube = {
+      user = "nginx";
+      group = "nginx";
+      settings = {
+        "listen.owner" = "nginx";
+        "listen.group" = "nginx";
+        "listen.mode" = "0660";
+        "pm" = "dynamic";
+        "pm.max_children" = 75;
+        "pm.start_servers" = 10;
+        "pm.min_spare_servers" = 5;
+        "pm.max_spare_servers" = 20;
+        "pm.max_requests" = 500;
+      };
     };
 
-    locations."~ \\.php$" = {
-      extraConfig = ''
-        fastcgi_pass unix:${config.services.phpfpm.pools.roundcube.socket};
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include ${pkgs.nginx}/conf/fastcgi_params;
+    # ────────────────────────────────────────────────────────
+    # MySQL (MariaDB) для Roundcube
+    # ────────────────────────────────────────────────────────
+    mysql = {
+      enable = true;
+      package = pkgs.mariadb;
+      ensureDatabases = [ "roundcube" ];
+      ensureUsers = [
+        {
+          name = "roundcube";
+          ensurePermissions = {
+            "roundcube.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
+      initialScript = pkgs.writeText "mysql-init.sql" ''
+        CREATE DATABASE IF NOT EXISTS roundcube;
+        GRANT ALL PRIVILEGES ON roundcube.* TO 'roundcube'@'localhost' IDENTIFIED BY 'roundcube_password';
+        FLUSH PRIVILEGES;
       '';
     };
 
-    extraConfig = ''
-      client_max_body_size 25M;
-    '';
+    # Nginx virtualHost для Roundcube
+    nginx.virtualHosts."${domain}" = {
+      root = "${rootDir}";
+      enableACME = true;
+      forceSSL = true;
+
+      locations."/" = {
+        index = "index.php";
+        tryFiles = "$uri $uri/ /index.php?$args";
+      };
+
+      locations."~ \\.php$" = {
+        extraConfig = ''
+          fastcgi_pass unix:${config.services.phpfpm.pools.roundcube.socket};
+          fastcgi_index index.php;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+          include ${pkgs.nginx}/conf/fastcgi_params;
+        '';
+      };
+
+      extraConfig = ''
+        client_max_body_size 25M;
+      '';
+    };
   };
 
   # ────────────────────────────────────────────────────────

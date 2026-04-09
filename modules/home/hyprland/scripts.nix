@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{_}:
 
 {
   home.file.".config/hypr/scripts".source = ./scripts;

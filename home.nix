@@ -12,19 +12,62 @@
   # ────────────────────────────────────────────────────────
   # Home Manager Base Settings
   # ────────────────────────────────────────────────────────
-  home.username = username;
-  home.homeDirectory = "/home/${username}";
-  home.stateVersion = "24.11";
+  home = {
+    inherit username;
+    homeDirectory = "/home/${username}";
+    stateVersion = "24.11";
 
-  home.language = {
-    base = "ru_RU.UTF-8";
+    language = {
+      base = "ru_RU.UTF-8";
+    };
+
+    sessionVariables = {
+      TERMINAL = "ghostty";
+    };
+
+    sessionPath = [ "/run/current-system/sw/bin" ];
+
+    packages = with pkgs; [
+      # Desktop Environment
+      waybar
+      rofi
+      swaynotificationcenter
+      waypaper
+      nwg-look
+      nwg-displays
+
+      # Media
+      mpv
+      mpvpaper
+      cava
+      ytermusic
+      yt-dlp
+      firefox
+
+      # Utilities
+      micro
+      ghostty
+      thunar
+      thunar-archive-plugin
+      tumbler
+      scrcpy
+      android-tools
+      remmina
+      libnotify
+      cliphist
+      bibata-cursors
+      sassc
+      galaxy-buds-client
+      virt-manager
+      qemu
+      libvirt
+      virt-viewer
+      opencode
+
+    ] ++ lib.optionals (hostName == "nixlensk323") [
+      inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
+    ];
   };
-
-  home.sessionVariables = {
-    TERMINAL = "ghostty";
-  };
-
-  home.sessionPath = [ "/run/current-system/sw/bin" ];
 
   dconf.enable = false;
 
@@ -61,48 +104,4 @@
     enable = true;
     package = pkgs.ghostty;
   };
-
-  # ────────────────────────────────────────────────────────
-  # Core Packages
-  # ────────────────────────────────────────────────────────
-  home.packages = with pkgs; [
-    # Desktop Environment
-    waybar
-    rofi
-    swaynotificationcenter
-    waypaper
-    nwg-look
-    nwg-displays
-
-    # Media
-    mpv
-    mpvpaper
-    cava
-    ytermusic
-    yt-dlp
-    firefox
-
-    # Utilities
-    micro
-    ghostty
-    thunar
-    thunar-archive-plugin
-    tumbler
-    scrcpy
-    android-tools
-    remmina
-    libnotify
-    cliphist
-    bibata-cursors
-    sassc
-    galaxy-buds-client
-    virt-manager
-    qemu
-    libvirt
-    virt-viewer
-    opencode
-
-  ] ++ lib.optionals (hostName == "nixlensk323") [
-    inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
 }

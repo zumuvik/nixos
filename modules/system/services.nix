@@ -1,23 +1,28 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
-  # Кэширование NSS (nscd)
-  services.nscd.enable = true;
+  # Кэширование NSS (nscd), Audio (PipeWire), SSH
+  services = {
+    nscd.enable = true;
 
-  # Audio (PipeWire)
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-    alsa.enable = true;
-  };
-
-  # SSH
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = true;
+    # Audio (PipeWire)
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+      alsa.enable = true;
     };
+
+    # SSH
+    openssh = {
+      enable = true;
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = true;
+      };
+    };
+
+    # D-Bus
+    dbus.enable = true;
   };
 
   # VPN - WireGuard
@@ -31,9 +36,6 @@
       setuid = true;
     };
   };
-
-  # D-Bus
-  services.dbus.enable = true;
 
   # XDG Desktop Portal (для Wayland)
   xdg.portal = {

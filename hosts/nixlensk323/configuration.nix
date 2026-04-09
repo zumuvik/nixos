@@ -1,17 +1,25 @@
-{ config, pkgs, username, hostName, lib', ... }:
+{ config, pkgs, username, lib', ... }:
 
 {
   # ────────────────────────────────────────────────────────
   # Networking & Hostname
   # ────────────────────────────────────────────────────────
-  networking.hostName = "nixlensk323";
+  networking = {
+    hostName = "nixlensk323";
+
+    # ────────────────────────────────────────────────────────
+    # Network Bridge (for VMs)
+    # ────────────────────────────────────────────────────────
+
+    networkmanager.enable = true;
+
+    nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
+    firewall.checkReversePath = "loose";
+  };
 
   # ────────────────────────────────────────────────────────
-  # Network Bridge (for VMs)
+  # Boot
   # ────────────────────────────────────────────────────────
-
-  networking.networkmanager.enable = true;
-
   boot = {
     kernelModules = [ "bridge" "uinput" "v4l2loopback" ];
     kernelParams = [
@@ -19,10 +27,12 @@
       "resume_offset=4988160"
     ];
     resumeDevice = "/dev/disk/by-uuid/6703b7a2-d8ba-4f63-8fc0-5d770b59df7f";
+    extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+    extraModprobeConfig = ''
+      options v4l2loopback devices=1 video_nr=10 card_label="OBS Cam" exclusive_caps=1
+    '';
   };
 
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" "1.1.1.1" ];
-  networking.firewall.checkReversePath = "loose";
   # ────────────────────────────────────────────────────────
   # Remote Builder
   # ────────────────────────────────────────────────────────
@@ -62,14 +72,6 @@
   hardware.opentabletdriver.enable = true;
   hardware.opentabletdriver.daemon.enable = true;
   hardware.uinput.enable = true;
-
-  # ────────────────────────────────────────────────────────
-  # OBS Virtual Camera
-  # ────────────────────────────────────────────────────────
-  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
-  boot.extraModprobeConfig = ''
-    options v4l2loopback devices=1 video_nr=10 card_label="OBS Cam" exclusive_caps=1
-  '';
 
   # ────────────────────────────────────────────────────────
   # System packages (host-specific)
