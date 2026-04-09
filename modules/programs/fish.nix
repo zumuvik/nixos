@@ -26,11 +26,11 @@
       set -gx C_YELLOW (set_color yellow)
       set -gx C_BLUE (set_color blue)
       set -gx C_CYAN (set_color cyan)
-      set -gx C_MAGENTA (set_color magenta)
+       set -gx C_MAGENTA (set_color magenta)
 
-      # ──────────────────────────────────────────────────────────────────
-      # NixOS build and check functions
-      # ──────────────────────────────────────────────────────────────────
+       # ──────────────────────────────────────────────────────────────────
+       # NixOS build and check functions
+       # ──────────────────────────────────────────────────────────────────
 
        function nix-build-check
          set -l description "NixOS rebuild build check (dry-run)"
@@ -48,7 +48,6 @@
          end
        end
 
-      function nix-build-apply
        function nix-build-apply
          set -l description "NixOS rebuild switch (apply config)"
          echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
