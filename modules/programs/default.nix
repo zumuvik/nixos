@@ -7,6 +7,7 @@
     ./nixcord.nix      # Декларативный discord
     ./ghostty.nix      # Терминал
     ./fish.nix         # Шелл
+    ./micro.nix        # Текстовый редактор
   ];
 }
 
