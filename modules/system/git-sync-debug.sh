@@ -76,9 +76,9 @@ echo ""
 # ── Host Map ──────────────────────────────────
 echo "── Host Map ──────────────────────────────"
 declare -A HOST_MAP=(
-  ["nixlensk323"]="192.168.1.146"
-  ["nixlensk322"]="192.168.1.145"
-  ["nixlensk321"]="192.168.1.80"
+  ["nixlensk323"]="192.168.10.210"
+  ["nixlensk322"]="192.168.10.120"
+  ["nixlensk321"]="192.168.10.242"
 )
 MY_HOSTNAME=$(hostname)
 for name in "${!HOST_MAP[@]}"; do

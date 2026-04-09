@@ -8,9 +8,9 @@ MY_HOSTNAME=$(hostname)
 
 # Map hostnames to IPs
 declare -A HOST_MAP=(
-    ["nixlensk323"]="192.168.1.146"
-    ["nixlensk322"]="192.168.1.145"
-    ["nixlensk321"]="192.168.1.80"
+  ["nixlensk323"]="192.168.10.210"
+  ["nixlensk322"]="192.168.10.120"
+  ["nixlensk321"]="192.168.10.242"
 )
 
 MY_IP="${HOST_MAP[$MY_HOSTNAME]}"
