@@ -74,19 +74,6 @@
   hardware.uinput.enable = true;
 
   # ────────────────────────────────────────────────────────
-  # llama.cpp REST API Server (DeepSeek-Coder-V2-Lite)
-  # ────────────────────────────────────────────────────────
-  services.llama-server = {
-    enable = true;
-    package = pkgs.llama-cpp-rocm;
-    modelPath = "/var/lib/llama-models/DeepSeek-Coder-V2-Lite-Instruct.IQ2_XS.gguf";
-    port = 8080;
-    gpuLayers = 32;
-    contextSize = 4096;
-    threads = 8;
-  };
-
-  # ────────────────────────────────────────────────────────
   # System packages (host-specific)
   # ────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
@@ -98,10 +85,9 @@
     xrandr
     nix-search
 
-    # ROCm tools & LLM inference
+    # ROCm tools
     rocmPackages.rocm-core
     rocmPackages.rocm-smi
     rocmPackages.rocminfo
-    llama-cpp-rocm
   ];
 }

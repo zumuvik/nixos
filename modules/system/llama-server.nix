@@ -62,6 +62,10 @@
       environment = {
         HIP_VISIBLE_DEVICES = "0";
         LD_LIBRARY_PATH = "${pkgs.rocmPackages.rocm-core}/lib";
+        # Vega 56 (gfx900) - override GFX version check
+        HSA_OVERRIDE_GFX_VERSION = "9.0.0";
+        # Limit VRAM usage to leave buffer for display
+        GGML_VULKAN_DEVICE_OVERRIDE = "0";
       };
 
       serviceConfig = {
@@ -71,16 +75,15 @@
         TimeoutStartSec = 300;
 
         ExecStart = ''
-          ${config.services.llama-server.package}/bin/llama-cpp-rocm \
-            --server \
+          ${config.services.llama-server.package}/bin/llama-server \
             --model ${config.services.llama-server.modelPath} \
             --host 127.0.0.1 \
             --port ${toString config.services.llama-server.port} \
             --ctx-size ${toString config.services.llama-server.contextSize} \
             --gpu-layers ${toString config.services.llama-server.gpuLayers} \
             --threads ${toString config.services.llama-server.threads} \
-            --n-predict 2048 \
-            --batch-size 512
+            --n-predict 512 \
+            --batch-size 256
         '';
 
         StandardOutput = "journal";

@@ -65,7 +65,7 @@
     slurp
     wl-clipboard
     mako
-    swww
+    awww
     btop
     fastfetch
     networkmanagerapplet
