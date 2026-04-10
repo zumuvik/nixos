@@ -21,7 +21,7 @@ Personal NixOS configuration for my machines — declarative, flake-based, with 
 - **Boot**: GRUB with Tela theme
 - **Locale**: ru_RU.UTF-8
 
-## nixleski323 Special: LLM Inference
+## nixlensk323 Special: LLM Inference
 
 - **GPU**: AMD Radeon RX Vega 56 (8GB VRAM)
 - **Runtime**: llama.cpp (v8667, ROCm-enabled)

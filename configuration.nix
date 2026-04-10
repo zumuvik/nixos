@@ -70,7 +70,19 @@
     fastfetch
     networkmanagerapplet
     pavucontrol
+
+    # Cloudflare WARP
+    cloudflare-warp
   ];
+
+  # Cloudflare WARP service
+  services.cloudflare-warp = {
+    enable = true;
+    # mode = "warp";  # default: warp (1.1.1.1 WARP)
+  };
+
+  # Fix for WARP tunnel (reverse path filtering)
+  networking.firewall.checkReversePath = "loose";
 
   # ────────────────────────────────────────────────────────
   # Boot & Kernel (общее для всех хостов)
