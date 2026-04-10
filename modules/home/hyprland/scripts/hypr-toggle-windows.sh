@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Get all non-minimized windows
-NON_MINIMIZED=$(hyprctl clients -j | jq -r '.[] | select(.minimized == false) | .address')
+# Get all non-hidden windows
+NON_HIDDEN=$(hyprctl clients -j | jq -r '.[] | select(.hidden == false) | .address')
 
-if [ -z "$NON_MINIMIZED" ]; then
-  # All windows are minimized, restore them
-  hyprctl clients -j | jq -r '.[] | select(.minimized == true) | .address' | while read -r addr; do
+if [ -z "$NON_HIDDEN" ]; then
+  # All windows are hidden, restore them
+  hyprctl clients -j | jq -r '.[] | select(.hidden == true) | .address' | while read -r addr; do
     hyprctl dispatch minimize "$addr"
   done
 else
-  # Minimize all non-minimized windows
-  echo "$NON_MINIMIZED" | while read -r addr; do
+  # Minimize all non-hidden windows
+  echo "$NON_HIDDEN" | while read -r addr; do
     hyprctl dispatch minimize "$addr"
   done
 fi
