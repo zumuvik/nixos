@@ -35,10 +35,10 @@ else
     next_mode="Light"
 fi
 
-# Inicializaciya swww
-swww query >/dev/null 2>&1 || swww-daemon --format xrgb
+# Inicializaciya awww
+awww query >/dev/null 2>&1 || awww-daemon --format xrgb
 
-swww="swww img"
+awww="awww img"
 effect="--transition-bezier .43,1.19,1,.4 --transition-fps 60 --transition-type grow --transition-pos 0.925,0.977 --transition-duration 2"
 
 # Update wallust config
@@ -96,7 +96,7 @@ if [[ -d "$dark_wall" && -d "$light_wall" ]]; then
     else
         wp=$(find "$light_wall" -type f \( -iname "*.jpg" -o -iname "*.png" \) -print0 | shuf -n1 -z | xargs -0)
     fi
-    [[ -n "$wp" ]] && $swww "$wp" $effect >/dev/null 2>&1 || true
+    [[ -n "$wp" ]] && $awww "$wp" $effect >/dev/null 2>&1 || true
 fi
 
 # Update Qt5ct/Qt6ct

@@ -36,7 +36,7 @@ GDK_BACKEND="$BACKEND" yad \
     "super+alt+scroll" "Zoom" "DesktopMagnifier" \
     "super+alt+v" "Clipboard" "cliphist" \
     "super+w" "Wallpaper" "Menu" \
-    "super+shift+w" "Effects" "swww" \
+    "super+shift+w" "Effects" "awww" \
     "super+ctrl+b" "Waybar style" "" \
     "super+alt+b" "Waybar layout" "" \
     "super+alt+r" "Reload" "waybar,rofi,swaync" \

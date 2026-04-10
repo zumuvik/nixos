@@ -21,14 +21,14 @@ if [[ "$HYPRGAMEMODE" == "1" ]]; then
         keyword decoration:rounding 0" 2>/dev/null || true
     
     hyprctl keyword "windowrule opacity 1 override 1 override 1 override, ^(.*)$" 2>/dev/null || true
-    swww kill 2>/dev/null || true
+    awww kill 2>/dev/null || true
     notify-send -e -u low -i "$notif" "GameMode" "Vklyucheno"
     exit 0
 else
     # Disable Game Mode - restore animations
-    swww-daemon --format xrgb 2>/dev/null || true
+    awww-daemon --format xrgb 2>/dev/null || true
     [[ -f "$HOME/.config/rofi/.current_wallpaper" ]] && \
-        swww img "$HOME/.config/rofi/.current_wallpaper" 2>/dev/null || true
+        awww img "$HOME/.config/rofi/.current_wallpaper" 2>/dev/null || true
     
     "$SCRIPTSDIR/WallustSwww.sh" 2>/dev/null || true
     sleep 0.5

@@ -283,10 +283,10 @@ DarkLight.sh    # Переключить между режимами
 ```
 
 #### ThemeChanger.sh
-Простой переключатель обоев с использованием `swww`.
+Простой переключатель обоев с использованием `awww`.
 
 #### WallustSwww.sh
-Применить цвета wallust к swww как эффекты обоев.
+Применить цвета wallust к awww как эффекты обоев.
 
 #### WaybarScripts.sh & WaybarLayout.sh & WaybarStyles.sh
 Настроить внешний вид и позицию Waybar.
@@ -657,7 +657,7 @@ set -x  # Трассировка выполнения
 | Система | Wlogout.sh | Меню выключения | wlogout |
 | Окно | Dropterminal.sh | Выпадающий терминал | hyprctl, jq |
 | Окно | OverviewToggle.sh | Обзор рабочего стола | ags |
-| Тема | DarkLight.sh | Переключатель темы | wallust, swww, sed, gsettings |
+| Тема | DarkLight.sh | Переключатель темы | wallust, awww, sed, gsettings |
 | Тема | Refresh.sh | Перезагрузить сервисы | waybar, rofi, swaync |
 | Утилита | Battery.sh | Статус батареи | /sys/class/power_supply |
 | Утилита | ClipManager.sh | История буфера обмена | cliphist, rofi |
