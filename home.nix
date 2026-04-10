@@ -105,4 +105,8 @@
     enable = true;
     package = pkgs.ghostty;
   };
+
+  home.packages = with pkgs; [
+    opencode
+  ];
 }
