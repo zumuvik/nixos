@@ -1,147 +1,109 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, username, hostName, lib, ... }:
+
 {
   imports = [
+    inputs.nixcord.homeModules.nixcord
     inputs.ags.homeManagerModules.default
-    inputs.nixvim.homeManagerModules.nixvim  
+    inputs.nixvim.homeModules.nixvim
+    ./modules/home
+    ./modules/programs
   ];
 
+  # ────────────────────────────────────────────────────────
+  # Home Manager Base Settings
+  # ────────────────────────────────────────────────────────
+  home = {
+    inherit username;
+    homeDirectory = "/home/${username}";
+    stateVersion = "24.11";
 
-  programs.nixvim = {
-    enable = true;
-    defaultEditor = true;
-
-    viAlias = true;
-    vimAlias = true;
-
-    
-    opts = {
-      number = true;
-      relativenumber = true;
-
-      tabstop = 2;
-      shiftwidth = 2;
-      expandtab = true;
-
-      ignorecase = true;
-      smartcase = true;
-
-      cursorline = true;
-      termguicolors = true;
-      signcolumn = "yes";
-
-      mouse = "a";
-      clipboard = "unnamedplus";
-      undofile = true;
-      swapfile = false;
+    language = {
+      base = "ru_RU.UTF-8";
     };
 
-    
-    colorschemes.gruvbox = {
-      enable = true;
-      settings.contrast = "hard";
+    sessionVariables = {
+      TERMINAL = "ghostty";
     };
 
-    # 
-    globals.mapleader = " ";
+    sessionPath = [ "/run/current-system/sw/bin" ];
 
-    
-    keymaps = [
-      { mode = "n"; key = "<leader>w"; action = "<cmd>w<CR>"; }
-      { mode = "n"; key = "<leader>q"; action = "<cmd>q<CR>"; }
+    packages = with pkgs; [
+      # Desktop Environment
+      waybar
+      rofi
+      swaynotificationcenter
+      waypaper
+      nwg-look
+      nwg-displays
+
+      # Media
+      mpv
+      mpvpaper
+      imv
+      cava
+      ytermusic
+      yt-dlp
+      firefox
+
+      # Utilities
+      micro
+      ghostty
+      thunar
+      thunar-archive-plugin
+      tumbler
+      scrcpy
+      android-tools
+      remmina
+      libnotify
+      cliphist
+      bibata-cursors
+      sassc
+      galaxy-buds-client
+      virt-manager
+      qemu
+      libvirt
+      virt-viewer
+      opencode
+      jq
+
+    ] ++ lib.optionals (hostName == "nixlensk323") [
+      inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
+  };
 
-  
-    plugins = {
-      lualine.enable = true;
-      treesitter.enable = true;
-      neo-tree.enable = true;
-      telescope.enable = true;
-      which-key.enable = true;
+  dconf.enable = false;
 
-      # LSP
-      lsp = {
-        enable = true;
-        servers = {
-          nixd.enable = true;
-          bashls.enable = true;
-        };
+  # ────────────────────────────────────────────────────────
+  # Hypridle (Screen lock/sleep/hibernate)
+  # ────────────────────────────────────────────────────────
+  services.hypridle = {
+    enable = true;
+    settings = {
+      general = {
+        lock_cmd = "pidof hyprlock || hyprlock";
+        before_sleep_cmd = "loginctl lock-session";
+        after_sleep_cmd = "hyprctl dispatch dpms on";
       };
 
-      
-      cmp = {
-        enable = true;
-        autoEnableSources = true;
-      };
+      listener = [
+        {
+          timeout = 300;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
+        }
+        {
+          timeout = 600;
+          on-timeout = "hyprctl dispatch switchxkblayout all en && loginctl lock-session";
+        }
+        {
+          timeout = 900;
+          on-timeout = "systemctl suspend";
+        }
+      ];
     };
   };
-
-  home.username = "zumuvik";
-  home.homeDirectory = "/home/zumuvik";
-
-  home.packages = with pkgs; [
-    
-    osu-lazer-bin
-    fastfetch kitty zip unzip git
-    mako swww waypaper waybar rofi
-    grim slurp wl-clipboard libnotify
-    pavucontrol nix-search
-    xfce.thunar
-    xfce.thunar-archive-plugin
-    xfce.tumbler
-    mpv mpvpaper spotube cava playerctl
-    discord vesktop firefox
-    scrcpy android-tools brightnessctl sassc
-    galaxy-buds-client micro
-    bibata-cursors
-    nwg-look 
-    inputs.ayugram-desktop.packages.${pkgs.system}.default
-  ];
-
-  programs.ags = {
+  xdg.terminal-exec = {
     enable = true;
-    extraPackages = with pkgs; [
-      gtksourceview
-      webkitgtk_6_0
-      accountsservice
-    ];
+    package = pkgs.ghostty;
   };
-
-  programs.obs-studio = {
-    enable = true;
-    plugins = with pkgs.obs-studio-plugins; [
-      obs-vaapi
-      obs-pipewire-audio-capture
-      wlrobs
-      obs-vkcapture
-    ];
-  };
-
-  home.sessionVariables = {
-    EDITOR = "nvim";   
-    VISUAL = "nvim";
-  };
-
-
-
-  home.language = {
-    base = "ru_RU.UTF-8";
-  };
-
-  gtk = {
-    enable = true;
-    theme = {
-      name = "Adwaita-dark";
-      package = pkgs.gnome-themes-extra;
-    };
-    gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
-    gtk4.extraConfig.gtk-application-prefer-dark-theme = 1;
-  };
-
-  qt = {
-    enable = true;
-    platformTheme.name = "gtk";
-    style.name = "adwaita-dark";
-  };
-
-  home.stateVersion = "25.11";
 }

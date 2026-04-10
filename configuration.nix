@@ -1,92 +1,49 @@
 # /etc/nixos/configuration.nix
-{ config, lib, pkgs, inputs, ... }:
+
+{ lib, pkgs, username, ... }:
 
 {
   imports = [
-    ./hardware-configuration.nix
+    ./modules/system
   ];
 
-  # ────────────────────────────────────────────────
-  # Boot & Kernel
-  # ────────────────────────────────────────────────
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-    kernelPackages = pkgs.linuxPackages_latest;
-  };
+  # ────────────────────────────────────────────────────────
+  # Networking (общее для всех)
+  # ────────────────────────────────────────────────────────
+  networking.networkmanager.enable = lib.mkDefault true;
+  networking.firewall.enable = lib.mkDefault true;
 
-  # ────────────────────────────────────────────────
-  # Networking
-  # ────────────────────────────────────────────────
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  networking.hostName = "nixlensk323";
-  programs.fish.enable = true;
+  # ────────────────────────────────────────────────────────
+  # Timezone & Locale (общее для всех)
+  # ────────────────────────────────────────────────────────
   time.timeZone = "Europe/Moscow";
-  systemd.network.networks."40-enp8s0" = {
-    matchConfig.Name = "enp8s0";
-    address = [ "192.168.3.155/24" ];
-    routes = [
-      {
-        Destination = "0.0.0.0/0";
-        Gateway = "192.168.3.1";
-        Metric = 1024;
-      }
-    ];
-    DHCP = "no";
-    DNS = [ "1.1.1.1" "8.8.8.8" ];
-  };
 
-
+  # ────────────────────────────────────────────────────────
+  # Keyboard (общее для всех)
+  # ────────────────────────────────────────────────────────
   services.xserver.xkb = {
     layout = "us,ru";
     options = "grp:alt_shift_toggle";
   };
 
-  console.useXkbConfig = true;
+  # ────────────────────────────────────────────────────────
+  # User (общее для всех)
+  # ────────────────────────────────────────────────────────
+  programs.fish.enable = true;
 
-  nix.gc = {
-  automatic = true;
-      dates = "daily";
-      options = "--delete-older-than 3d";
-    };
-
-  systemd.timers.nix_gc = {
-    enable = true;
-    unitConfig.Timer = "OnCalendar=daily";
-  };
-
-
-    nixpkgs.config.allowUnfree = true;
-
-
-
-
-  swapDevices = [
-    {
-      device = "/swap/swapfile";
-      size = 32768;
-    }
-  ];
-
-
-  # ────────────────────────────────────────────────
-  # Users
-  # ────────────────────────────────────────────────
-  users.users.zumuvik = {
+  users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" "qemu" "disk" ];
-   shell = pkgs.fish;
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" "kvm" ];
+    shell = pkgs.fish;
   };
+
+  # ────────────────────────────────────────────────────────
+  # sudo без пароля на nixos-rebuild switch (общее)
+  # ────────────────────────────────────────────────────────
   security.sudo.extraRules = [
     {
-      users = [ "zumuvik" ];
+      users = [ "${username}" ];
       commands = [
-        {
-          command = "/run/current-system/sw/bin/micro /etc/nixos/configuration.nix";
-          options = [ "NOPASSWD" ];
-        }
         {
           command = "/run/current-system/sw/bin/nixos-rebuild switch";
           options = [ "NOPASSWD" ];
@@ -95,102 +52,152 @@
     }
   ];
 
+  # ────────────────────────────────────────────────────────
+  # System packages (общие для всех хостов)
+  # ────────────────────────────────────────────────────────
+  environment.systemPackages = with pkgs; [
+    git
+    wget
+    gh
+    wireguard-tools
+    brightnessctl
+    grim
+    slurp
+    wl-clipboard
+    mako
+    swww
+    btop
+    fastfetch
+    networkmanagerapplet
+    pavucontrol
+  ];
 
+  # ────────────────────────────────────────────────────────
+  # Boot & Kernel (общее для всех хостов)
+  # ────────────────────────────────────────────────────────
+  boot.kernelParams = [
+    "quiet"
+    "udev.log_level=3"
+    "systemd.show_status=auto"
+    "rd.udev.log_level=3"
+    "vt.global_cursor_default=0"
+  ];
 
-  # ────────────────────────────────────────────────
-  # Desktop / Wayland / Hyprland
-  # ────────────────────────────────────────────────
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-     withUWSM = true;                     # ← можно включить в 2025+ для лучшей стабильности сессии
-  };
+  boot.plymouth.enable = true;
 
-  # Throne (GUI прокси-менеджер с TUN-режимом)
-  programs.throne = {
-    enable = true;
-    tunMode = {
+  boot.loader = {
+    systemd-boot.enable = false;
+    efi.canTouchEfiVariables = true;
+    grub = {
       enable = true;
-      setuid = true;                     # создаёт SUID-враппер
+      device = lib.mkDefault "nodev";
+      efiSupport = true;
+      useOSProber = false;
+    };
+    grub2-theme = {
+      enable = true;
+      theme = "tela";
     };
   };
 
-
-
-  # ────────────────────────────────────────────────
-  # Hardware
-  # ────────────────────────────────────────────────
-  home-manager.backupFileExtension = "backup";
-  programs.obs-studio = {
-    enable = true;
-
-    plugins = with pkgs.obs-studio-plugins; [
-      obs-vaapi                # аппаратное ускорение AMD (Vega)
-      obs-pipewire-audio-capture
-      wlrobs                   # захват экрана на Wayland
-      obs-vkcapture            # захват игр через Vulkan
-      obs-gstreamer
+  # ────────────────────────────────────────────────────────
+  # Nix Settings (общее)
+  # ────────────────────────────────────────────────────────
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    auto-optimise-store = true;
+    max-jobs = "auto";
+    max-substitution-jobs = 32;
+    substituters = [
+      "https://cache.nixos.org"
+    ];
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
     ];
   };
 
-  # Важно для AMD VAAPI
-  hardware.opengl = {
-    enable = true;
+  nixpkgs.config.allowUnfree = true;
 
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 7d";
   };
 
+  programs.nix-ld.enable = true;
 
+  # ────────────────────────────────────────────────────────
+  # Console (общее)
+  # ────────────────────────────────────────────────────────
+  console.useXkbConfig = true;
 
- hardware.opentabletdriver.enable = true;
- hardware.uinput.enable = true;
-  boot.kernelModules = [ "uinput" ];
-security.rtkit.enable = true;
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
+  # ────────────────────────────────────────────────────────
+  # Dark Theme (общее для всех)
+  # ────────────────────────────────────────────────────────
+  environment.sessionVariables = {
+    QT_QPA_PLATFORMTHEME = "gtk";
+    GTK_THEME = "Adwaita-dark";
+    QT_STYLE_OVERRIDE = "adwaita-dark";
   };
 
-  services.blueman.enable = true;           # удобный bluetooth gui
-  networking.wireguard.enable = true;
+  # ────────────────────────────────────────────────────────
+  # Fonts (общее для всех)
+  # ────────────────────────────────────────────────────────
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      nerd-fonts.jetbrains-mono
+      nerd-fonts.iosevka
+      nerd-fonts.fantasque-sans-mono
+      jetbrains-mono
+      noto-fonts-cjk-serif
+      noto-fonts
+      noto-fonts-color-emoji
+      dejavu_fonts
+      liberation_ttf
+      (pkgs.stdenv.mkDerivation {
+        pname = "sf-pro-display";
+        version = "1.0";
+        dontUnpack = true;
+        srcs = [
+          (pkgs.fetchurl {
+            name = "sf-pro-bold.otf";
+            url = "https://raw.githubusercontent.com/MrVivekRajan/Hyprlock-Styles/main/Style-9/Fonts/SF%20Pro%20Display/SF%20Pro%20Display%20Bold.otf";
+            sha256 = "0pqv47piw79jglk641dripxmdpcgzr673kgiws9y7mmy9l9cxd8w";
+          })
+          (pkgs.fetchurl {
+            name = "sf-pro-regular.otf";
+            url = "https://raw.githubusercontent.com/MrVivekRajan/Hyprlock-Styles/main/Style-9/Fonts/SF%20Pro%20Display/SF%20Pro%20Display%20Regular.otf";
+            sha256 = "1kxj8hc9ckzgskwz78b9ijikbpy755808xzfllg9wbya01wd3d6z";
+          })
+        ];
+        installPhase = ''
+          mkdir -p $out/share/fonts/opentype
+          for src in $srcs; do
+            cp $src $out/share/fonts/opentype/
+          done
+        '';
+      })
+    ];
+  };
 
+  # ────────────────────────────────────────────────────────
+  # Locale & i18n (общее для всех)
+  # ────────────────────────────────────────────────────────
+  i18n.defaultLocale = "ru_RU.UTF-8";
+  i18n.extraLocaleSettings = {
+    LC_MESSAGES = "ru_RU.UTF-8";
+    LC_COLLATE = "ru_RU.UTF-8";
+    LC_CTYPE = "ru_RU.UTF-8";
+  };
 
+  # ────────────────────────────────────────────────────────
+  # Home Manager (общее)
+  # ────────────────────────────────────────────────────────
+  home-manager.backupFileExtension = "backup";
 
-  # ────────────────────────────────────────────────
-  # Packages (system-wide — только необходимое)
-  # ────────────────────────────────────────────────
-  environment.systemPackages = with pkgs; [
-    btop
-    xrandr hyprlock pkgs.opentabletdriver
-    nwg-look
-    fastfetch
-    kitty
-    zip unzip
-    git
-    nwg-displays
-    wlr-randr cliphist wl-clipboard
-
-    mako mpvpaper remmina
-      mpv fish
-    swww waypaper spotube scrcpy
-    grim gh wireguard-tools
-    slurp android-tools
-    rofi   playerctl
-    wl-clipboard libnotify
-
-    # apps
-    pavucontrol
-    nix-search            # поиск по пакетам nix
-  ];
-
-  # В файле configuration.nix или home-manager
-  fonts.packages = with pkgs; [
-   nerd-fonts.jetbrains-mono
-   nerd-fonts.iosevka
-  ];
-
-
-  # ────────────────────────────────────────────────
-  # Misc / Compatibility
-  # ────────────────────────────────────────────────
-  system.stateVersion = "26.05";            # НЕ МЕНЯЙ без прочтения комментария!
+  # ────────────────────────────────────────────────────────
+  # System State Version (НЕ МЕНЯЙ)
+  # ────────────────────────────────────────────────────────
+  system.stateVersion = "24.11";
 }
