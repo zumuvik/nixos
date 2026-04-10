@@ -2,6 +2,24 @@
 
 Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 
+## Machines
+
+| Host | Role | Features |
+|------|------|----------|
+| `nixlensk321` | Laptop | Hyprland, battery management |
+| `nixlensk322` | Server/Router | Docker, NAT, dnsmasq, firewall, nginx |
+| `nixlensk323` | Gaming PC | Steam, AMD Vega 56 (llama.cpp), Hyprland |
+
+## nixlensk323 Special: LLM Inference
+
+- **GPU**: AMD Radeon RX Vega 56 (8GB VRAM)
+- **Runtime**: llama.cpp (v8667, ROCm-enabled)
+- **Model**: DeepSeek-Coder-V2-Lite (16B params, IQ2_XS quant)
+- **API**: REST on localhost:8080
+- **Integration**: OpenCode AI development
+
+See [`QUICKSTART.sh`](./QUICKSTART.sh) and [`LLAMA_OPENCODE_INTEGRATION.md`](./LLAMA_OPENCODE_INTEGRATION.md) for setup.
+
 ## Structure
 
 ```
@@ -15,28 +33,34 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 │   ├── nixlensk322/           # Server/Router
 │   ├── nixlensk321/           # Laptop
 │   └── template/              # Template for new hosts
-└── modules/
-    ├── system/
-    │   ├── services.nix       # PipeWire, SSH, VPN, XDG
-    │   ├── hardware.nix       # GPU, Virtualization
-    │   ├── zram.nix           # ZRAM config
-    │   ├── swap.nix           # Swap config (nixlensk323 only)
-    │   ├── greetd.nix         # Login manager
-    │   ├── laptop.nix         # Laptop-specific (nixlensk321 only)
-    │   ├── bluetooth.nix      # Bluetooth (optional)
-    │   ├── router.nix         # Router/DHCP/NAT (optional)
-    │   └── git-sync.nix       # Auto git-sync across LAN
-    ├── home/
-    │   ├── common/            # Shared home settings
-    │   └── hyprland/          # Hyprland WM config
-    └── programs/
-        ├── nixvim.nix         # Declarative Neovim
-        ├── ghostty.nix        # Terminal
-        ├── vscodium.nix       # VSCode without telemetry
-        ├── obs.nix            # OBS Studio
-        ├── ags.nix            # Aylur's Gtk Shell
-        ├── nixcord.nix        # Declarative Vesktop
-        └── zsh.nix            # Zsh config
+├── modules/
+│   ├── system/
+│   │   ├── services.nix       # PipeWire, SSH, VPN, XDG
+│   │   ├── hardware.nix       # GPU, Virtualization
+│   │   ├── zram.nix           # ZRAM config
+│   │   ├── swap.nix           # Swap config (nixlensk323 only)
+│   │   ├── greetd.nix         # Login manager
+│   │   ├── laptop.nix         # Laptop-specific (nixlensk321 only)
+│   │   ├── bluetooth.nix      # Bluetooth (optional)
+│   │   ├── router.nix         # Router/DHCP/NAT (optional)
+│   │   ├── git-sync.nix       # Auto git-sync across LAN
+│   │   └── sites/             # Nginx virtual hosts
+│   ├── home/
+│   │   ├── common/            # Shared home settings
+│   │   └── hyprland/          # Hyprland WM config
+│   └── programs/
+│       ├── nixvim.nix         # Declarative Neovim
+│       ├── ghostty.nix        # Terminal
+│       ├── vscodium.nix       # VSCode without telemetry
+│       ├── obs.nix            # OBS Studio
+│       ├── ags.nix            # Aylur's Gtk Shell
+│       ├── nixcord.nix        # Declarative Vesktop
+│       ├── zsh.nix            # Zsh config
+│       └── micro.nix          # Micro editor config
+├── AGENTS.md                  # Instructions for AI coding agents
+├── QUICKSTART.sh              # Quick setup for llama.cpp + OpenCode
+├── SETUP_MANUAL.md            # Step-by-step installation guide
+└── LLAMA_OPENCODE_INTEGRATION.md # LLM integration guide
 ```
 
 ## Requirements
@@ -45,127 +69,69 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 - Internet connection
 - Git installed: `nix-shell -p git`
 
-## Setup
+See [`SETUP_MANUAL.md`](./SETUP_MANUAL.md) for detailed step-by-step installation instructions.
 
-### 1. Clone and rename
+## Build and Deploy
 
-```bash
-git clone <repo-url> /tmp/nixos-config
-cd /tmp/nixos-config
-```
-
-### 2. Change username
-
-Edit `lib/default.nix`:
-
-```nix
-{
-  username = "your_username";  # CHANGE THIS
-}
-```
-
-### 3. Generate hardware config for your machine
+### Verification (run BEFORE applying)
 
 ```bash
-sudo nixos-generate-config --dir /tmp/nixos-config/hosts/myhost
+sudo nixos-rebuild build --flake .#<hostname>   # dry-run
+home-manager build --flake .#<hostname>         # Home Manager only
+nix flake check                                 # check flake outputs
 ```
 
-This creates `hardware-configuration.nix` in the host directory.
-
-### 4. Create host directory
+### Apply
 
 ```bash
-cp -r hosts/template hosts/myhost
+sudo nixos-rebuild switch --flake .#<hostname>
+home-manager switch --flake .#<hostname>
 ```
 
-Edit `hosts/myhost/configuration.nix`:
-
-```nix
-{ config, lib, pkgs, username, ... }:
-
-{
-  networking.hostName = "myhost";
-  time.timeZone = "Europe/Moscow";  # Change to your timezone
-
-  # Copy UUIDs from generated hardware-configuration.nix
-  # fileSystems."/" = {
-  #   device = "/dev/disk/by-uuid/YOUR_UUID_HERE";
-  #   fsType = "ext4";
-  # };
-
-  users.users.${username} = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
-    shell = pkgs.bash;  # or pkgs.fish, pkgs.zsh
-  };
-
-  # System packages
-  environment.systemPackages = with pkgs; [
-    git
-    wget
-    vim
-    # Add your packages here
-  ];
-}
-```
-
-### 5. Register host in flake.nix
-
-Edit `flake.nix` — add your host:
-
-```nix
-nixosConfigurations = {
-  myhost = makeHost {
-    hostName = "myhost";
-    # enableSteam = true;
-    # enableBluetooth = true;
-    # enableRouter = true;
-  };
-  # ... existing hosts ...
-};
-```
-
-### 6. Locale and timezone
-
-Edit `configuration.nix` to change locale:
-
-```nix
-i18n.defaultLocale = "en_US.UTF-8";  # Change from ru_RU.UTF-8
-```
-
-If your host needs a different locale than the default, use `lib.mkForce` in your host config:
-
-```nix
-i18n.defaultLocale = lib.mkForce "en_US.UTF-8";
-```
-
-### 7. Build and switch
+### Rollback
 
 ```bash
-cd /etc/nixos  # or wherever you placed the config
+sudo nixos-rebuild switch --rollback
+home-manager switch --rollback
+```
+
+### Maintenance
+
+```bash
+nix flake update && nix-collect-garbage -d
+```
+
+## Linting / Static Analysis
+
+```bash
+deadnix -W .    # detect unused variables
+statix check .  # static analysis for Nix patterns
+```
+
+## Updating
+
+```bash
+cd /etc/nixos
+nix flake update
 sudo nixos-rebuild switch --flake .#myhost
 ```
 
-## Available Hosts
+## Code Style
 
-| Host | Type | Features |
-|------|------|----------|
-| `nixlensk323` | Gaming PC | Steam, Bluetooth, Hyprland |
-| `nixlensk322` | Server/Router | Docker, NAT, dnsmasq, firewall |
-| `nixlensk321` | Laptop | Hyprland, battery management |
+### Formatting
+- **Indentation**: 2 spaces, no tabs
+- **No automated formatter** (no alejandra/nixfmt) — follow existing style
+- One attribute per line in attrsets
+- Lists: one item per line when > 2 items or any item is complex
 
-## Optional Modules
+### Naming Conventions
 
-Enable optional modules in `flake.nix`:
-
-```nix
-myhost = makeHost {
-  hostName = "myhost";
-  enableBluetooth = true;  # Enable Bluetooth support
-  enableRouter = true;     # Enable Router/NAT/DHCP
-  # enableSteam is not used as a module toggle yet
-};
-```
+| Element | Convention | Example |
+|---------|------------|---------|
+| Files | kebab-case | `git-sync.nix` |
+| Options | camelCase | `hardware.opengl.enable` |
+| Variables | camelCase | `nixpkgsHost` |
+| Folders | lowercase | `modules/system/` |
 
 ## Customization
 
@@ -189,19 +155,35 @@ Add packages in two places:
 1. **System-wide**: `hosts/myhost/configuration.nix` → `environment.systemPackages`
 2. **User-level**: `home.nix` → `home.packages`
 
-## Updating
-
-```bash
-cd /etc/nixos
-nix flake update
-sudo nixos-rebuild switch --flake .#myhost
-```
-
 ## Git Sync (LAN)
 
 After each commit, a post-commit hook sends a UDP signal to all other hosts on the LAN. Each host runs a listener that automatically runs `git pull --rebase --autostash`.
 
 No manual sync needed — commit on one machine, others update automatically.
+
+## Remote Host Management
+
+Manage other hosts via SSH. Example:
+
+```bash
+ssh -o ConnectTimeout=3 zumuvik@192.168.10.242 "cd /etc/nixos && git status"
+```
+
+Known hosts:
+
+| Host | IP | Description |
+|------|-----|-------------|
+| nixlensk321 | 192.168.10.242 | Laptop |
+| nixlensk322 | 192.168.10.120 | Server |
+| nixlensk323 | 192.168.10.210 | Gaming PC |
+
+## Web Services (nixlensk322)
+
+Nginx virtual hosts in `modules/system/sites/`.
+
+| Site | Domain |
+|------|--------|
+| Roundcube | mail.samolensk.ru |
 
 ## Troubleshooting
 
@@ -230,3 +212,15 @@ The config uses `home-manager.backupFileExtension = "backup"` to handle conflict
 sudo nixos-rebuild switch --rollback
 # or select at boot in GRUB
 ```
+
+## For AI Coding Agents
+
+See [`AGENTS.md`](./AGENTS.md) for detailed guidelines:
+- Directory structure details
+- Module patterns and imports
+- Nix idioms (conditionals, package lists, attribute ordering)
+- Comments style
+- Error handling
+- Shell script conventions
+- Git workflow
+- Adding new hosts
