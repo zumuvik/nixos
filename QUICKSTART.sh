@@ -39,7 +39,7 @@ echo "[$STEP/6] Applying NixOS configuration..."
 echo "        (installs ROCm, llama-cpp-rocm, enables service)"
 ((STEP++))
 
-if grep -q "services.llama-server.enable = true" /etc/nixos/hosts/nixlensk323/configuration.nix; then
+if grep -q "services.llama-server" /etc/nixos/hosts/nixlensk323/configuration.nix; then
     echo "✓ Config already updated"
     
     read -p "Rebuild system now? (requires sudo password) [y/N] " -n 1 -r
