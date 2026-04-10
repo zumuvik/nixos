@@ -1,5 +1,5 @@
-{ ... }: {
-  imports = [
-    ./fastfetch.nix
+{ config, pkgs, lib, ... }: {
+  nixpkgs.overlays = [
+    (import ./overlay.nix)
   ];
 }
