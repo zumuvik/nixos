@@ -63,7 +63,6 @@
       qemu
       libvirt
       virt-viewer
-      opencode
       jq
 
     ] ++ lib.optionals (hostName == "nixlensk323") [

@@ -83,7 +83,6 @@
     unzip
     unrar
     xrandr
-    opencode
     nix-search
   ];
 }

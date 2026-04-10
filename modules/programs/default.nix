@@ -8,6 +8,7 @@
     ./ghostty.nix      # Терминал
     ./fish.nix         # Шелл
     ./micro.nix        # Текстовый редактор
+    ./opencode.nix     # AI-assisted coding
   ];
 }
 
