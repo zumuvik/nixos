@@ -1,4 +1,4 @@
-{...}:
+_:
 
 {
   # Graphics (AMD/Intel)

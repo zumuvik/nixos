@@ -1,4 +1,4 @@
-{ ... }: {
+_: {
   imports = [
     ./nginx.nix
     ./roundcube.nix

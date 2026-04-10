@@ -1,4 +1,4 @@
-{ ... }: {
+_: {
   imports = [
     ./nixvim.nix       # Декларативный Nvim
     ./vscodium.nix     # vscode без слежки

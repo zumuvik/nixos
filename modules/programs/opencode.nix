@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+_: {
   programs.opencode = {
     enable = true;
     enableMcpIntegration = true;
