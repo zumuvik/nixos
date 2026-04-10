@@ -15,9 +15,9 @@
    Если OpenCode на **другой машине** в сети:
    - Отредактируйте `/etc/nixos/modules/system/llama-server.nix`
    - Измените `--host 127.0.0.1` на `--host 0.0.0.0`
-   - Запустите: `sudo nixos-rebuild switch --flake /etc/nixos#nixleski323`
+   - Запустите: `sudo nixos-rebuild switch --flake /etc/nixos#nixlensk323`
 
-2. **Получите IP адрес nixleski323**
+2. **Получите IP адрес nixlensk323**
    ```bash
    hostname -I  # или посмотрите в конфиге: IP = 192.168.x.x
    ```

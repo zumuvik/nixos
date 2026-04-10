@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # DeepSeek-Coder-V2-Lite Quick Start Script
-# Автоматизирует все шаги установки для nixleski323
+# Автоматизирует все шаги установки для nixlensk323
 
 set -euo pipefail
 
 echo "╔═══════════════════════════════════════════════════════════════╗"
-echo "║  DeepSeek-Coder-V2-Lite Quick Start (nixleski323)            ║"
+echo "║  DeepSeek-Coder-V2-Lite Quick Start (nixlensk323)            ║"
 echo "║  AMD Vega 56 + llama.cpp + ROCm                              ║"
 echo "╚═══════════════════════════════════════════════════════════════╝"
 echo ""
@@ -39,18 +39,18 @@ echo "[$STEP/6] Applying NixOS configuration..."
 echo "        (installs ROCm, llama-cpp-rocm, enables service)"
 ((STEP++))
 
-if grep -q "services.llama-server.enable = true" /etc/nixos/hosts/nixleski323/configuration.nix; then
+if grep -q "services.llama-server.enable = true" /etc/nixos/hosts/nixlensk323/configuration.nix; then
     echo "✓ Config already updated"
     
     read -p "Rebuild system now? (requires sudo password) [y/N] " -n 1 -r
     echo ""
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "Building NixOS config..."
-        sudo /run/current-system/sw/bin/nixos-rebuild switch --flake /etc/nixos#nixleski323 2>&1 | tail -20
+        sudo /run/current-system/sw/bin/nixos-rebuild switch --flake /etc/nixos#nixlensk323 2>&1 | tail -20
         echo "✓ System rebuilt"
     else
         echo "⚠️  Skipped rebuild. Run manually:"
-        echo "   sudo nixos-rebuild switch --flake /etc/nixos#nixleski323"
+        echo "   sudo nixos-rebuild switch --flake /etc/nixos#nixlensk323"
         echo ""
         read -p "Continue anyway? [y/N] " -n 1 -r
         echo ""
