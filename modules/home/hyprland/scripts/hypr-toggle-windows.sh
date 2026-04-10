@@ -4,15 +4,16 @@ set -euo pipefail
 STATE_FILE="/tmp/hypr_windows_state"
 
 if [ -f "$STATE_FILE" ]; then
-  # Restore windows
+  # Restore windows from ws 99 back to their original workspaces
   while IFS=: read -r addr ws; do
-    hyprctl dispatch movetoworkspace "$ws,$addr"
+    hyprctl dispatch movetoworkspace "$addr,$ws"
   done < "$STATE_FILE"
   rm "$STATE_FILE"
 else
-  # Hide windows to workspace 99
-  hyprctl clients -j | jq -r '.[] | select(.hidden == false) | "\(.address):\(.workspace.id)"' | while IFS=: read -r addr ws; do
+  # Hide all windows to ws 99 and save current workspace
+  hyprctl clients -j | jq -r '.[] | select(.hidden == false) | .address' | while read -r addr; do
+    ws=$(hyprctl clients -j | jq -r --arg addr "$addr" '.[] | select(.address == $addr) | .workspace.id')
     echo "$addr:$ws" >> "$STATE_FILE"
-    hyprctl dispatch movetoworkspace "99,$addr"
+    hyprctl dispatch movetoworkspace "$addr,99"
   done
 fi
