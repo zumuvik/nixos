@@ -74,6 +74,7 @@ in
       # Custom
       "$mainMod, P, exec, ~/.local/bin/nix-pkg-manage.sh"
       "SUPER, Caps_Lock, exec, ~/.local/bin/ayu-toggle.sh"
+      "$mainMod, W, exec, ~/.local/bin/hypr-toggle-windows.sh"
     ] ++ lib.optionals (hostName == "nixlensk323") [
       "$mainMod, 9, execr, ${osuScript}"
     ] ++ lib.optionals (hostName != "nixlensk323") [
