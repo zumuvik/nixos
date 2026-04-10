@@ -21,6 +21,16 @@ Personal NixOS configuration for my machines — declarative, flake-based, with 
 - **Boot**: GRUB with Tela theme
 - **Locale**: ru_RU.UTF-8
 
+## nixleski323 Special: LLM Inference
+
+- **GPU**: AMD Radeon RX Vega 56 (8GB VRAM)
+- **Runtime**: llama.cpp (v8667, ROCm-enabled)
+- **Model**: DeepSeek-Coder-V2-Lite (16B params, IQ2_XS quant)
+- **API**: REST on localhost:8080
+- **Integration**: OpenCode AI development
+
+See [`QUICKSTART.sh`](./QUICKSTART.sh) and [`LLAMA_OPENCODE_INTEGRATION.md`](./LLAMA_OPENCODE_INTEGRATION.md) for setup.
+
 ## Quick Start
 
 ### Build (dry-run)
