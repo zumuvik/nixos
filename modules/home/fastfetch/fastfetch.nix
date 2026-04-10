@@ -46,22 +46,30 @@
     '';
   };
 
-  # ASCII art logo for fastfetch
+  # ASCII art logo for fastfetch (from original SVG design)
   home.file."Pictures/fastfetch-logo.txt" = {
     force = true;
     text = ''
-         ╔══════════════════════════════════════════════╗
-         ║                                              ║
-         ║            ░▒▓█ FASTFETCH █▓▒░              ║
-         ║                                              ║
-         ║       ╱────────────────────────────╲        ║
-         ║      │  System Information Display  │       ║
-         ║      │    Blazingly Fast & Efficient │      ║
-         ║       ╲────────────────────────────╱        ║
-         ║                                              ║
-         ║    ⚡ Lightweight • Colorful • Modern ⚡   ║
-         ║                                              ║
-         ╚══════════════════════════════════════════════╝
+                    ▐▌
+                   ▐██▌
+                  ▐████▌
+                 ▐██████▌
+                ▐████████▌
+               ▐██████████▌
+              ▐████████████▌
+             ▐██████████████▌
+            ▐████████████████▌
+           ▐██████████████████▌
+          ▐████████████████████▌
+         ▐██████████████████████▌
+        ▐████████████████████████▌
+       ╔══════════════════════════════╗
+       ║   ⚡ F A S T F E T C H ⚡   ║
+       ║                              ║
+       ║  System Information Display  ║
+       ║   Blazingly Fast & Modern    ║
+       ║                              ║
+       ╚══════════════════════════════╝
     '';
   };
 }
