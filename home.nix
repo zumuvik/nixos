@@ -64,6 +64,7 @@
       libvirt
       virt-viewer
       opencode
+      jq
 
     ] ++ lib.optionals (hostName == "nixlensk323") [
       inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
