@@ -1,21 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-STATE_FILE="/tmp/hypr-windows-hidden"
+# Get all non-minimized windows
+NON_MINIMIZED=$(hyprctl clients -j | jq -r '.[] | select(.minimized == false) | .address')
 
-# Get all windows
-WINDOWS=$(hyprctl clients -j | jq -r '.[] | .address')
-
-if [ -f "$STATE_FILE" ]; then
-    # Restore windows from workspace 10
-    while read -r addr; do
-        hyprctl dispatch movetoworkspace "1,$addr" 2>/dev/null || true
-    done <<< "$(cat "$STATE_FILE")"
-    rm "$STATE_FILE"
+if [ -z "$NON_MINIMIZED" ]; then
+  # All windows are minimized, restore them
+  hyprctl clients -j | jq -r '.[] | .address' | while read -r addr; do
+    hyprctl dispatch setprop address "$addr" minimized false
+  done
 else
-    # Save window addresses and move to workspace 10
-    echo "$WINDOWS" > "$STATE_FILE"
-    for addr in $WINDOWS; do
-        hyprctl dispatch movetoworkspace "10,$addr" 2>/dev/null || true
-    done
+  # Minimize all non-minimized windows
+  echo "$NON_MINIMIZED" | while read -r addr; do
+    hyprctl dispatch setprop address "$addr" minimized true
+  done
 fi
