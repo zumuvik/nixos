@@ -30,6 +30,7 @@
   # User (общее для всех)
   # ────────────────────────────────────────────────────────
   programs.fish.enable = true;
+  programs.home-manager.enable = true;
 
   users.users.${username} = {
     isNormalUser = true;
