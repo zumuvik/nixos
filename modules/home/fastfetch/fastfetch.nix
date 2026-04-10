@@ -9,6 +9,7 @@
   ];
 
   home.file.".config/fastfetch/config.jsonc" = {
+    force = true;
     text = ''
       {
         "logo": {
@@ -47,6 +48,7 @@
 
   # ASCII art logo for fastfetch
   home.file."Pictures/fastfetch-logo.txt" = {
+    force = true;
     text = ''
          ╔══════════════════════════════════════════════╗
          ║                                              ║
