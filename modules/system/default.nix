@@ -5,5 +5,6 @@
     ./zram.nix
     ./greetd.nix
     ./git-sync.nix
+    ./llama-server.nix
   ];
 }
