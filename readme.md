@@ -34,7 +34,6 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 │   │   ├── greetd.nix         # Login manager
 │   │   ├── laptop.nix         # Laptop-specific (nixlensk321 only)
 │   │   ├── bluetooth.nix      # Bluetooth (optional)
-│   │   ├── router.nix         # Router/DHCP/NAT (optional)
 │   │   ├── git-sync.nix       # Auto git-sync across LAN
 │   │   └── sites/             # Nginx virtual hosts
 │   ├── home/
