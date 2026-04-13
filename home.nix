@@ -23,7 +23,6 @@
       ghostty
       jq
       btop
-      fastfetch
       inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
   };

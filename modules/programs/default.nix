@@ -11,6 +11,7 @@
     ./micro.nix        # Текстовый редактор
     ./opencode.nix     # AI-assisted coding
     ./zen-browser.nix  # Кастомный браузер
+    ./fastfetch.nix    # Системная информация
 
   ];
 }

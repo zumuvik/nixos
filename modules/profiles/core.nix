@@ -19,7 +19,7 @@
 
   # Common packages
   environment.systemPackages = with pkgs; [
-    git wget gh btop fastfetch curl jq
+    git wget gh btop curl jq
   ];
 
   # User Configuration
