@@ -48,22 +48,22 @@
         # ── Система ──
         {
           type = "os";
-          key = "  OS";
+          key = "  OS";
           keyColor = "yellow";
         }
         {
           type = "kernel";
-          key = "  Kernel";
+          key = "  Kernel";
           keyColor = "yellow";
         }
         {
           type = "packages";
-          key = "  Packages";
+          key = "  Packages";
           keyColor = "yellow";
         }
         {
           type = "uptime";
-          key = "  Uptime";
+          key = "  Uptime";
           keyColor = "yellow";
         }
 
@@ -75,17 +75,17 @@
         # ── Окружение ──
         {
           type = "wm";
-          key = "  WM";
+          key = "  WM";
           keyColor = "green";
         }
         {
           type = "terminal";
-          key = "  Terminal";
+          key = "  Terminal";
           keyColor = "green";
         }
         {
           type = "shell";
-          key = "  Shell";
+          key = "  Shell";
           keyColor = "green";
         }
         {
@@ -102,17 +102,17 @@
         # ── Железо ──
         {
           type = "cpu";
-          key = "  CPU";
+          key = "  CPU";
           keyColor = "red";
         }
         {
           type = "gpu";
-          key = "  GPU";
+          key = "  GPU";
           keyColor = "red";
         }
         {
           type = "memory";
-          key = "  RAM";
+          key = "  RAM";
           keyColor = "red";
         }
         {
@@ -130,14 +130,14 @@
         # ── Сеть ──
         {
           type = "localip";
-          key = "  IP";
+          key = "  IP";
           keyColor = "magenta";
           showIpv4 = true;
           compact = true;
         }
         {
           type = "display";
-          key = "  Display";
+          key = "  Display";
           keyColor = "magenta";
         }
 
