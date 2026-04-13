@@ -24,8 +24,8 @@
       display = {
         separator = "  ";
         color = {
-          keys = "34";       # синий для ключей
-          title = "36";      # cyan для заголовка
+          keys = "34";
+          title = "36";
         };
         key = {
           width = 16;
@@ -36,7 +36,6 @@
       # Modules
       # ──────────────────────────────────────────────
       modules = [
-        # ── Заголовок ──
         {
           type = "title";
           format = "{user-name-colored}@{host-name-colored}";
@@ -49,26 +48,25 @@
         # ── Система ──
         {
           type = "os";
-          key = "  OS";
+          key = "  OS";
           keyColor = "yellow";
         }
         {
           type = "kernel";
-          key = "  Kernel";
+          key = "  Kernel";
           keyColor = "yellow";
         }
         {
           type = "packages";
-          key = "  Packages";
+          key = "  Packages";
           keyColor = "yellow";
         }
         {
           type = "uptime";
-          key = "  Uptime";
+          key = "  Uptime";
           keyColor = "yellow";
         }
 
-        # ── Разделитель ──
         {
           type = "separator";
           string = "─";
@@ -77,26 +75,25 @@
         # ── Окружение ──
         {
           type = "wm";
-          key = "  WM";
+          key = "  WM";
           keyColor = "green";
         }
         {
           type = "terminal";
-          key = "  Terminal";
+          key = "  Terminal";
           keyColor = "green";
         }
         {
           type = "shell";
-          key = "  Shell";
+          key = "  Shell";
           keyColor = "green";
         }
         {
           type = "terminalfont";
-          key = "  Font";
+          key = "  Font";
           keyColor = "green";
         }
 
-        # ── Разделитель ──
         {
           type = "separator";
           string = "─";
@@ -105,27 +102,26 @@
         # ── Железо ──
         {
           type = "cpu";
-          key = "  CPU";
+          key = "  CPU";
           keyColor = "red";
         }
         {
           type = "gpu";
-          key = "  GPU";
+          key = "  GPU";
           keyColor = "red";
         }
         {
           type = "memory";
-          key = "  RAM";
+          key = "  RAM";
           keyColor = "red";
         }
         {
           type = "disk";
-          key = "  Disk";
+          key = "  Disk";
           keyColor = "red";
           folders = "/";
         }
 
-        # ── Разделитель ──
         {
           type = "separator";
           string = "─";
@@ -134,18 +130,17 @@
         # ── Сеть ──
         {
           type = "localip";
-          key = "  IP";
+          key = "  IP";
           keyColor = "magenta";
           showIpv4 = true;
           compact = true;
         }
         {
           type = "display";
-          key = "  Display";
+          key = "  Display";
           keyColor = "magenta";
         }
 
-        # ── Цвета терминала ──
         "break"
         {
           type = "colors";
