@@ -1,0 +1,21 @@
+# Result symlinks
+result
+result-*
+
+# Secrets (legacy/unencrypted)
+.secret
+.env
+*.key
+*.pem
+
+# Editor backups and temp files
+*~
+*.swp
+.netrwhist
+
+# Sisyphus drafts (keeping specific ones if needed, but ignoring general temp)
+.sisyphus/drafts/*
+
+# OS generated files
+.DS_Store
+Thumbs.db

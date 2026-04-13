@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# /* ---- 💫 https://github.com/JaKooLit 💫 ---- */  ##
+# Optsimizirovannyj skript dlya battery monitoring
+
+for i in {0..3}; do
+    if [[ -f "/sys/class/power_supply/BAT$i/capacity" ]]; then
+        battery_level=$(cat "/sys/class/power_supply/BAT$i/status")
+        battery_capacity=$(cat "/sys/class/power_supply/BAT$i/capacity")
+        echo "Battery: $battery_capacity% ($battery_level)"
+    fi
+done

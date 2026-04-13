@@ -1,0 +1,27 @@
+<?php
+$config = array();
+$db_pass = trim(file_get_contents('/run/secrets/roundcube_db_pass'));
+$config['db_dsnw'] = "mysql://roundcube:{$db_pass}@localhost/roundcube";
+$config['default_host'] = 'localhost';
+$config['default_port'] = 143;
+$config['smtp_server'] = 'localhost';
+$config['smtp_port'] = 25;
+$config['smtp_user'] = '%u';
+$config['smtp_pass'] = '%p';
+$config['support_url'] = '';
+$config['product_name'] = 'Mail Samolensk';
+$config['plugins'] = array('archive', 'zipdownload');
+$config['skin'] = 'elastic';
+$config['language'] = 'ru_RU';
+$config['imap_conn_options'] = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+    ),
+);
+$config['smtp_conn_options'] = array(
+    'ssl' => array(
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+    ),
+);
