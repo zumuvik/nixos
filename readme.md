@@ -18,12 +18,14 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 ├── configuration.nix          # Shared system config
 ├── home.nix                   # Home Manager config
 ├── lib/default.nix            # Shared variables (username)
+├── secrets/                   # Encrypted secrets (sops-nix)
 ├── hosts/
 │   ├── nixlensk323/           # Gaming PC
 │   ├── nixlensk322/           # Server/Router
 │   ├── nixlensk321/           # Laptop
 │   └── template/              # Template for new hosts
 ├── modules/
+│   ├── profiles/              # Shared profiles (desktop, server, core)
 │   ├── system/
 │   │   ├── services.nix       # PipeWire, SSH, VPN, XDG
 │   │   ├── hardware.nix       # GPU, Virtualization
@@ -46,6 +48,7 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 │       ├── ags.nix            # Aylur's Gtk Shell
 │       ├── nixcord.nix        # Declarative Vesktop
 │       ├── zsh.nix            # Zsh config
+│       ├── zen-browser.nix    # Zen Browser
 │       └── micro.nix          # Micro editor config
 ├── AGENTS.md                  # Instructions for AI coding agents
 └── SETUP_MANUAL.md            # Step-by-step installation guide
@@ -71,16 +74,16 @@ nix flake check                                 # check flake outputs
 
 ### Apply
 
+A single command applies both system and user configurations (Home Manager is a NixOS module):
+
 ```bash
 sudo nixos-rebuild switch --flake .#<hostname>
-home-manager switch --flake .#<hostname>
 ```
 
 ### Rollback
 
 ```bash
 sudo nixos-rebuild switch --rollback
-home-manager switch --rollback
 ```
 
 ### Maintenance
@@ -128,8 +131,9 @@ sudo nixos-rebuild switch --flake .#myhost
 Config files are in `modules/home/hyprland/`:
 
 - `binds.nix` — keyboard shortcuts
-- `style.nix` — gaps, borders, animations
+- `style.nix` — gaps, borders, animations (liquid glass effect)
 - `exec-once.nix` — autostart applications
+- `swaync/` — SwayNC notifications configuration
 - `scripts/` — shell scripts
 
 ### Neovim (nixvim)
