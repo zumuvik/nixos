@@ -7,10 +7,8 @@
     ./modules/system
   ];
 
-  # This file is now a thin wrapper. 
-  # Most settings moved to modules/profiles/core.nix
   
-  # Bootloader settings (global default)
+
   boot.loader = {
     systemd-boot.enable = lib.mkDefault false;
     efi.canTouchEfiVariables = true;

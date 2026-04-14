@@ -106,7 +106,7 @@ end
 function nix-full-check
   set -l description "Full pre-deployment check (lint + flake + build)"
   echo $C_BOLD$C_MAGENTA"╔════════════════════════════════════════╗"$C_RESET
-  echo $C_BOLD$C_MAGENTA"║    Full NixOS Configuration Check     ║"$C_RESET
+  echo $C_BOLD$C_MAGENTA"║    Full NixOS Configuration Check      ║"$C_RESET
   echo $C_BOLD$C_MAGENTA"╚════════════════════════════════════════╝"$C_RESET
   echo ""
   
