@@ -34,8 +34,16 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
-    substituters = [ "https://cache.nixos.org" ];
-    trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
+    substituters = [ 
+    "https://cache.nixos.org"
+    "https://cache.garnix.io"
+    "https://ayugram-desktop.cachix.org"
+    ];
+    trusted-public-keys = [ 
+    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" 
+    "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
+    "ayugram-desktop.cachix.org:AZ5EqHrJsAKL5YkZYLPEsb1FdD9QlypUwQ0REcJftgA="
+    ];
   };
 
   nix.gc = {
@@ -59,5 +67,5 @@
   };
 
   # State version should be set at host level, but we have a default
-  system.stateVersion = lib.mkDefault "24.11";
+  system.stateVersion = lib.mkDefault "25.11";
 }

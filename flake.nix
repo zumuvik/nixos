@@ -14,18 +14,15 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    ayugram-desktop = {
-      type = "git";
-      submodules = true;
-      url = "https://github.com/ndfined-crp/ayugram-desktop/";
-    };
-
     ags = {
       url = "github:Aylur/ags";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
+    ayugram-desktop = {
+      type = "git";
+      submodules = true;
+      url = "https://github.com/ndfined-crp/ayugram-desktop/";
+     };
     grub2-themes = {
       url = "github:vinceliuice/grub2-themes";
     };
@@ -45,7 +42,7 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ayugram-desktop, ags, grub2-themes, sops-nix, ... } @ inputs:
+  outputs = { nixpkgs, home-manager, ayugram-desktop, self, ags, grub2-themes, sops-nix, ... } @ inputs:
   let
     lib = import ./lib;
     inherit (lib) username;

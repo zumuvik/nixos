@@ -24,6 +24,7 @@
       jq
       btop
       inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
+      inputs.ayugram-desktop.packages.${pkgs.system}.ayugram-desktop
     ];
   };
 

@@ -95,5 +95,6 @@
     unrar
     xrandr
     nix-search
+    
   ];
 }

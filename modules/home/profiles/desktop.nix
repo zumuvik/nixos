@@ -42,9 +42,7 @@
       slurp
       wl-clipboard
       swappy
-    ] ++ lib.optionals (hostName == "nixlensk323") [
-      inputs.ayugram-desktop.packages.${pkgs.stdenv.hostPlatform.system}.default
-    ];
+   ];
 
     # Hypridle (Screen lock/sleep/hibernate)
     services.hypridle = {
