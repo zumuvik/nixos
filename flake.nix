@@ -43,13 +43,9 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    cachyos-kernel = {
-      url = "github:xddxdd/nix-cachyos-kernel";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { nixpkgs, home-manager, ayugram-desktop, ags, grub2-themes, sops-nix, cachyos-kernel, ... } @ inputs:
+  outputs = { nixpkgs, home-manager, ayugram-desktop, ags, grub2-themes, sops-nix, ... } @ inputs:
   let
     lib = import ./lib;
     inherit (lib) username;
@@ -59,7 +55,7 @@
         system = "x86_64-linux";
         specialArgs = { 
           inherit inputs username hostName;
-          inherit ayugram-desktop ags grub2-themes cachyos-kernel;
+          inherit ayugram-desktop ags grub2-themes;
           lib' = lib;
         };
 

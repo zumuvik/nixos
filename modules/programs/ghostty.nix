@@ -6,9 +6,9 @@
       package = pkgs.ghostty;
       
       settings = {
-        theme = "GruvboxDarkHard";
+        theme = "Gruvbox Dark Hard";
         font-family = "JetBrainsMono Nerd Font";
-        font-size = 13;
+        font-size = 15;
         window-decoration = false;
         background-opacity = 0.9;
         confirm-close-surface = false;

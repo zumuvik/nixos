@@ -14,7 +14,7 @@ pgrep -x yad >/dev/null 2>&1 && pkill yad
 # Launch yad
 GDK_BACKEND="$BACKEND" yad \
     --center \
-    --title="KooL Quick Cheat Sheet" \
+    --title="ZUMUVIK" \
     --no-buttons \
     --list \
     --column=Key: \
@@ -40,7 +40,7 @@ GDK_BACKEND="$BACKEND" yad \
     "super+ctrl+b" "Waybar style" "" \
     "super+alt+b" "Waybar layout" "" \
     "super+alt+r" "Reload" "waybar,rofi,swaync" \
-    "super+shift+n" "Notifications" "swaync" \
+    "super+~" "Notifications" "swaync" \
     "print" "Screenshot" "grim" \
     "super+print" "Area" "grim+slurp" \
     "super+shift+s" "Swappy" "" \

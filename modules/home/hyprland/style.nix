@@ -12,7 +12,7 @@
 
    decoration = {
        rounding = 12;
-       active_opacity = 0.85;
+       active_opacity = 0.95;
        inactive_opacity = 0.75;
        fullscreen_opacity = 1.0;
 

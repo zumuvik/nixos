@@ -12,6 +12,6 @@
     ./git-sync.nix
     ./fonts.nix
     ./bluetooth.nix
-    ./cachyos-kernel.nix
+    ./kernel.nix
   ];
 }
