@@ -26,6 +26,7 @@
     keymaps = [
       { mode = "n"; key = "<leader>w"; action = "<cmd>w<CR>"; }
       { mode = "n"; key = "<leader>q"; action = "<cmd>q<CR>"; }
+      { mode = "n"; key = "<leader>n"; action = "<cmd>Neotree toggle<CR>"; }
     ];
 
     colorschemes.gruvbox = {
