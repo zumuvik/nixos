@@ -1,6 +1,11 @@
 { config, lib, inputs, my, pkgs, hostName, ... }:
 
 {
+  imports = [
+    ../hyprland
+    ../waybar
+  ];
+
   config = lib.mkIf my.profiles.desktop.enable {
     # ────────────────────────────────────────────────────────
     # Desktop Home Manager Settings
