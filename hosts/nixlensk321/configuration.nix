@@ -4,7 +4,8 @@
   my.profiles.desktop.enable = true;
   my.hardware.bluetooth.enable = true;
   my.hardware.laptop.enable = true;
-  my.hardware.kernel-zen.enable = true;
+  my.hardware.kernel-zen.enable = false;
+  my.hardware.kernel-cachy.enable = true;
   my.hardware.zram.enable = true;
 
   # ────────────────────────────────────────────────────────

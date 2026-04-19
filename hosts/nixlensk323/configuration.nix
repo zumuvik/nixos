@@ -7,7 +7,8 @@
   my.hardware.virtualization.enable = true;
   my.hardware.zram.enable = true;
   my.hardware.swap.enable = true;
-  my.hardware.kernel-zen.enable = true;
+  my.hardware.kernel-zen.enable = false;
+  my.hardware.kernel-cachy.enable = true;
   my.gaming.enable = true;
   programs.gamemode.enable = true; 
   # ────────────────────────────────────────────────────────

@@ -37,9 +37,12 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-cachyos-kernel = {
+      url = "github:drakon64/nixos-cachyos-kernel";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, ... } @ inputs:
+  outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, nixos-cachyos-kernel, ... } @ inputs:
   let
     lib = import ./lib;
     inherit (lib) username;
@@ -55,6 +58,7 @@
 
         modules = [
           sops-nix.nixosModules.sops
+          nixos-cachyos-kernel.nixosModules.default
           ./hosts/${hostName}/default.nix
           ./configuration.nix
           home-manager.nixosModules.home-manager

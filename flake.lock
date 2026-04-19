@@ -193,6 +193,21 @@
         "type": "github"
       }
     },
+    "nixos-cachyos-kernel": {
+      "locked": {
+        "lastModified": 1743535541,
+        "narHash": "sha256-OlBtXY26w9OcAmpqrTvxaG4/rfDdavauQF2eRxb+ySs=",
+        "owner": "drakon64",
+        "repo": "nixos-cachyos-kernel",
+        "rev": "8516d89c4e0c4a25cea1be8431db3963359ee81b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "drakon64",
+        "repo": "nixos-cachyos-kernel",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1776197346,
@@ -301,6 +316,7 @@
         "grub2-themes": "grub2-themes",
         "home-manager": "home-manager",
         "nixcord": "nixcord",
+        "nixos-cachyos-kernel": "nixos-cachyos-kernel",
         "nixpkgs": "nixpkgs_3",
         "nixvim": "nixvim",
         "sops-nix": "sops-nix",
