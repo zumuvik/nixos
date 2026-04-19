@@ -60,14 +60,14 @@
           sops-nix.nixosModules.sops
           ({ ... }: { nixpkgs.overlays = [ nix-cachyos-kernel.overlays.default ]; })
           ./hosts/${hostName}/default.nix
-          ./configuration.nix
+          ./modules/profiles
           home-manager.nixosModules.home-manager
           grub2-themes.nixosModules.default
 
           ( { config, ... }: {
             home-manager = {
               useUserPackages = true;
-              extraSpecialArgs = { inherit inputs username hostName; my = config.my; inherit (config) modules; };
+              extraSpecialArgs = { inherit inputs username hostName; my = config.my; };
               users.${username} = import ./home.nix;
             };
           } )
@@ -87,14 +87,6 @@
 
       nixlensk321 = makeHost {
         hostName = "nixlensk321";
-      };
-    };
-
-    nixosModules = {
-      base-system = {
-        imports = [
-          ./configuration.nix
-        ];
       };
     };
 

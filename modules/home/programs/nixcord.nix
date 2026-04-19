@@ -1,8 +1,8 @@
-{ modules, lib, inputs, ... }: 
+{ my, lib, inputs, ... }: 
 
 {
   imports = [ inputs.nixcord.homeModules.nixcord ];
-  config = lib.mkIf modules.desktop.enable {
+  config = lib.mkIf my.profiles.desktop.enable {
     programs.nixcord = {
       enable = true;
       vesktop.enable = true;

@@ -1,6 +1,6 @@
-{ modules, lib, inputs, ... }: {
+{ my, lib, inputs, ... }: {
   imports = [ inputs.ags.homeManagerModules.default ];
-  config = lib.mkIf modules.desktop.enable {
+  config = lib.mkIf my.profiles.desktop.enable {
     programs.ags.enable = true;
   };
 }

@@ -12,6 +12,5 @@
     ./hardware/default.nix
     ./gaming.nix
     ./ui
-    ./legacy-shims.nix
   ];
 }

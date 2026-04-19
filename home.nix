@@ -3,7 +3,7 @@
 {
   imports = [
     ./modules/home
-    ./modules/programs
+    ./modules/home/programs
   ];
 
    home = {

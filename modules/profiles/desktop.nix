@@ -30,5 +30,11 @@
       QT_QPA_PLATFORMTHEME = "gtk";
       GTK_THEME = "Adwaita-dark";
     };
+
+    # Desktop Bootloader styling
+    boot.loader.grub2-theme = {
+      enable = true;
+      theme = "tela";
+    };
   };
 }

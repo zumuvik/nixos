@@ -10,6 +10,7 @@
   my.hardware.kernel-zen.enable = false;
   my.hardware.kernel-cachy.enable = true;
   my.gaming.enable = true;
+  my.ui.plymouth.enable = true;
   programs.gamemode.enable = true; 
   # ────────────────────────────────────────────────────────
   # Sops-nix (управление секретами)
@@ -46,6 +47,7 @@
        "net.ipv4.ip_forward=1"
        "resume_offset=4988160"
        "quiet"
+       "splash"
        "loglevel=3"
        "systemd.show_status=auto"
        "rd.udev.log_level=3"

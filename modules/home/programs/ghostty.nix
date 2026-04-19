@@ -1,5 +1,5 @@
-{ modules, lib, pkgs, ... }: {
-  config = lib.mkIf modules.desktop.enable {
+{ my, lib, pkgs, ... }: {
+  config = lib.mkIf my.profiles.desktop.enable {
     programs.ghostty = {
       enable = true;
       enableFishIntegration = true;
