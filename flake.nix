@@ -63,7 +63,7 @@
           ( { config, ... }: {
             home-manager = {
               useUserPackages = true;
-              extraSpecialArgs = { inherit inputs username hostName; inherit (config) modules; };
+              extraSpecialArgs = { inherit inputs username hostName; my = config.my; inherit (config) modules; };
               users.${username} = import ./home.nix;
             };
           } )

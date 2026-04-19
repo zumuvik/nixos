@@ -1,7 +1,7 @@
-{ config, lib, inputs, modules, pkgs, hostName, ... }:
+{ config, lib, inputs, my, pkgs, hostName, ... }:
 
 {
-  config = lib.mkIf modules.desktop.enable {
+  config = lib.mkIf my.profiles.desktop.enable {
     # ────────────────────────────────────────────────────────
     # Desktop Home Manager Settings
     # ────────────────────────────────────────────────────────
