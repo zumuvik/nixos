@@ -7,7 +7,7 @@
     # ────────────────────────────────────────────────────────
     # Desktop Profile Settings
     # ────────────────────────────────────────────────────────
-    
+
     # UI Components
     my.ui.greetd.enable = lib.mkDefault true;
     my.ui.fonts.enable = lib.mkDefault true;
@@ -15,7 +15,16 @@
 
     # Misc
     programs.nix-ld.enable = true;
-    
+
+    # Throne (VLESS client)
+    programs.throne = {
+      enable = true;
+      tunMode = {
+        enable = true;
+        setuid = true;
+      };
+    };
+
     # Environment
     environment.sessionVariables = {
       QT_QPA_PLATFORMTHEME = "gtk";
