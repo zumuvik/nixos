@@ -1,2 +1,1 @@
-# Игнорировать SH-скрипты в статистике языков GitHub (Linguist), чтобы они не перекрывали Nix
 modules/home/hyprland/scripts/* linguist-vendored
