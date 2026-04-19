@@ -8,7 +8,7 @@
       enable = true;
       settings = {
         default_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd 'Hyprland > /dev/null 2>&1'";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-user-session --cmd 'start-hyprland > /dev/null 2>&1'";
           user = "greeter";
         };
       };

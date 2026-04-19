@@ -35,6 +35,10 @@
           key_press_enables_dpms = false;
           mouse_move_enables_dpms = false;
         };
+        debug = {
+          disable_logs = true;
+          gl_debugging = false;
+        };
         dwindle = {
           pseudotile = true;
           preserve_split = true;
