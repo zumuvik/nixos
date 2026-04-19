@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   options.my.hardware = {
@@ -11,7 +11,7 @@
       boot.kernelPackages = pkgs.linuxPackages_zen;
     })
     (lib.mkIf config.my.hardware.kernel-cachy.enable {
-      boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+      boot.kernelPackages = inputs.nix-cachyos-kernel.legacyPackages.${pkgs.system}.linuxPackages-cachyos-latest;
     })
   ];
 }
