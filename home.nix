@@ -14,25 +14,17 @@
     language.base = "ru_RU.UTF-8";
 
     sessionVariables = {
-      TERMINAL = "ghostty";
     };
 
-     # Base packages for all hosts
+     # Base packages for all hosts (CLI ONLY)
      packages = with pkgs; [
-         micro
-         ghostty
-         jq
-         btop
-         inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
-       ];
+          micro
+          jq
+          btop
+          inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
+        ];
   };
 
-  # Terminal settings
-  xdg.terminal-exec = {
-    enable = true;
-    package = pkgs.ghostty;
-  };
-  
   # Programs (core)
   programs.fish.enable = true;
 

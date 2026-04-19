@@ -1,7 +1,7 @@
 { config, lib, inputs, my, pkgs, hostName, ... }:
 
 {
-  imports = [
+  imports = lib.optionals my.profiles.desktop.enable [
     ../hyprland
     ../waybar
   ];
@@ -11,6 +11,16 @@
     # Desktop Home Manager Settings
     # ────────────────────────────────────────────────────────
     
+    # Core Desktop Settings
+    home.sessionVariables = {
+      TERMINAL = "ghostty";
+    };
+
+    xdg.terminal-exec = {
+      enable = true;
+      package = pkgs.ghostty;
+    };
+
     home.packages = with pkgs; [
       # Desktop Environment
       waybar
