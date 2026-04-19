@@ -2,13 +2,15 @@
 
 
 {
-  modules.server.enable = true;
+  my.profiles.server.enable = true;
+  my.services.wg-easy.enable = true;
+  my.services.roundcube.enable = true;
+  my.services.mailserver.enable = true;
 
   imports = [
-    ../../modules/system/cloudflare-dns-sync.nix
   ];
 
-  services.cloudflare-dns-sync = {
+  my.services.cloudflare-sync = {
     enable = true;
     checkInterval = "hourly";
     domains = [

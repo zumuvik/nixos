@@ -1,7 +1,9 @@
 { config, lib, ... }:
 
 {
-  config = lib.mkIf config.modules.server.enable {
+  options.my.profiles.server.enable = lib.mkEnableOption "Server Profile";
+
+  config = lib.mkIf config.my.profiles.server.enable {
     # ────────────────────────────────────────────────────────
     # Server Profile Settings
     # ────────────────────────────────────────────────────────
@@ -14,5 +16,9 @@
     
     # Force English locale for server logs/messages
     i18n.defaultLocale = lib.mkForce "en_US.UTF-8";
+
+    # Default services for servers
+    my.services.nginx.enable = lib.mkDefault true;
+    my.services.git-sync.enable = lib.mkDefault true;
   };
 }

@@ -78,7 +78,7 @@ in
       "$mainMod, P, exec, ~/.local/bin/nix-pkg-manage.sh"
       "SUPER, Caps_Lock, exec, ~/.local/bin/ayu-toggle.sh"
       "$mainMod, W, exec, ~/.local/bin/hypr-toggle-windows.sh"
-      "$mainMod, H, exec, ~/.config/hypr/scripts/KeyHints.sh"
+      "$mainMod, F1, exec, ~/.config/hypr/scripts/KeyHints.sh"
       "$mainMod, grave, exec, swaync-client -t -sw"
     ] ++ lib.optionals (hostName == "nixlensk323") [
       "$mainMod, 9, execr, ${osuScript}"

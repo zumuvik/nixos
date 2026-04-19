@@ -1,8 +1,11 @@
 { pkgs, username, lib', ... }:
 
 {
-  modules.desktop.enable = true;
-  modules.bluetooth.enable = true;
+  my.profiles.desktop.enable = true;
+  my.hardware.bluetooth.enable = true;
+  my.hardware.laptop.enable = true;
+  my.hardware.kernel-zen.enable = true;
+  my.hardware.zram.enable = true;
 
   # ────────────────────────────────────────────────────────
   # Networking & Hostname

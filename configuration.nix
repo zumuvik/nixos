@@ -4,7 +4,7 @@
 
 {
   imports = [
-    ./modules/system
+    ./modules/profiles
   ];
 
   

@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 let
-  cfg = config.services.cloudflare-dns-sync;
+  cfg = config.my.services.cloudflare-sync;
   domainsJson = builtins.toJSON cfg.domains;
 in
 {
-  options.services.cloudflare-dns-sync = {
+  options.my.services.cloudflare-sync = {
     enable = lib.mkEnableOption "Cloudflare DNS sync service";
 
     checkInterval = lib.mkOption { type = lib.types.str; default = "hourly"; };

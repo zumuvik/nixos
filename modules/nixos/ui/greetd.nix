@@ -1,7 +1,9 @@
 { config, lib, pkgs, ... }:
 
 {
-  config = lib.mkIf config.modules.desktop.enable {
+  options.my.ui.greetd.enable = lib.mkEnableOption "greetd login manager with tuigreet";
+
+  config = lib.mkIf config.my.ui.greetd.enable {
     services.greetd = {
       enable = true;
       settings = {

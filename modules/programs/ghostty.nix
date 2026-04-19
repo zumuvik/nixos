@@ -6,7 +6,7 @@
       package = pkgs.ghostty;
       
       settings = {
-        theme = "Gruvbox Dark Hard";
+        theme = "Gruvbox Dark";
         font-family = "JetBrainsMono Nerd Font";
         font-size = 15;
         window-decoration = false;

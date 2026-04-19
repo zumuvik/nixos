@@ -6,10 +6,10 @@
     ./modules/programs
   ];
 
-  home = {
-    inherit username;
-    homeDirectory = "/home/${username}";
-    stateVersion = "24.11";
+   home = {
+     inherit username;
+     homeDirectory = "/home/${username}";
+     stateVersion = "25.11";
 
     language.base = "ru_RU.UTF-8";
 
@@ -17,15 +17,14 @@
       TERMINAL = "ghostty";
     };
 
-    # Base packages for all hosts
-    packages = with pkgs; [
-      micro
-      ghostty
-      jq
-      btop
-      inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
-      inputs.ayugram-desktop.packages.${pkgs.system}.ayugram-desktop
-    ];
+     # Base packages for all hosts
+     packages = with pkgs; [
+         micro
+         ghostty
+         jq
+         btop
+         inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
+       ];
   };
 
   # Terminal settings

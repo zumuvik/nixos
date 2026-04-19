@@ -1,10 +1,15 @@
 { config, pkgs, username, lib', ... }:
 
 {
-  modules.desktop.enable = true;
-  modules.bluetooth.enable = true;
-  modules.gaming.enable = true;
-
+  my.profiles.desktop.enable = true;
+  my.hardware.bluetooth.enable = true;
+  my.hardware.amdgpu.enable = true;
+  my.hardware.virtualization.enable = true;
+  my.hardware.zram.enable = true;
+  my.hardware.swap.enable = true;
+  my.hardware.kernel-zen.enable = true;
+  my.gaming.enable = true;
+  programs.gamemode.enable = true; 
   # ────────────────────────────────────────────────────────
   # Sops-nix (управление секретами)
   # ────────────────────────────────────────────────────────
@@ -28,16 +33,24 @@
     firewall.checkReversePath = "loose";
   };
 
-  # ────────────────────────────────────────────────────────
-  # Boot
-  # ────────────────────────────────────────────────────────
-  boot = {
-    kernelModules = [ "bridge" "uinput" "v4l2loopback" ];
-    kernelParams = [
-      "net.ipv4.ip_forward=1"
-      "resume_offset=4988160"
-    ];
-    resumeDevice = "/dev/disk/by-uuid/6703b7a2-d8ba-4f63-8fc0-5d770b59df7f";
+    # ────────────────────────────────────────────────────────
+    # Boot
+    # ────────────────────────────────────────────────────────
+    system.stateVersion = "25.11";
+    boot = {
+     consoleLogLevel = 0;
+     initrd.verbose = false;
+     kernelModules = [ "bridge" "uinput" "v4l2loopback" "hid-playstation" ];
+     kernelParams = [
+       "net.ipv4.ip_forward=1"
+       "resume_offset=4988160"
+       "quiet"
+       "loglevel=3"
+       "systemd.show_status=auto"
+       "rd.udev.log_level=3"
+       "udev.log_priority=3"
+     ];
+     resumeDevice = "/dev/disk/by-uuid/6703b7a2-d8ba-4f63-8fc0-5d770b59df7f";
     extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
     extraModprobeConfig = ''
       options v4l2loopback devices=1 video_nr=10 card_label="OBS Cam" exclusive_caps=1
@@ -64,18 +77,21 @@
     openssh.authorizedKeys.keys = lib'.sshKeys;
   };
 
-  # ────────────────────────────────────────────────────────
-  # Steam + Gaming
-  # ────────────────────────────────────────────────────────
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = false;
-    dedicatedServer.openFirewall = false;
-    extraPackages = with pkgs; [
-      mangohud
-      gamemode
-    ];
-  };
+   # ────────────────────────────────────────────────────────
+   # Steam + Gaming
+   # ────────────────────────────────────────────────────────
+   programs.steam = {
+     enable = true;
+     remotePlay.openFirewall = false;
+     dedicatedServer.openFirewall = false;
+     extraPackages = with pkgs; [
+       mangohud
+       gamemode
+     ];
+   };
+   
+   # Gamepad/Joystick support
+   services.udev.packages = with pkgs; [ game-devices-udev-rules ];
 
   # ────────────────────────────────────────────────────────
   # Tablet Driver & Input Devices
@@ -84,17 +100,18 @@
   hardware.opentabletdriver.daemon.enable = true;
   hardware.uinput.enable = true;
 
-  # ────────────────────────────────────────────────────────
-  # System packages (host-specific)
-  # ────────────────────────────────────────────────────────
-  environment.systemPackages = with pkgs; [
-    v4l-utils
-    osu-lazer-bin
-    zip
-    unzip
-    unrar
-    xrandr
-    nix-search
-    
-  ];
+   # ────────────────────────────────────────────────────────
+   # System packages (host-specific)
+   # ────────────────────────────────────────────────────────
+   environment.systemPackages = with pkgs; [
+     v4l-utils
+     osu-lazer-bin
+     zip
+     unzip
+     unrar
+     xrandr
+     nix-search
+     ayugram-desktop
+     
+   ];
 }
