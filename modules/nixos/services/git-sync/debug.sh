@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Git Sync Debug Script
-# Run: bash /etc/nixos/modules/system/git-sync-debug.sh
+# Run: bash /etc/nixos/modules/nixos/services/git-sync/debug.sh
 
 PORT=9876
 SECRET="nix-git-sync-2026"
