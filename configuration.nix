@@ -11,10 +11,10 @@
 
   nix.settings = {
     substituters = [
-      "https://drakon64-nixos-cachyos-kernel.cachix.org"
+      "https://nix-cachyos-kernel.cachix.org"
     ];
     trusted-public-keys = [
-      "drakon64-nixos-cachyos-kernel.cachix.org-1:J3gjZ9N6S05pyLA/P0M5y7jXpSxO/i0rshrieQJi5D0="
+      "nix-cachyos-kernel.cachix.org-1:nE7d/3rV1BwNf55D0V6NlWz6kM4D1J9bL4oYd1WJ7A0="
     ];
   };
 

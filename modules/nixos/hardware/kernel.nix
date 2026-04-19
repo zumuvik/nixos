@@ -11,7 +11,7 @@
       boot.kernelPackages = pkgs.linuxPackages_zen;
     })
     (lib.mkIf config.my.hardware.kernel-cachy.enable {
-      boot.kernelPackages = pkgs.linuxPackagesFor pkgs.linuxPackages_cachyos;
+      boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
     })
   ];
 }
