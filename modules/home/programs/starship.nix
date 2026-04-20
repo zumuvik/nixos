@@ -4,7 +4,6 @@
     enableFishIntegration = true;
     settings = {
       add_newline = true;
-      char_symbol = "➜";
       
       # Catppuccin Mocha colors
       palette = "catppuccin_mocha";

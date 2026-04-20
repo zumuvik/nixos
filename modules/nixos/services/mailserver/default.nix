@@ -53,9 +53,9 @@ in
     services.dovecot2 = {
       enable = true;
       enablePAM = false;
-      enableImap = true;
-      enablePop3 = false;
-      enableLmtp = true;
+      settings = {
+        protocols = "imap lmtp"; # imap and lmtp enabled, pop3 disabled
+      };
       createMailUser = true;
       mailUser = "vmail";
       mailGroup = "vmail";

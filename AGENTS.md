@@ -1,5 +1,6 @@
 # AGENTS.md — NixOS Configuration
 
+#
 Flake-based NixOS + Home Manager. Language: Nix.
 - **WM**: Hyprland | **Editor**: nixvim | **Terminal**: Ghostty
 - **Namespace**: `my.*` (custom options)

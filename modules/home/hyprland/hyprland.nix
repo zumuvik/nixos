@@ -11,6 +11,10 @@
   ];
 
   config = lib.mkIf my.profiles.desktop.enable {
+    home.sessionVariables = {
+      HYPRLAND_NO_RT_VARS = "1";
+    };
+
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland.enable = true;
@@ -36,8 +40,8 @@
           mouse_move_enables_dpms = false;
         };
         debug = {
-          disable_logs = true;
-          gl_debugging = false;
+          disable_logs = false;
+          overlay = false;
         };
         dwindle = {
           pseudotile = true;
