@@ -33,11 +33,11 @@
        # ──────────────────────────────────────────────────────────────────
 
        function nix-build-check
-         set -l description "NixOS rebuild build check (dry-run)"
+         set -l description "NixOS build check (nh os build)"
          echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
          echo ""
          
-         sudo nixos-rebuild build --flake . --show-trace
+         nh os build /etc/nixos
          set -l exit_code $status
          echo ""
          if test $exit_code -eq 0
@@ -49,22 +49,11 @@
        end
 
        function nix-build-apply
-         set -l description "NixOS rebuild switch (apply config)"
+         set -l description "NixOS apply configuration (nh os switch)"
          echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
          echo ""
          
-         # First run a dry-run check
-         echo $C_DIM"Running pre-check..."$C_RESET
-         sudo nixos-rebuild build --flake . --show-trace
-         
-         if test $status -ne 0
-           echo $C_BOLD$C_RED"✗ Pre-check failed! Aborting switch."$C_RESET
-           return 1
-         end
-         
-         echo ""
-         echo $C_BOLD$C_YELLOW"→ Applying configuration..."$C_RESET
-         sudo nixos-rebuild switch --flake . --show-trace
+         nh os switch /etc/nixos
          set -l exit_code $status
          echo ""
          if test $exit_code -eq 0
@@ -168,6 +157,26 @@
       alias lint='nix-lint'
       alias lp='ssh 192.168.10.242'
       alias sr='ssh 192.168.10.120'
+      
+      # Modern CLI replacements
+      alias ls='eza'
+      alias ll='eza -l'
+      alias la='eza -a'
+      alias lla='eza -la'
+      alias lt='eza --tree'
+      alias cat='bat'
+      alias top='btop'
+      alias cd='z'
+
+      # NH (Nix Helper)
+      alias nsw='nh os switch /etc/nixos'
+      alias nbu='nh os build /etc/nixos'
+      alias ncl='nh clean all'
+      
+      # Legacy / Short aliases
+      alias rebuild='nix-build-apply'
+      alias check='nix-full-check'
+      alias lint='nix-lint'
     '';
   };
 
