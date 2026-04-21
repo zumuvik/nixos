@@ -45,17 +45,11 @@
     auto-optimise-store = true;
     substituters = [ 
       "https://cache.nixos.org"
-      # "https://nix-cachyos-kernel.cachix.org" # 401 Error
-      "https://attic.xuyh0120.win/lantian"
       "https://cache.garnix.io"
-      "https://ayugram-desktop.cachix.org"
     ];
     trusted-public-keys = [ 
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" 
-      # "nix-cachyos-kernel.cachix.org-1:nE7d/3rV1BwNf55D0V6NlWz6kM4D1J9bL4oYd1WJ7A0="
-      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-      "ayugram-desktop.cachix.org:AZ5EqHrJsAKL5YkZYLPEsb1FdD9QlypUwQ0REcJftgA="
     ];
   };
 
