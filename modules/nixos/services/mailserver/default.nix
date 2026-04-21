@@ -53,57 +53,67 @@ in
     services.dovecot2 = {
       enable = true;
       enablePAM = false;
-      settings = {
-        protocols = "imap lmtp"; # imap and lmtp enabled, pop3 disabled
-      };
+      
       createMailUser = true;
       mailUser = "vmail";
       mailGroup = "vmail";
-      mailLocation = "maildir:~/Maildir";
-      sslServerCert = "${sslCertDir}/fullchain.pem";
-      sslServerKey = "${sslCertDir}/key.pem";
 
-      mailboxes = {
-        Drafts = { auto = "create"; specialUse = "Drafts"; };
-        Junk = { auto = "create"; specialUse = "Junk"; };
-        Trash = { auto = "create"; specialUse = "Trash"; };
-        Sent = { auto = "create"; specialUse = "Sent"; };
+      settings = {
+        protocols = "imap lmtp";
+        mail_location = "maildir:~/Maildir";
+        ssl = "required";
+        ssl_cert = "<${sslCertDir}/fullchain.pem";
+        ssl_key = "<${sslCertDir}/key.pem";
+        ssl_min_protocol = "TLSv1.2";
+
+        # Auth format
+        auth_username_format = "%Lu";
+        auth_mechanisms = "plain login";
+
+        # PassDB & UserDB
+        "passdb" = {
+          driver = "passwd-file";
+          args = "scheme=PLAIN username_format=%u ${config.sops.secrets."mail_users".path}";
+        };
+
+        "userdb" = {
+          driver = "passwd-file";
+          args = "username_format=%u ${config.sops.secrets."mail_users".path}";
+          default_fields = "uid=vmail gid=vmail home=/var/vmail/%d/%n";
+        };
+
+        # Services
+        "service auth" = {
+          unix_listener = {
+            "/var/spool/postfix/auth" = {
+              mode = "0600";
+              user = "postfix";
+              group = "postfix";
+            };
+          };
+        };
+
+        "service lmtp" = {
+          unix_listener = {
+            "/var/spool/postfix/dovecot-lmtp" = {
+              mode = "0600";
+              user = "postfix";
+              group = "postfix";
+            };
+          };
+        };
+
+        # Mailboxes
+        "namespace inbox" = {
+          inbox = "yes";
+          mailbox = {
+            Drafts = { auto = "create"; special_use = "\\Drafts"; };
+            Junk = { auto = "create"; special_use = "\\Junk"; };
+            Trash = { auto = "create"; special_use = "\\Trash"; };
+            Sent = { auto = "create"; special_use = "\\Sent"; };
+          };
+        };
       };
-
-      extraConfig = ''
-        auth_username_format = %Lu
-        auth_mechanisms = plain login
-
-        passdb {
-          driver = passwd-file
-          args = scheme=PLAIN username_format=%u ${config.sops.secrets."mail_users".path}
-        }
-
-        userdb {
-          driver = passwd-file
-          args = username_format=%u ${config.sops.secrets."mail_users".path}
-          default_fields = uid=vmail gid=vmail home=/var/vmail/%d/%n
-        }
-
-        service auth {
-          unix_listener /var/spool/postfix/auth {
-            mode = 0600
-            user = postfix
-            group = postfix
-          }
-        }
-
-        service lmtp {
-          unix_listener /var/spool/postfix/dovecot-lmtp {
-            mode = 0600
-            user = postfix
-            group = postfix
-          }
-        }
-
-        ssl = required
-        ssl_min_protocol = TLSv1.2
-      '';
     };
 
     # ── Директории ─────────────────────────────────────────
