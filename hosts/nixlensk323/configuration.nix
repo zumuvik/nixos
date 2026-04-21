@@ -115,6 +115,6 @@
      xrandr
      nix-search
      ayugram-desktop
-     
+     gemini-cli
    ];
 }

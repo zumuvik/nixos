@@ -3,7 +3,7 @@
     enable = true;
     enableFishIntegration = true;
     settings = {
-      add_newline = true;
+      add_newline = false;
       
       # Catppuccin Mocha colors
       palette = "catppuccin_mocha";
@@ -37,7 +37,7 @@
         crust = "#11111b";
       };
 
-      format = "$directory$git_branch$git_status$python$golang$rust$nix_shell$character";
+      format = "$directory$git_branch$git_status$nix_shell$python$golang$rust$character";
 
       directory = {
         style = "bold blue";
@@ -48,16 +48,18 @@
       git_branch = {
         symbol = "󰊢 ";
         style = "bold mauve";
+        format = "[$symbol$branch]($style) ";
       };
 
       git_status = {
         style = "bold red";
+        format = "([$all_status$ahead_behind]($style) )";
       };
 
       nix_shell = {
         symbol = " ";
         style = "bold blue";
-        format = "via [$symbol$state]($style) ";
+        format = "[$symbol]($style) ";
       };
 
       character = {
