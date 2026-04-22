@@ -27,6 +27,7 @@
       rofi
       swaynotificationcenter
       waypaper
+      awww
       nwg-look
       nwg-displays
 
