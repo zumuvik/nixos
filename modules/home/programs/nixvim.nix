@@ -39,7 +39,7 @@
       lualine.enable = true;
       treesitter = {
         enable = true;
-        package = pkgs.vimPlugins.nvim-treesitter;
+        nixGrammars = true;
       };
       neo-tree.enable = true;
       telescope.enable = true;
