@@ -53,49 +53,50 @@ in
     services.dovecot2 = {
       enable = true;
       enablePAM = false;
-      mailUid = "vmail";
-      mailGid = "vmail";
 
       settings = {
         protocols = "imap lmtp";
         mail_location = "maildir:~/Maildir";
+        mail_uid = "vmail";
+        mail_gid = "vmail";
         ssl = "required";
         ssl_cert = "<${sslCertDir}/fullchain.pem";
         ssl_key = "<${sslCertDir}/key.pem";
         ssl_min_protocol = "TLSv1.2";
         auth_username_format = "%Lu";
-        auth_mechanisms = "plain login";
-      };
-    };
+        auth_mechanisms = [ "plain" "login" ];
 
-      extraConfig = ''
-        passdb {
-          driver = passwd-file
-          args = scheme=PLAIN username_format=%u ${config.sops.secrets."mail_users".path}
-        }
-        userdb {
-          driver = passwd-file
-          args = username_format=%u ${config.sops.secrets."mail_users".path}
-          default_fields = uid=vmail gid=vmail home=/var/vmail/%d/%n
-        }
-        service auth {
-          unix_listener /var/spool/postfix/auth {
-            mode = 0600
-            user = postfix
-            group = postfix
-          }
-        }
-        service lmtp {
-          unix_listener /var/spool/postfix/dovecot-lmtp {
-            mode = 0600
-            user = postfix
-            group = postfix
-          }
-        }
-        namespace inbox {
-          inbox = yes
-        }
-      '';
+        "namespace inbox" = {
+          inbox = "yes";
+        };
+
+        "passdb" = {
+          driver = "passwd-file";
+          args = "scheme=PLAIN username_format=%u ${config.sops.secrets."mail_users".path}";
+        };
+
+        "userdb" = {
+          driver = "passwd-file";
+          args = "username_format=%u ${config.sops.secrets."mail_users".path}";
+          override_fields = "uid=vmail gid=vmail home=/var/vmail/%d/%n";
+        };
+
+        "service auth" = {
+          unix_listener."/var/spool/postfix/auth" = {
+            mode = "0600";
+            user = "postfix";
+            group = "postfix";
+          };
+        };
+
+        "service lmtp" = {
+          unix_listener."/var/spool/postfix/dovecot-lmtp" = {
+            mode = "0600";
+            user = "postfix";
+            group = "postfix";
+          };
+        };
+      };
     };
 
     users.users.vmail = {
