@@ -8,7 +8,8 @@
   my.hardware.zram.enable = true;
   my.hardware.swap.enable = true;
   my.hardware.kernel-zen.enable = false;
-  my.hardware.kernel-cachy.enable = true;
+  my.hardware.kernel-cachy.enable = false;
+  my.hardware.kernel-cachy-bore.enable = true;
   my.gaming.enable = true;
   my.ui.plymouth.enable = true;
   programs.gamemode.enable = true; 

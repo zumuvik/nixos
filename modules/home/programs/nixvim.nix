@@ -1,4 +1,4 @@
-{ inputs, ... }:{
+{ inputs, pkgs, ... }:{
   imports = [ inputs.nixvim.homeModules.nixvim ];
   programs.nixvim = {
     enable = true;
@@ -37,7 +37,10 @@
     plugins = {
       web-devicons.enable = true;
       lualine.enable = true;
-      treesitter.enable = true;
+      treesitter = {
+        enable = true;
+        package = pkgs.vimPlugins.nvim-treesitter;
+      };
       neo-tree.enable = true;
       telescope.enable = true;
       which-key.enable = true;
