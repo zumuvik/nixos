@@ -1,15 +1,23 @@
 { config, lib, pkgs, username, ... }:
 
+let
+  # Minimal Hyprland config for the greeter
+  greetdHyprConfig = pkgs.writeText "greetd-hyprland.conf" ''
+    monitor=HDMI-A-1,preferred,0x0,1
+    monitor=,disable
+    exec-once = ${lib.getExe pkgs.greetd.regreet}; hyprctl dispatch exit
+  '';
+in
 {
   options.my.ui.greetd.enable = lib.mkEnableOption "greetd login manager with ReGreet";
 
   config = lib.mkIf config.my.ui.greetd.enable {
-    # ReGreet needs a compositor to run. Cage is a tiny kiosk compositor.
     services.greetd = {
       enable = true;
       settings = {
         default_session = {
-          command = "${lib.getExe pkgs.cage} -s -- ${lib.getExe pkgs.greetd.regreet}";
+          # Use Hyprland instead of cage for better monitor control
+          command = "${lib.getExe pkgs.hyprland} --config ${greetdHyprConfig}";
           user = "greeter";
         };
       };
