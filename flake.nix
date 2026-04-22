@@ -38,6 +38,9 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-cachyos-kernel = {
+      url = "github:xddxdd/nix-cachyos-kernel/ac5956bbceb022998fc1dd0001322f10ef1e6dda";
+    };
   };
 
   outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, chaotic, ... } @ inputs:
@@ -61,6 +64,10 @@
           ./modules/profiles
           home-manager.nixosModules.home-manager
           grub2-themes.nixosModules.default
+
+          ({ ... }: {
+            nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.default ];
+          })
 
           ( { config, ... }: {
             home-manager = {
