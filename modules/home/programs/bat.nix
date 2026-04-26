@@ -2,7 +2,7 @@
   programs.bat = {
     enable = true;
     config = {
-      theme = "base16";
+      theme = "gruvbox-dark";
       italic-text = "always";
     };
   };
