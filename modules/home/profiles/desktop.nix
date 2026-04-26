@@ -4,6 +4,7 @@
   imports = lib.optionals my.profiles.desktop.enable [
     ../hyprland
     ../waybar
+    ../services/mpd.nix
   ];
 
   config = lib.mkIf my.profiles.desktop.enable {
@@ -38,6 +39,7 @@
       cava
       ytermusic
       yt-dlp
+      mmtc
 
       # GUI Utilities
       thunar
@@ -53,13 +55,18 @@
       virt-manager
       virt-viewer
       pavucontrol
+      networkmanagerapplet
 
       # Screenshots
       grim
       slurp
       wl-clipboard
       swappy
-   ];
+      tty-clock
+    ];
 
-    };
+    xdg.configFile."mmtc/config.toml".text = ''
+      address = "127.0.0.1:6600"
+    '';
+  };
 }

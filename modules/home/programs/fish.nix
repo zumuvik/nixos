@@ -26,59 +26,59 @@
       set -gx C_YELLOW (set_color yellow)
       set -gx C_BLUE (set_color blue)
       set -gx C_CYAN (set_color cyan)
-       set -gx C_MAGENTA (set_color magenta)
+      set -gx C_MAGENTA (set_color magenta)
 
-       # ──────────────────────────────────────────────────────────────────
-       # NixOS build and check functions
-       # ──────────────────────────────────────────────────────────────────
+      # ──────────────────────────────────────────────────────────────────
+      # NixOS build and check functions
+      # ──────────────────────────────────────────────────────────────────
 
-       function nix-build-check
-         set -l description "NixOS build check (nh os build)"
-         echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
-         echo ""
-         
-         nh os build /etc/nixos
-         set -l exit_code $status
-         echo ""
-         if test $exit_code -eq 0
-           echo $C_BOLD$C_GREEN"✓ Build check passed!"$C_RESET
-         else
-           echo $C_BOLD$C_RED"✗ Build check failed with status "$exit_code$C_RESET
-           return $exit_code
-         end
-       end
+      function nix-build-check
+        set -l description "NixOS build check (nh os build)"
+        echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
+        echo ""
+        
+        nh os build /etc/nixos
+        set -l exit_code $status
+        echo ""
+        if test $exit_code -eq 0
+          echo $C_BOLD$C_GREEN"✓ Build check passed!"$C_RESET
+        else
+          echo $C_BOLD$C_RED"✗ Build check failed with status "$exit_code$C_RESET
+          return $exit_code
+        end
+      end
 
-       function nix-build-apply
-         set -l description "NixOS apply configuration (nh os switch)"
-         echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
-         echo ""
-         
-         nh os switch /etc/nixos
-         set -l exit_code $status
-         echo ""
-         if test $exit_code -eq 0
-           echo $C_BOLD$C_GREEN"✓ Configuration applied successfully!"$C_RESET
-         else
-           echo $C_BOLD$C_RED"✗ Switch failed with status "$exit_code$C_RESET
-           return $exit_code
-         end
-       end
+      function nix-build-apply
+        set -l description "NixOS apply configuration (nh os switch)"
+        echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
+        echo ""
+        
+        nh os switch /etc/nixos
+        set -l exit_code $status
+        echo ""
+        if test $exit_code -eq 0
+          echo $C_BOLD$C_GREEN"✓ Configuration applied successfully!"$C_RESET
+        else
+          echo $C_BOLD$C_RED"✗ Switch failed with status "$exit_code$C_RESET
+          return $exit_code
+        end
+      end
 
-       function flake-check
-         set -l description "Nix flake integrity check"
-         echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
-         echo ""
-         
-         nix flake check --show-trace
-         set -l exit_code $status
-         echo ""
-         if test $exit_code -eq 0
-           echo $C_BOLD$C_GREEN"✓ Flake check passed!"$C_RESET
-         else
-           echo $C_BOLD$C_RED"✗ Flake check failed with status "$exit_code$C_RESET
-           return $exit_code
-         end
-       end
+      function flake-check
+        set -l description "Nix flake integrity check"
+        echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
+        echo ""
+        
+        nix flake check --show-trace
+        set -l exit_code $status
+        echo ""
+        if test $exit_code -eq 0
+          echo $C_BOLD$C_GREEN"✓ Flake check passed!"$C_RESET
+        else
+          echo $C_BOLD$C_RED"✗ Flake check failed with status "$exit_code$C_RESET
+          return $exit_code
+        end
+      end
 
       function nix-lint
         set -l description "Nix static analysis (deadnix + statix)"
@@ -177,6 +177,7 @@
       alias rebuild='nix-build-apply'
       alias check='nix-full-check'
       alias lint='nix-lint'
+      alias nmcpcpp='ncmpcpp'
     '';
   };
 

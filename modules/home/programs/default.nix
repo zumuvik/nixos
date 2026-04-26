@@ -18,6 +18,7 @@
     ./ghostty.nix      # Терминал
     ./opencode.nix     # AI-assisted coding
     ./zen-browser.nix  # Кастомный браузер
+    ./ncmpcpp.nix      # Музыкальный плеер
   ];
 }
 

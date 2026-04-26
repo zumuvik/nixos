@@ -12,7 +12,18 @@
   my.hardware.kernel-cachy-bore.enable = true;
   my.gaming.enable = true;
   my.ui.plymouth.enable = true;
+  my.ui.mpd.enable = true;
   programs.gamemode.enable = true; 
+
+  # ────────────────────────────────────────────────────────
+  # File Systems
+  # ────────────────────────────────────────────────────────
+  fileSystems."/mnt/steam" = {
+    device = "/dev/disk/by-uuid/1dca31d9-2405-4c45-bb8a-f233003e250a";
+    fsType = "ext4";
+    options = [ "defaults" "nofail" ];
+  };
+
   # ────────────────────────────────────────────────────────
   # Sops-nix (управление секретами)
   # ────────────────────────────────────────────────────────

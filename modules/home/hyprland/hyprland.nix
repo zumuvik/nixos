@@ -53,7 +53,11 @@
           "QT_QPA_PLATFORM,wayland"
         ];
         windowrule = [
-          "suppress_event maximize, match:class .*"
+          "match:class .*, suppress_event maximize"
+          "match:class ^(ghostty)$, opacity 1.0 override"
+          "match:class ^(com.mitchellh.ghostty)$, opacity 1.0 override"
+          "match:class ^(kitty)$, opacity 1.0 override"
+          "match:title ^(tty-clock)$, float on, center on"
         ];
       }
     ];

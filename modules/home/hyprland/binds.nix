@@ -80,6 +80,8 @@ in
       "$mainMod, W, exec, ~/.local/bin/hypr-toggle-windows.sh"
       "$mainMod, F1, exec, ~/.config/hypr/scripts/KeyHints.sh"
       "$mainMod, grave, exec, swaync-client -t -sw"
+      "$mainMod SHIFT, L, exec, ghostty -e mmtc"
+      "$mainMod, C, exec, ghostty --title=tty-clock --window-width=55 --window-height=10 -e tty-clock -s -c -C 4 -b"
     ] ++ lib.optionals (hostName == "nixlensk323") [
       "$mainMod, 9, execr, ${osuScript}"
     ] ++ lib.optionals (hostName != "nixlensk323") [
@@ -106,6 +108,7 @@ in
       ",XF86AudioPause, exec, playerctl play-pause"
       ",XF86AudioPlay, exec, playerctl play-pause"
       ",XF86AudioPrev, exec, playerctl previous"
+      ",XF86AudioStop, exec, playerctl stop"
     ];
 
 
