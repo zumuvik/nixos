@@ -7,6 +7,10 @@
      "$livewallpaper" = "mpvpaper";
 
      exec-once = [
+       "gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'"
+       "gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'"
+       "gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Classic'"
+       "gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'"
        "$sD/Polkit-NixOS.sh"
        "$sD/Hyprsunset.sh init"
        "waypaper --restore"

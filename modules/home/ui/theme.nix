@@ -24,6 +24,12 @@
     };
   };
 
+  home.packages = with pkgs; [
+    gnome-themes-extra
+    adwaita-icon-theme
+    dconf
+  ];
+
   # Also set the cursor for X11/Wayland applications that don't use GTK
   home.pointerCursor = {
     name = "Bibata-Modern-Classic";

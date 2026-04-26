@@ -30,5 +30,4 @@
 
   # Base settings
   nixpkgs.config.allowUnfree = true;
-  dconf.enable = false;
-}
+  dconf.enable = true;}
