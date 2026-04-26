@@ -39,7 +39,10 @@
       lualine.enable = true;
       treesitter = {
         enable = true;
-        package = pkgs.vimPlugins.nvim-treesitter;
+        settings = {
+          highlight.enable = true;
+          indent.enable = true;
+        };
       };
       neo-tree.enable = true;
       telescope.enable = true;
