@@ -21,7 +21,7 @@
       boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
     })
     (lib.mkIf config.my.hardware.kernel-cachy-bore.enable {
-      boot.kernelPackages = pkgs.linuxPackages_cachyos;
+      boot.kernelPackages = pkgs.chaotic.linuxPackages_cachyos;
     })
   ];
 }
