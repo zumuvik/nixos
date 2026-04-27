@@ -1,6 +1,11 @@
 {
   description = "NixOS configuration for zumuvik's machines";
 
+  nixConfig = {
+    extra-substituters = [ "https://xddxdd.cachix.org" ];
+    extra-trusted-public-keys = [ "xddxdd.cachix.org-1:ay1HJyNDYmlSwj5NXQG065C8LfoqqKaTNCyzeixGjf8=" ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixcord.url = "github:FlameFlag/nixcord";

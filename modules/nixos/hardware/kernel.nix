@@ -8,6 +8,12 @@
   };
 
   config = lib.mkMerge [
+    {
+      nix.settings = {
+        substituters = [ "https://xddxdd.cachix.org" ];
+        trusted-public-keys = [ "xddxdd.cachix.org-1:ay1HJyNDYmlSwj5NXQG065C8LfoqqKaTNCyzeixGjf8=" ];
+      };
+    }
     (lib.mkIf config.my.hardware.kernel-zen.enable {
       boot.kernelPackages = pkgs.linuxPackages_zen;
     })
