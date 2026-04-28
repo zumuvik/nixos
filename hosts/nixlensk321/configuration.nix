@@ -2,6 +2,7 @@
 
 {
   my.profiles.desktop.enable = true;
+  my.hardware.amdgpu.enable = true;
   my.hardware.bluetooth.enable = true;
   my.hardware.laptop.enable = true;
   my.hardware.kernel-zen.enable = false;
@@ -32,4 +33,6 @@
   environment.systemPackages = with pkgs; [
     osu-lazer-bin
   ];
+
+  users.users.${username}.extraGroups = [ "video" "render" ];
 }

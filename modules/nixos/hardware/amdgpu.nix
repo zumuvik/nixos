@@ -11,6 +11,11 @@
 
     services.xserver.videoDrivers = [ "amdgpu" ];
     boot.initrd.kernelModules = [ "amdgpu" ];
-    boot.kernelParams = [ "amdgpu.dc=1" ];
+    # Enable overclocking/undervolting support
+    boot.kernelParams = [ "amdgpu.dc=1" "amdgpu.ppfeaturemask=0xffffffff" ];
+
+    environment.systemPackages = with pkgs; [
+      corectrl
+    ];
   };
 }

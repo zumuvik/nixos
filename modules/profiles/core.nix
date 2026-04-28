@@ -38,13 +38,11 @@
       "https://cache.nixos.org"
       "https://cache.garnix.io"
       "https://attic.xuyh0120.win/lantian"
-      "https://chaotic-nyx.cachix.org"
     ];
     trusted-public-keys = [ 
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" 
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" 
-      "chaotic-nyx.cachix.org-1:99re65iEnuLH3r8+/y0I6idk7VOVvF7S2Tcn8sxV390="
     ];
   };
 

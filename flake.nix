@@ -9,7 +9,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixcord.url = "github:FlameFlag/nixcord";
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -44,11 +43,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-cachyos-kernel = {
-      url = "github:xddxdd/nix-cachyos-kernel/ac5956bbceb022998fc1dd0001322f10ef1e6dda";
+      url = "github:xddxdd/nix-cachyos-kernel/release";
     };
   };
 
-  outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, chaotic, ... } @ inputs:
+  outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, ... } @ inputs:
   let
     lib = import ./lib;
     inherit (lib) username;
@@ -64,14 +63,13 @@
 
         modules = [
           sops-nix.nixosModules.sops
-          chaotic.nixosModules.default
           ./hosts/${hostName}/default.nix
           ./modules/profiles
           home-manager.nixosModules.home-manager
           grub2-themes.nixosModules.default
 
           ({ ... }: {
-            nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.default ];
+            nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
           })
 
           ( { config, ... }: {

@@ -108,6 +108,9 @@
    # Gamepad/Joystick support
    services.udev.packages = with pkgs; [ game-devices-udev-rules ];
 
+   services.udev.extraRules = ''
+     ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x1002", ATTR{device}=="0x687f", RUN+="${pkgs.coreutils}/bin/chgrp video /sys/bus/pci/devices/%k/pp_od_clk_voltage", RUN+="${pkgs.coreutils}/bin/chmod 664 /sys/bus/pci/devices/%k/pp_od_clk_voltage"
+   '';
   # ────────────────────────────────────────────────────────
   # Tablet Driver & Input Devices
   # ────────────────────────────────────────────────────────

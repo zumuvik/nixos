@@ -1,19 +1,18 @@
 { config, lib, pkgs, ... }:
 
+let
+  anyCachyEnabled =
+    config.my.hardware.kernel-cachy.enable
+    || config.my.hardware.kernel-cachy-bore.enable;
+in
 {
   options.my.hardware = {
     kernel-zen.enable = lib.mkEnableOption "Zen kernel optimizations";
     kernel-cachy.enable = lib.mkEnableOption "CachyOS kernel optimizations";
-    kernel-cachy-bore.enable = lib.mkEnableOption "CachyOS Bore kernel optimizations";
+    kernel-cachy-bore.enable = lib.mkEnableOption "CachyOS BORE kernel optimizations";
   };
 
   config = lib.mkMerge [
-    {
-      nix.settings = {
-        substituters = [ "https://xddxdd.cachix.org" ];
-        trusted-public-keys = [ "xddxdd.cachix.org-1:ay1HJyNDYmlSwj5NXQG065C8LfoqqKaTNCyzeixGjf8=" ];
-      };
-    }
     (lib.mkIf config.my.hardware.kernel-zen.enable {
       boot.kernelPackages = pkgs.linuxPackages_zen;
     })
@@ -21,7 +20,7 @@
       boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
     })
     (lib.mkIf config.my.hardware.kernel-cachy-bore.enable {
-      boot.kernelPackages = pkgs.chaotic.linuxPackages_cachyos;
+      boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
     })
   ];
 }
