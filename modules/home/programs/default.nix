@@ -1,5 +1,7 @@
 { lib, my, ... }: {
   imports = [
+    ./git.nix           # Конфигурация Git
+    ./lazygit.nix       # TUI для Git
     ./nixvim.nix       # Декларативный Nvim
     ./fish.nix         # Шелл
     ./starship.nix     # Красивый промпт
