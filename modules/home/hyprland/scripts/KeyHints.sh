@@ -5,7 +5,7 @@ pgrep -x rofi >/dev/null 2>&1 && pkill rofi
 
 declare -a hints=(
     "super: Super Key (Windows)"
-    "super+enter: Terminal (ghostty)"
+    "super+enter: Terminal (foot)"
     "super+shift+enter: Dropdown Terminal"
     "super+d: Launcher (rofi)"
     "super+e: Files (Thunar)"

@@ -14,9 +14,15 @@
     # Enable overclocking/undervolting support
     boot.kernelParams = [ "amdgpu.dc=1" "amdgpu.ppfeaturemask=0xffffffff" ];
 
-    programs.corectrl = {
-      enable = true;
-      gpuOverclock.enable = true;
+    environment.systemPackages = [ pkgs.lact ];
+    systemd.services.lactd = {
+      description = "AMDGPU Control Daemon";
+      after = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.lact}/bin/lact daemon";
+        Restart = "always";
+      };
     };
   };
 }

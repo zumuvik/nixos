@@ -15,12 +15,12 @@
     
     # Core Desktop Settings
     home.sessionVariables = {
-      TERMINAL = "ghostty";
+      TERMINAL = "foot";
     };
 
     xdg.terminal-exec = {
       enable = true;
-      package = pkgs.ghostty;
+      package = pkgs.foot;
     };
 
     home.packages = with pkgs; [

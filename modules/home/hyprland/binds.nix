@@ -12,7 +12,7 @@ in
 {
   wayland.windowManager.hyprland.settings = {
     "$mainMod" = "SUPER";
-    "$terminal" = "ghostty";
+    "$terminal" = "foot";
     "$fileManager" = "Thunar";
     # $sD is defined in exec-once.nix
 
@@ -30,7 +30,7 @@ in
 
       "$mainMod, space, togglefloating"
       # Config Picker
-      "$mainMod, T, exec, bash ~/.config/hypr/scripts/config_picker.sh"
+      # $mainMod, T, exec, bash ~/.config/hypr/scripts/config_picker.sh
 
 
       "SUPER, Tab, workspace, e+1"
@@ -75,13 +75,13 @@ in
       "SUPER, Print, exec, ~/.config/hypr/scripts/ScreenShot.sh --swappy"
 
       # Custom
-      "$mainMod, P, exec, ~/.local/bin/nix-pkg-manage.sh"
+      "$mainMod, P, exec, foot -e ncmpcpp"
       "SUPER, Caps_Lock, exec, ~/.local/bin/ayu-toggle.sh"
       "$mainMod, W, exec, ~/.local/bin/hypr-toggle-windows.sh"
       "$mainMod, F1, exec, ~/.config/hypr/scripts/KeyHints.sh"
       "$mainMod, grave, exec, swaync-client -t -sw"
-      "$mainMod SHIFT, L, exec, ghostty -e mmtc"
-      "$mainMod, C, exec, ghostty --title=tty-clock --window-width=55 --window-height=10 -e tty-clock -s -c -C 4 -b"
+      "$mainMod SHIFT, L, exec, foot -e mmtc"
+      "$mainMod, C, exec, foot -e tty-clock -s -c -C 4 -b"
     ] ++ lib.optionals (hostName == "nixlensk323") [
       "$mainMod, 9, execr, ${osuScript}"
     ] ++ lib.optionals (hostName != "nixlensk323") [

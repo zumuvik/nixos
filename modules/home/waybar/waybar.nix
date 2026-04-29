@@ -21,7 +21,7 @@
         clock = {
           format = "{:%H:%M}";
           tooltip-format = "{:%A, %d %B %Y}";
-          on-click = "ghostty --title=tty-clock --window-width=55 --window-height=10 -e tty-clock -s -c -C 4 -b";
+          on-click = "foot -e tty-clock -s -c -C 4 -b";
         };
 
         pulseaudio = {
