@@ -4,10 +4,13 @@
     settings = {
       gui.showIcons = true;
       git = {
-        paging = {
-          colorArg = "always";
-          pager = "delta --dark --paging=never";
-        };
+        pagers = [
+          {
+            # Исправлено: теперь это элемент списка
+            colorArg = "always";
+            pager = "delta --dark --paging=never";
+          }
+        ];
       };
     };
   };

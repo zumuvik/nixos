@@ -11,7 +11,7 @@
       settings = {
         General = {
           Experimental = true;
-          ControllerMode = "bredr";
+          ControllerMode = "dual";
         };
       };
       input = {

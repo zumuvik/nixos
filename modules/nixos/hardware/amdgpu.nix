@@ -14,8 +14,9 @@
     # Enable overclocking/undervolting support
     boot.kernelParams = [ "amdgpu.dc=1" "amdgpu.ppfeaturemask=0xffffffff" ];
 
-    environment.systemPackages = with pkgs; [
-      corectrl
-    ];
+    programs.corectrl = {
+      enable = true;
+      gpuOverclock.enable = true;
+    };
   };
 }

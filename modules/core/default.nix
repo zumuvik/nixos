@@ -34,7 +34,7 @@
   # User Configuration
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "corectrl" ];
     shell = pkgs.fish;
   };
   programs.fish.enable = true;

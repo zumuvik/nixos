@@ -17,7 +17,6 @@
     boot.kernelParams = lib.mkAfter [
       "splash"
       "vt.global_cursor_default=0"
-      "plymouth.use-simpledrm"
     ];
 
     boot.initrd.verbose = lib.mkForce false;
