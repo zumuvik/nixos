@@ -14,7 +14,7 @@
     # Enable overclocking/undervolting support
     boot.kernelParams = [ "amdgpu.dc=1" "amdgpu.ppfeaturemask=0xffffffff" ];
 
-    environment.systemPackages = [ pkgs.lact ];
+    environment.systemPackages = [ pkgs.lact pkgs.mangohud pkgs.goverlay ];
     systemd.services.lactd = {
       description = "AMDGPU Control Daemon";
       after = [ "multi-user.target" ];
