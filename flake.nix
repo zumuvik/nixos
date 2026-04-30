@@ -85,6 +85,10 @@
   in
   {
     nixosConfigurations = {
+      nixlensk324 = makeHost {
+        hostName = "nixlensk324";
+      };
+
       nixlensk323 = makeHost {
         hostName = "nixlensk323";
       };

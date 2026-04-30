@@ -1,9 +1,11 @@
 keys:
+  - &host_nixlensk324 age1me6qh57zf6w0vzhrs2ts8n6uv572zmf26pf6lpnqyyddpufumaqswq3zkr
   - &host_nixlensk323 age1u7nseu2zpm3lv2gm0v0s4qt7ww55gehx540ry7tal8zkww6d2ehsvvg80x
   - &host_nixlensk322 age1g6ze6fuu4es9uwd5yzcaqhvgg7j24w4299yatrpylm6fa8kakspqduk78q
 creation_rules:
   - path_regex: .*\.yaml$
     key_groups:
     - age:
+      - *host_nixlensk324
       - *host_nixlensk323
       - *host_nixlensk322
