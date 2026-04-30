@@ -7,6 +7,7 @@
   # Boot & Filesystems
   # ────────────────────────────────────────────────────────
   boot.loader.systemd-boot.enable = true;
+  boot.loader.grub.enable = false;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.supportedFilesystems = [ "btrfs" ];
 
@@ -15,6 +16,7 @@
   # ────────────────────────────────────────────────────────
   sops.defaultSopsFile = ../../secrets/secrets.yaml;
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  sops.secrets."git_sync_env" = {};
 
   # ────────────────────────────────────────────────────────
   # Networking
@@ -42,14 +44,6 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "qemu" ];
     openssh.authorizedKeys.keys = lib'.sshKeys;
-  };
-
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "yes"; 
-      PasswordAuthentication = true;
-    };
   };
 
   networking.firewall.allowedTCPPorts = [ 22 ];

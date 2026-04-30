@@ -81,7 +81,7 @@
      systemd-boot.enable = lib.mkDefault false;
      efi.canTouchEfiVariables = true;
      grub = {
-       enable = true;
+       enable = lib.mkDefault true;
        device = lib.mkDefault "nodev";
        efiSupport = lib.mkDefault true;
        useOSProber = false;
