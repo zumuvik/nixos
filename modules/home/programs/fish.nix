@@ -37,7 +37,12 @@
         echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
         echo ""
         
-        nh os build /etc/nixos
+        if test (count $argv) -gt 0
+          nh os build /etc/nixos --hostname (hostname) -- $argv
+        else
+          nh os build /etc/nixos --hostname (hostname)
+        end
+
         set -l exit_code $status
         echo ""
         if test $exit_code -eq 0
@@ -53,7 +58,12 @@
         echo $C_BOLD$C_CYAN"→"$C_RESET" "$description
         echo ""
         
-        nh os switch /etc/nixos
+        if test (count $argv) -gt 0
+          nh os switch /etc/nixos --hostname (hostname) -- $argv
+        else
+          nh os switch /etc/nixos --hostname (hostname)
+        end
+
         set -l exit_code $status
         echo ""
         if test $exit_code -eq 0
