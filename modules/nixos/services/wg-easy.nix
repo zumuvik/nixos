@@ -51,44 +51,47 @@ in
       "net.ipv4.conf.all.src_valid_mark" = 1;
     };
 
-    # Podman (container runtime)
-    virtualisation = {
-      podman.enable = true;
-      podman.dockerCompat = true;
+    # Arion (Docker Compose for Nix)
+    virtualisation.arion = {
+      backend = "docker"; # Or "podman" if you prefer, but docker is common for arion
+      projects.wg-easy.settings = {
+        project.name = "wg-easy";
+        services.wg-easy = {
+          service = {
+            image = "ghcr.io/wg-easy/wg-easy:15";
+            container_name = "wg-easy";
+            network_mode = "host";
+            cap_add = [ "NET_ADMIN" "SYS_MODULE" "NET_RAW" ];
+            restart = "always";
+            
+            volumes = [
+              "wg-easy-config:/etc/wireguard"
+              "${iptablesStub}/bin/iptables:/usr/sbin/iptables:ro"
+              "${iptablesStub}/bin/iptables:/usr/sbin/ip6tables:ro"
+            ];
 
-      oci-containers.containers."wg-easy" = {
-        image = "ghcr.io/wg-easy/wg-easy:15";
-        autoStart = true;
+            # Arion supports environmentFiles
+            env_file = [ config.sops.secrets."wg_easy_env".path ];
 
-        volumes = [
-          "wg-easy-config:/etc/wireguard"
-          "${iptablesStub}/bin/iptables:/usr/sbin/iptables:ro"
-          "${iptablesStub}/bin/iptables:/usr/sbin/ip6tables:ro"
-        ];
-
-        environmentFiles = [ config.sops.secrets."wg_easy_env".path ];
-        environment = {
-          WG_HOST = "vpn.samolensk.ru";
-          WG_PORT = "44321";
-          WEBUI_HOST = "10.8.0.1";
-          WEBUI_PORT = "51821";
-
-          # Фикс входа за прокси (Nginx)
-          WG_AUTH_BYPASS_LOCALHOST = "true";
-
-          # Unattended setup — создаёт пользователя при первом запуске
-          INIT_ENABLED = "true";
-          INIT_USERNAME = "admin";
+            environment = {
+              WG_HOST = "vpn.samolensk.ru";
+              WG_PORT = "44321";
+              WEBUI_HOST = "10.8.0.1";
+              WEBUI_PORT = "51821";
+              WG_AUTH_BYPASS_LOCALHOST = "true";
+              INIT_ENABLED = "true";
+              INIT_USERNAME = "admin";
+            };
+          };
         };
-
-        extraOptions = [
-          "--network=host"
-          "--cap-add=NET_ADMIN"
-          "--cap-add=SYS_MODULE"
-          "--cap-add=NET_RAW"
-        ];
+        # Named volume definition if needed, though host paths are often simpler
+        # Arion creates docker-compose.yml, so we can define volumes there
+        docker-compose.volumes.wg-easy-config = {};
       };
     };
+
+    # Ensure docker/podman is enabled for Arion
+    virtualisation.docker.enable = true;
 
     # NAT на хосте через nftables (вместо iptables в контейнере)
     networking.nftables.enable = true;

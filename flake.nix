@@ -45,6 +45,10 @@
     nix-cachyos-kernel = {
       url = "github:xddxdd/nix-cachyos-kernel/release";
     };
+    arion = {
+      url = "github:hercules-ci/arion";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, ... } @ inputs:
@@ -63,6 +67,7 @@
 
         modules = [
           sops-nix.nixosModules.sops
+          inputs.arion.nixosModules.arion
           ./hosts/${hostName}/default.nix
           ./modules/profiles
           home-manager.nixosModules.home-manager
