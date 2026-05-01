@@ -58,11 +58,10 @@ in
     ];
 
     # ── Firewall ──
-    # Открываем порт VLESS-трафика.
-    # Порт панели открываем только если нет nginx (иначе панель за SSL).
+    # Открываем порт VLESS-трафика и порт панели.
+    # При наличии domain дополнительно открываем 80/443 для nginx + ACME.
     networking.firewall.allowedTCPPorts =
-      [ cfg.vlessPort ]
-      ++ lib.optionals (cfg.domain == null) [ cfg.panelPort ]
+      [ cfg.vlessPort cfg.panelPort ]
       ++ lib.optionals (cfg.domain != null) [ 80 443 ];
 
     # ── Nginx reverse proxy ──
