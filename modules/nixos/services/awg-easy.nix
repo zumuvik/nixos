@@ -44,6 +44,7 @@ in
               WG_HOST = "awg.samolensk.ru";
               WG_PORT = "51822";
               WEBUI_HOST = "0.0.0.0";
+              PORT = "51823";
               WEBUI_PORT = "51823";
               WG_DEFAULT_ADDRESS = "10.9.x.x";
 
