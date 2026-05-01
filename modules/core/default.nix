@@ -53,7 +53,7 @@
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
     ];
-    trusted-users = [ "root" "@wheel" ];
+    trusted-users = [ "root" "@wheel" "${username}" ];
   };
 
   nix.gc = {
