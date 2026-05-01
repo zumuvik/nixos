@@ -30,15 +30,13 @@ in
       description = "Docker-образ 3X-UI";
     };
 
-    environment = lib.mkOption {
-      type = lib.types.attrsOf lib.types.str;
-      default = {
-        # ── Первичные креды администратора ──
-        # Замени плейсхолдеры перед первым деплоем!
-        XUI_USERNAME = "<ADMIN_USER>";
-        XUI_PASSWORD = "<ADMIN_PASS>";
-      };
-      description = "Переменные окружения для контейнера 3X-UI";
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Путь к env-файлу с секретами (XUI_USERNAME, XUI_PASSWORD).
+        Обычно это config.sops.secrets."x3-ui_env".path.
+      '';
     };
   };
 
@@ -78,7 +76,11 @@ in
           "${cfg.dataDir}:/etc/x-ui"
         ];
 
-        environment = cfg.environment;
+        # env_file: секреты (XUI_USERNAME, XUI_PASSWORD) читаются из
+        # зашифрованного sops-файла, а не хранятся в Nix-коде.
+        env_file = lib.mkIf (cfg.environmentFile != null) [
+          cfg.environmentFile
+        ];
 
         # Автоматический перезапуск при падении
         restart = "unless-stopped";
