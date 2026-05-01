@@ -37,11 +37,9 @@ in
     # Работает через Arion (Docker)
     # ────────────────────────────────────────────────────────
 
-    # Kernel modules для NAT и iptables + AmneziaWG
-    boot.extraModulePackages = [ config.boot.kernelPackages.amneziawg ];
+    # Kernel modules для NAT и iptables
     boot.kernelModules = [
       "wireguard"
-      "amneziawg"
       "ip_tables"
       "iptable_filter"
       "ipt_MASQUERADE"
@@ -78,7 +76,6 @@ in
             
             volumes = [
               "wg-easy-config:/etc/wireguard"
-              "/lib/modules:/lib/modules:ro"
               "${iptablesStub}/bin/iptables:/usr/sbin/iptables:ro"
               "${iptablesStub}/bin/iptables:/usr/sbin/ip6tables:ro"
             ];
@@ -94,7 +91,6 @@ in
               WG_AUTH_BYPASS_LOCALHOST = "true";
               INIT_ENABLED = "true";
               INIT_USERNAME = "admin";
-              EXPERIMENTAL_AWG = "true";
             };
           };
         };
@@ -106,8 +102,6 @@ in
 
     # Ensure docker/podman is enabled for Arion
     virtualisation.docker.enable = true;
-
-    environment.systemPackages = [ pkgs.amneziawg-tools ];
 
     # NAT на хосте через nftables (вместо iptables в контейнере)
     networking.nftables.enable = true;

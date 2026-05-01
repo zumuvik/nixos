@@ -28,11 +28,16 @@
     externalInterface = "ens18";
   };
 
+  my.services.awg-easy = {
+    enable = true;
+    externalInterface = "ens18";
+  };
+
   my.services.cloudflare-sync = {
     enable = true;
     checkInterval = "hourly";
     domains = [
-      { zone = "samolensk.ru"; records = [ "vpn" "wg-easy" ]; }
+      { zone = "samolensk.ru"; records = [ "vpn" "wg-easy" "awg" ]; }
     ];
   };
 

@@ -1,6 +1,7 @@
 { ... }: {
   imports = [
     ./services/wg-easy.nix
+    ./services/awg-easy.nix
     ./services/nginx
     ./services/mailserver
     ./services/roundcube
