@@ -46,6 +46,7 @@ in
               WEBUI_HOST = "0.0.0.0";
               WEBUI_PORT = "51823";
               WG_DEFAULT_ADDRESS = "10.9.x.x";
+
               WG_DEFAULT_DNS = "1.1.1.1";
               WG_AUTH_BYPASS_LOCALHOST = "true";
             };
