@@ -24,7 +24,7 @@
   # Services
   # ────────────────────────────────────────────────────────
   my.services.wg-easy = {
-    enable = true;
+    enable = false; # Disabled to resolve conflict with awg-easy
     externalInterface = "ens18";
   };
 

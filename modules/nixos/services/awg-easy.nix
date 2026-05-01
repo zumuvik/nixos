@@ -60,11 +60,7 @@ in
           service = {
             image = "ghcr.io/gennadykataev/awg-easy:latest";
             container_name = "awg-easy";
-            # network_mode = "host"; # Removed to avoid wg0 conflict
-            ports = [
-              "51822:51822/udp"
-              "51823:51823/tcp"
-            ];
+            network_mode = "host";
             capabilities = {
               NET_ADMIN = true;
               SYS_MODULE = true;
@@ -86,13 +82,13 @@ in
             environment = {
               WG_HOST = "awg.samolensk.ru";
               WG_PORT = "51822";
-              # WG_DEVICE = "awg0"; # Removed as it's hardcoded to wg0 in this image
+              WG_DEVICE = "ens18"; # Host interface for masquerade
+              WG_DEFAULT_ADDRESS = "10.9.0.x";
+              WG_DEFAULT_DNS = "1.1.1.1";
+              WG_MTU = "1420";
               WEBUI_HOST = "0.0.0.0";
               PORT = "51823";
               WEBUI_PORT = "51823";
-              WG_DEFAULT_ADDRESS = "10.9.0.x";
-
-              WG_DEFAULT_DNS = "1.1.1.1";
               WG_AUTH_BYPASS_LOCALHOST = "true";
             };
           };
@@ -108,7 +104,29 @@ in
     # Ensure docker is enabled
     virtualisation.docker.enable = true;
 
-    # Firewall для AWG (теперь только проброс портов, так как NAT внутри докера)
+    # NAT и Firewall для AWG
+    networking.nftables.enable = true;
+    # Используем mkAfter, чтобы не конфликтовать с wg-easy, если оба включены
+    networking.nftables.ruleset = lib.mkAfter ''
+      table ip awg_nat {
+        chain postrouting {
+          type nat hook postrouting priority 100; policy accept;
+          ip saddr 10.9.0.0/24 oifname "${cfg.externalInterface}" masquerade
+        }
+      }
+      table ip awg_filter {
+        chain forward {
+          type filter hook forward priority 0; policy accept;
+          iifname "wg0" accept
+          oifname "wg0" accept
+        }
+        chain input {
+          type filter hook input priority 0; policy accept;
+          udp dport 51822 accept
+        }
+      }
+    '';
+
     networking.firewall.allowedUDPPorts = [ 51822 ];
     networking.firewall.allowedTCPPorts = [ 51823 ];
 
