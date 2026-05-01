@@ -89,7 +89,7 @@ in
             environment = {
               WG_HOST = "vpn.samolensk.ru";
               WG_PORT = "51820";
-              WEBUI_HOST = "10.8.0.1";
+              WEBUI_HOST = "0.0.0.0";
               WEBUI_PORT = "51821";
               WG_AUTH_BYPASS_LOCALHOST = "true";
               INIT_ENABLED = "true";
