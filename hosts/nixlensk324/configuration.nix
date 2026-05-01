@@ -24,7 +24,7 @@
   # Services
   # ────────────────────────────────────────────────────────
   my.services.wg-easy = {
-    enable = false; # Disabled to resolve conflict with awg-easy
+    enable = false;
     externalInterface = "ens18";
   };
 
@@ -32,6 +32,7 @@
     enable = true;
     externalInterface = "ens18";
   };
+
 
   my.services.cloudflare-sync = {
     enable = true;

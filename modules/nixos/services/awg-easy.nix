@@ -60,20 +60,29 @@ in
           service = {
             image = "ghcr.io/gennadykataev/awg-easy:latest";
             container_name = "awg-easy";
-            network_mode = "host";
+            # network_mode = "host"; # Bridge mode as per README
+            ports = [
+              "51820:51820/udp"
+              "51821:51821/tcp"
+            ];
             capabilities = {
               NET_ADMIN = true;
               SYS_MODULE = true;
               NET_RAW = true;
             };
+            sysctls = {
+              "net.ipv4.conf.all.src_valid_mark" = "1";
+              "net.ipv4.ip_forward" = "1";
+            };
+            devices = [
+              "/dev/net/tun:/dev/net/tun"
+            ];
             restart = "always";
-            
+
             volumes = [
               "/var/lib/awg-easy:/etc/amnezia/amneziawg"
               "/var/lib/awg-easy:/etc/wireguard"
               "/lib/modules:/lib/modules:ro"
-              "${iptablesStub}/bin/iptables:/usr/sbin/iptables:ro"
-              "${iptablesStub}/bin/iptables:/usr/sbin/ip6tables:ro"
             ];
 
             # Используем тот же секрет или отдельный, если нужно
@@ -81,15 +90,15 @@ in
 
             environment = {
               WG_HOST = "awg.samolensk.ru";
-              WG_PORT = "51822";
-              WG_DEVICE = "ens18"; # Host interface for masquerade
+              WG_PORT = "51820";
               WG_DEFAULT_ADDRESS = "10.9.0.x";
               WG_DEFAULT_DNS = "1.1.1.1";
               WG_MTU = "1420";
               WEBUI_HOST = "0.0.0.0";
-              PORT = "51823";
-              WEBUI_PORT = "51823";
+              PORT = "51821";
+              WEBUI_PORT = "51821";
               WG_AUTH_BYPASS_LOCALHOST = "true";
+              LANG = "ru";
             };
           };
         };
@@ -104,38 +113,16 @@ in
     # Ensure docker is enabled
     virtualisation.docker.enable = true;
 
-    # NAT и Firewall для AWG
-    networking.nftables.enable = true;
-    # Используем mkAfter, чтобы не конфликтовать с wg-easy, если оба включены
-    networking.nftables.ruleset = lib.mkAfter ''
-      table ip awg_nat {
-        chain postrouting {
-          type nat hook postrouting priority 100; policy accept;
-          ip saddr 10.9.0.0/24 oifname "${cfg.externalInterface}" masquerade
-        }
-      }
-      table ip awg_filter {
-        chain forward {
-          type filter hook forward priority 0; policy accept;
-          iifname "wg0" accept
-          oifname "wg0" accept
-        }
-        chain input {
-          type filter hook input priority 0; policy accept;
-          udp dport 51822 accept
-        }
-      }
-    '';
-
-    networking.firewall.allowedUDPPorts = [ 51822 ];
-    networking.firewall.allowedTCPPorts = [ 51823 ];
+    # NAT и Firewall для AWG (открываем порты для моста)
+    networking.firewall.allowedUDPPorts = [ 51820 ];
+    networking.firewall.allowedTCPPorts = [ 51821 ];
 
     # Nginx Reverse Proxy
     services.nginx.virtualHosts."awg.samolensk.ru" = {
       enableACME = true;
       forceSSL = true;
       locations."/" = {
-        proxyPass = "http://127.0.0.1:51823";
+        proxyPass = "http://127.0.0.1:51821";
         proxyWebsockets = true;
       };
     };
