@@ -133,5 +133,15 @@ in
 
     # Firewall
     networking.firewall.allowedUDPPorts = [ 44321 ];
+
+    # Nginx Reverse Proxy for Web UI
+    services.nginx.virtualHosts."vpn.samolensk.ru" = {
+      enableACME = true;
+      forceSSL = true;
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:51821";
+        proxyWebsockets = true;
+      };
+    };
   };
 }
