@@ -6,7 +6,6 @@
     ./services/roundcube
     ./services/cloudflare-sync
     ./services/nh.nix
-    ./services/git-sync
     ./hardware/bluetooth.nix
     ./hardware/zram.nix
     ./hardware/swap.nix

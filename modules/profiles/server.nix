@@ -19,6 +19,5 @@
 
     # Default services for servers
     my.services.nginx.enable = lib.mkDefault true;
-    my.services.git-sync.enable = lib.mkDefault true;
   };
 }

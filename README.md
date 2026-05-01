@@ -27,7 +27,7 @@ The configuration uses a modular approach with a custom `my.*` namespace for all
 │   │   └── configuration.nix  # Host feature toggles (my.*)
 ├── modules/
 │   ├── nixos/                 # NixOS Modules (Namespace: my.*)
-│   │   ├── services/          # Services (nginx, wg-easy, git-sync)
+│   │   ├── services/          # Services (nginx, wg-easy)
 │   │   ├── hardware/          # Hardware (bluetooth, amdgpu, laptop, kernel)
 │   │   ├── ui/                # UI (fonts, greetd, common)
 │   │   └── gaming.nix         # Gaming optimizations

@@ -34,6 +34,8 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
+    accept-flake-config = true;
+    trusted-users = [ "root" "@wheel" ];
     substituters = [ 
       "https://cache.nixos.org"
       "https://cache.garnix.io"

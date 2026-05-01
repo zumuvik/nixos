@@ -27,7 +27,7 @@
 │   │   └── configuration.nix  # Переключатели функций хоста (my.*)
 ├── modules/
 │   ├── nixos/                 # Модули NixOS (Namespace: my.*)
-│   │   ├── services/          # Сервисы (nginx, wg-easy, git-sync)
+│   │   ├── services/          # Сервисы (nginx, wg-easy)
 │   │   ├── hardware/          # Оборудование (bluetooth, amdgpu, laptop, kernel)
 │   │   ├── ui/                # Интерфейс (fonts, greetd, common)
 │   │   └── gaming.nix         # Твики для игр

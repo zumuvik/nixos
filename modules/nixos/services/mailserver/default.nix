@@ -52,9 +52,12 @@ in
     # ── Dovecot (IMAP) ─────────────────────────────────────
     services.dovecot2 = {
       enable = true;
+      package = pkgs.dovecot;
       enablePAM = false;
 
       settings = {
+        dovecot_config_version = config.services.dovecot2.package.version;
+        dovecot_storage_version = config.services.dovecot2.package.version;
         protocols = "imap lmtp";
         mail_location = "maildir:~/Maildir";
         mail_uid = "vmail";

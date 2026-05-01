@@ -17,7 +17,7 @@ hosts/<host>/                  # Host-specific configs
   └── configuration.nix         # Host-specific feature toggles (my.*)
 modules/
   ├── nixos/                    # NixOS custom modules (Namespace: my.*)
-  │   ├── services/             # Services (nginx, git-sync, etc.)
+  │   ├── services/             # Services (nginx, etc.)
   │   ├── hardware/             # Hardware settings (gpu, kernel, etc.)
   │   ├── ui/                   # UI settings (fonts, greetd, etc.)
   │   ├── default.nix           # Index of modules
@@ -71,7 +71,7 @@ Example module:
 
 | Element | Convention | Example |
 |---------|------------|---------|
-| Files | kebab-case | `git-sync.nix` |
+| Files | kebab-case | `amdgpu.nix` |
 | Options | camelCase | `my.hardware.amdgpu.enable` |
 | Folders | lowercase | `modules/nixos/` |
 
