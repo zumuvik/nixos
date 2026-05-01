@@ -17,29 +17,29 @@
   sops.defaultSopsFile = ../../secrets/secrets.yaml;
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.secrets."git_sync_env" = {};
-  sops.secrets."wg_easy_env" = {};
   sops.secrets."cloudflare_env" = {};
 
   # ────────────────────────────────────────────────────────
   # Services
   # ────────────────────────────────────────────────────────
-  my.services.wg-easy = {
-    enable = false;
-    externalInterface = "ens18";
-  };
-
-  my.services.awg-easy = {
-    enable = true;
-    externalInterface = "ens18";
-  };
 
 
   my.services.cloudflare-sync = {
     enable = true;
     checkInterval = "hourly";
     domains = [
-      { zone = "samolensk.ru"; records = [ "vpn" "wg-easy" "awg" ]; }
+      { zone = "samolensk.ru"; records = [ ]; }
     ];
+  };
+
+  my.services.x3-ui = {
+    enable = true;
+    # panelPort = 2053;  # порт веб-панели (по умолчанию 2053)
+    # vlessPort = 443;   # порт VLESS-трафика (по умолчанию 443)
+    environment = {
+      XUI_USERNAME = "<ADMIN_USER>";   # ← замени перед деплоем
+      XUI_PASSWORD = "<ADMIN_PASS>";   # ← замени перед деплоем
+    };
   };
 
   # ────────────────────────────────────────────────────────
