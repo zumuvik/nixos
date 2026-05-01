@@ -48,8 +48,8 @@ in
 
     # IP forwarding для маршрутизации трафика клиентов
     boot.kernel.sysctl = {
-      "net.ipv4.ip_forward" = lib.mkDefault 1;
-      "net.ipv4.conf.all.src_valid_mark" = lib.mkDefault 1;
+      "net.ipv4.ip_forward" = lib.mkForce 1;
+      "net.ipv4.conf.all.src_valid_mark" = lib.mkForce 1;
     };
 
     # Arion (Docker Compose for Nix)
