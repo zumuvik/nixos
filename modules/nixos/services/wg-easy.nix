@@ -138,7 +138,7 @@ in
     # Nginx Reverse Proxy for Web UI
     services.nginx.virtualHosts."wg-easy.samolensk.ru" = {
       enableACME = true;
-      forceSSL = true;
+      forceSSL = false; # Temporarily disable to fix 526 error during challenge
       locations."/" = {
         proxyPass = "http://127.0.0.1:51821";
         proxyWebsockets = true;
