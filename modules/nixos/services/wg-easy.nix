@@ -137,8 +137,7 @@ in
     # Nginx Reverse Proxy for Web UI
     services.nginx.virtualHosts."vpn.samolensk.ru" = {
       enableACME = true;
-      forceSSL = false;
-      addSSL = false;
+      forceSSL = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:51821";
         proxyWebsockets = true;
