@@ -30,9 +30,8 @@ in
 
   config = lib.mkIf cfg.enable {
     # Kernel modules для NAT и AmneziaWG
-    # AmneziaWG может использовать обычный wireguard модуль, если не нужны специфичные параметры,
-    # но для полной поддержки AmneziaWG нужны соответствующие патчи.
     boot.kernelModules = [
+      "amneziawg"
       "wireguard"
       "ip_tables"
       "iptable_filter"
@@ -43,6 +42,10 @@ in
       "xt_conntrack"
       "xt_addrtype"
       "xt_mark"
+    ];
+
+    boot.extraModulePackages = [
+      config.boot.kernelPackages.amneziawg
     ];
 
     # IP forwarding для маршрутизации трафика клиентов
@@ -60,6 +63,7 @@ in
           service = {
             image = "ghcr.io/gennadykataev/awg-easy:latest";
             container_name = "awg-easy";
+            privileged = true;
             # network_mode = "host"; # Bridge mode as per README
             ports = [
               "51820:51820/udp"
