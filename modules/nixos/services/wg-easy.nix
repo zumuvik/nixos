@@ -85,7 +85,7 @@ in
             env_file = [ config.sops.secrets."wg_easy_env".path ];
 
             environment = {
-              WG_HOST = "vpn.samolensk.ru";
+              WG_HOST = "wg-easy.samolensk.ru";
               WG_PORT = "44321";
               WEBUI_HOST = "10.8.0.1";
               WEBUI_PORT = "51821";
@@ -136,7 +136,7 @@ in
     networking.firewall.allowedTCPPorts = [ 51821 ]; # Temporary for direct access
 
     # Nginx Reverse Proxy for Web UI
-    services.nginx.virtualHosts."vpn.samolensk.ru" = {
+    services.nginx.virtualHosts."wg-easy.samolensk.ru" = {
       enableACME = true;
       forceSSL = true;
       locations."/" = {
