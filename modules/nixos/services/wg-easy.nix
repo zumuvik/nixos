@@ -23,12 +23,19 @@ let
 in
 
 {
-  options.my.services.wg-easy.enable = lib.mkEnableOption "WireGuard Easy VPN server";
+  options.my.services.wg-easy = {
+    enable = lib.mkEnableOption "WireGuard Easy VPN server";
+    externalInterface = lib.mkOption {
+      type = lib.types.str;
+      default = "enp6s0";
+      description = "The external network interface for NAT masquerade.";
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     # ────────────────────────────────────────────────────────
     # WireGuard Easy — VPN сервер с веб-интерфейсом
-    # Работает через podman (без Docker)
+    # Работает через Arion (Docker)
     # ────────────────────────────────────────────────────────
 
     # Kernel modules для NAT и iptables
@@ -61,7 +68,11 @@ in
             image = "ghcr.io/wg-easy/wg-easy:15";
             container_name = "wg-easy";
             network_mode = "host";
-            cap_add = [ "NET_ADMIN" "SYS_MODULE" "NET_RAW" ];
+            capabilities = {
+              NET_ADMIN = true;
+              SYS_MODULE = true;
+              NET_RAW = true;
+            };
             restart = "always";
             
             volumes = [
