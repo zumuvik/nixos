@@ -133,6 +133,7 @@ in
 
     # Firewall
     networking.firewall.allowedUDPPorts = [ 44321 ];
+    networking.firewall.allowedTCPPorts = [ 51821 ]; # Temporary for direct access
 
     # Nginx Reverse Proxy for Web UI
     services.nginx.virtualHosts."vpn.samolensk.ru" = {
