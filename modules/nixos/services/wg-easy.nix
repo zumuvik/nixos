@@ -66,7 +66,7 @@ in
         project.name = "wg-easy";
         services.wg-easy = {
           service = {
-            image = "ghcr.io/wg-easy/wg-easy:15";
+            image = "ghcr.io/spcfox/amnezia-wg-easy:latest";
             container_name = "wg-easy";
             network_mode = "host";
             capabilities = {
