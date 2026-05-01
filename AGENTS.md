@@ -89,7 +89,6 @@ Sites in `modules/nixos/services/`.
 | Site | Domain | Module |
 |------|--------|--------|
 | Roundcube | mail.samolensk.ru | `roundcube.nix` |
-| WG-Easy | vpn.samolensk.ru | `wg-easy.nix` |
 
 Add HTTPS: `enableACME = true; forceSSL = true;`
 Не забывай делать коммиты при изменениях.

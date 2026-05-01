@@ -28,7 +28,7 @@
     enable = true;
     checkInterval = "hourly";
     domains = [
-      { zone = "samolensk.ru"; records = [ ]; }
+      { zone = "samolensk.ru"; records = [ "vpn" ]; }
     ];
   };
 
@@ -37,8 +37,9 @@
   my.services.x3-ui = {
     enable = true;
     # panelPort = 2053;  # порт веб-панели (по умолчанию 2053)
-    # vlessPort = 443;   # порт VLESS-трафика (по умолчанию 443)
+    vlessPort = 8443;    # порт VLESS-трафика (443 занят nginx)
     environmentFile = config.sops.secrets."x3-ui_env".path;
+    domain = "vpn.samolensk.ru";
   };
 
   # ────────────────────────────────────────────────────────

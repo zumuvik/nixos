@@ -7,7 +7,7 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 | Host | Role | Features |
 |------|------|----------|
 | `nixlensk321` | Laptop | Hyprland, battery management, Zen kernel |
-| `nixlensk322` | Server/Router | Podman, Nginx, WireGuard, Firewall |
+| `nixlensk322` | Server/Router | Podman, Nginx, Firewall |
 | `nixlensk323` | Gaming PC | Hyprland, Steam, Zen kernel, AMD GPU |
 
 ## Modular Structure
@@ -27,7 +27,7 @@ The configuration uses a modular approach with a custom `my.*` namespace for all
 │   │   └── configuration.nix  # Host feature toggles (my.*)
 ├── modules/
 │   ├── nixos/                 # NixOS Modules (Namespace: my.*)
-│   │   ├── services/          # Services (nginx, wg-easy)
+│   │   ├── services/          # Services (nginx, mailserver)
 │   │   ├── hardware/          # Hardware (bluetooth, amdgpu, laptop, kernel)
 │   │   ├── ui/                # UI (fonts, greetd, common)
 │   │   └── gaming.nix         # Gaming optimizations
@@ -97,7 +97,6 @@ Edit `modules/programs/nixvim.nix` to customize the declarative Neovim experienc
 | Site | Domain | Module |
 |------|--------|--------|
 | Roundcube | mail.samolensk.ru | `roundcube.nix` |
-| WG-Easy | vpn.samolensk.ru | `wg-easy.nix` |
 
 ## Code Style
 

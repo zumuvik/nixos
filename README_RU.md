@@ -7,7 +7,7 @@
 | Хост | Роль | Особенности |
 |------|------|-------------|
 | `nixlensk321` | Ноутбук | Hyprland, управление питанием, ядро Zen |
-| `nixlensk322` | Сервер | Podman, Nginx, WireGuard, Firewall |
+| `nixlensk322` | Сервер | Podman, Nginx, Firewall |
 | `nixlensk323` | Игровой ПК | Hyprland, Steam, ядро Zen, AMD GPU |
 
 ## Модульная структура
@@ -27,7 +27,7 @@
 │   │   └── configuration.nix  # Переключатели функций хоста (my.*)
 ├── modules/
 │   ├── nixos/                 # Модули NixOS (Namespace: my.*)
-│   │   ├── services/          # Сервисы (nginx, wg-easy)
+│   │   ├── services/          # Сервисы (nginx, mailserver)
 │   │   ├── hardware/          # Оборудование (bluetooth, amdgpu, laptop, kernel)
 │   │   ├── ui/                # Интерфейс (fonts, greetd, common)
 │   │   └── gaming.nix         # Твики для игр

@@ -3,7 +3,6 @@
 
 {
   my.profiles.server.enable = true;
-  my.services.wg-easy.enable = true;
   my.services.roundcube.enable = true;
   my.services.mailserver.enable = true;
 
@@ -35,7 +34,6 @@
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.secrets."cloudflare_env" = {};
   sops.secrets."git_sync_env" = {};
-  sops.secrets."wg_easy_env" = {};
   sops.secrets."roundcube_db_pass" = {
     owner = "nginx";
     group = "nginx";
@@ -57,29 +55,6 @@
   # sudo без пароля (server-specific: podman)
   # ────────────────────────────────────────────────────────
   security.sudo.extraRules = [
-    {
-      users = [ "${username}" ];
-      commands = [
-        {
-          command = "/run/current-system/sw/bin/systemctl restart podman-wg-easy.service";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "/run/current-system/sw/bin/systemctl status podman-wg-easy.service";
-          options = [ "NOPASSWD" ];
-        }
-        {
-          command = "/run/current-system/sw/bin/journalctl -u podman-wg-easy.service";
-          options = [ "NOPASSWD" ];
-        }
-/*
-        {
-          command = "/run/current-system/sw/bin/podman";
-          options = [ "NOPASSWD" ];
-        }
-*/
-      ];
-    }
   ];
 
   # ────────────────────────────────────────────────────────

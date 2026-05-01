@@ -38,6 +38,16 @@ in
         Обычно это config.sops.secrets."x3-ui_env".path.
       '';
     };
+
+    domain = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "vpn.samolensk.ru";
+      description = ''
+        Домен для nginx reverse proxy с ACME SSL.
+        Если null — панель доступна напрямую по порту.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -48,11 +58,37 @@ in
     ];
 
     # ── Firewall ──
-    # Открываем порт VLESS (443) и порт веб-панели.
-    networking.firewall.allowedTCPPorts = [
-      cfg.vlessPort
-      cfg.panelPort
-    ];
+    # Открываем порт VLESS-трафика.
+    # Порт панели открываем только если нет nginx (иначе панель за SSL).
+    networking.firewall.allowedTCPPorts =
+      [ cfg.vlessPort ]
+      ++ lib.optionals (cfg.domain == null) [ cfg.panelPort ]
+      ++ lib.optionals (cfg.domain != null) [ 80 443 ];
+
+    # ── Nginx reverse proxy ──
+    # Проксируем панель через HTTPS с автоматическим Let's Encrypt.
+    services.nginx = lib.mkIf (cfg.domain != null) {
+      enable = true;
+      recommendedGzipSettings = true;
+      recommendedOptimisation = true;
+      recommendedProxySettings = true;
+      recommendedTlsSettings = true;
+
+      virtualHosts."${cfg.domain}" = {
+        enableACME = true;
+        forceSSL = true;
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:${toString cfg.panelPort}";
+          proxyWebsockets = true;
+        };
+      };
+    };
+
+    # ── ACME ──
+    security.acme = lib.mkIf (cfg.domain != null) {
+      acceptTerms = true;
+      defaults.email = "admin@samolensk.ru";
+    };
 
     # ── Arion: бэкенд ──
     # Используем Podman через сокет (не требует Docker-демона).
