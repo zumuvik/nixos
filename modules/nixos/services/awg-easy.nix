@@ -2,7 +2,6 @@
 
 let
   cfg = config.my.services.awg-easy;
-  wgSubnet = "10.9.0.0/24"; # Другая подсеть, чтобы не конфликтовать с wg-easy
 
   # Заглушки для iptables — AmneziaWG Easy (как и wg-easy) может требовать iptables в контейнере
   iptablesStub = pkgs.pkgsMusl.stdenv.mkDerivation {
@@ -61,7 +60,11 @@ in
           service = {
             image = "ghcr.io/gennadykataev/awg-easy:latest";
             container_name = "awg-easy";
-            network_mode = "host";
+            # network_mode = "host"; # Removed to avoid wg0 conflict
+            ports = [
+              "51822:51822/udp"
+              "51823:51823/tcp"
+            ];
             capabilities = {
               NET_ADMIN = true;
               SYS_MODULE = true;
@@ -70,8 +73,8 @@ in
             restart = "always";
             
             volumes = [
-              "awg-easy-config:/etc/amnezia/amneziawg"
-              "awg-easy-config:/etc/wireguard"
+              "/var/lib/awg-easy:/etc/amnezia/amneziawg"
+              "/var/lib/awg-easy:/etc/wireguard"
               "/lib/modules:/lib/modules:ro"
               "${iptablesStub}/bin/iptables:/usr/sbin/iptables:ro"
               "${iptablesStub}/bin/iptables:/usr/sbin/ip6tables:ro"
@@ -83,6 +86,7 @@ in
             environment = {
               WG_HOST = "awg.samolensk.ru";
               WG_PORT = "51822";
+              # WG_DEVICE = "awg0"; # Removed as it's hardcoded to wg0 in this image
               WEBUI_HOST = "0.0.0.0";
               PORT = "51823";
               WEBUI_PORT = "51823";
@@ -93,36 +97,18 @@ in
             };
           };
         };
-        docker-compose.volumes.awg-easy-config = {};
       };
     };
+
+    # Хранилище конфигурации AmneziaWG
+    systemd.tmpfiles.rules = [
+      "d /var/lib/awg-easy 0700 root root -"
+    ];
 
     # Ensure docker is enabled
     virtualisation.docker.enable = true;
 
-    # NAT и Firewall для AWG
-    networking.nftables.enable = true;
-    # Используем mkAfter, чтобы не конфликтовать с wg-easy, если оба включены
-    networking.nftables.ruleset = lib.mkAfter ''
-      table ip awg_nat {
-        chain postrouting {
-          type nat hook postrouting priority 100; policy accept;
-          ip saddr ${wgSubnet} oifname "${cfg.externalInterface}" masquerade
-        }
-      }
-      table ip awg_filter {
-        chain forward {
-          type filter hook forward priority 0; policy accept;
-          iifname "awg0" accept
-          oifname "awg0" accept
-        }
-        chain input {
-          type filter hook input priority 0; policy accept;
-          udp dport 51822 accept
-        }
-      }
-    '';
-
+    # Firewall для AWG (теперь только проброс портов, так как NAT внутри докера)
     networking.firewall.allowedUDPPorts = [ 51822 ];
     networking.firewall.allowedTCPPorts = [ 51823 ];
 
