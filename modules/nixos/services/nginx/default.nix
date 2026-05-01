@@ -54,7 +54,7 @@ in
       acceptTerms = true;
       defaults = {
         email = "admin@samolensk.ru";
-        dnsProvider = null; # Используем HTTP-01 challenge
+        server = "https://acme-v02.api.letsencrypt.org/directory";
       };
     };
 
