@@ -30,12 +30,12 @@ in
       appendHttpConfig = ''
         access_log /var/log/nginx/access.log;
 
-        # Security headers
-        add_header X-Content-Type-Options nosniff;
-        add_header X-Frame-Options SAMEORIGIN;
-        add_header X-XSS-Protection "1; mode=block";
-        add_header Referrer-Policy strict-origin-when-cross-origin;
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+        # Security headers (temporarily disabled for ACME)
+        # add_header X-Content-Type-Options nosniff;
+        # add_header X-Frame-Options SAMEORIGIN;
+        # add_header X-XSS-Protection "1; mode=block";
+        # add_header Referrer-Policy strict-origin-when-cross-origin;
+        # add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 
         # Блокируем доступ по IP и неизвестным доменам
         server {
