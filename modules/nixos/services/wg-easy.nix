@@ -2,7 +2,6 @@
 
 let
   cfg = config.my.services.wg-easy;
-  extIf = "enp6s0";
   wgSubnet = "10.8.0.0/24";
 
   # Заглушки для iptables — контейнер v15 требует legacy iptables,
@@ -85,8 +84,8 @@ in
             env_file = [ config.sops.secrets."wg_easy_env".path ];
 
             environment = {
-              WG_HOST = "wg-easy.samolensk.ru";
-              WG_PORT = "44321";
+              WG_HOST = "vpn.samolensk.ru";
+              WG_PORT = "51820";
               WEBUI_HOST = "10.8.0.1";
               WEBUI_PORT = "51821";
               WG_AUTH_BYPASS_LOCALHOST = "true";
@@ -110,7 +109,7 @@ in
       table ip nat {
         chain postrouting {
           type nat hook postrouting priority 100; policy accept;
-          ip saddr ${wgSubnet} oifname "${extIf}" masquerade
+          ip saddr ${wgSubnet} oifname "${cfg.externalInterface}" masquerade
         }
       }
       table ip filter {
@@ -121,7 +120,7 @@ in
         }
         chain input {
           type filter hook input priority 0; policy accept;
-          udp dport 44321 accept
+          udp dport 51820 accept
         }
       }
     '';
@@ -132,13 +131,13 @@ in
     ];
 
     # Firewall
-    networking.firewall.allowedUDPPorts = [ 44321 ];
+    networking.firewall.allowedUDPPorts = [ 51820 ];
     networking.firewall.allowedTCPPorts = [ 51821 ]; # Temporary for direct access
 
     # Nginx Reverse Proxy for Web UI
-    services.nginx.virtualHosts."wg-easy.samolensk.ru" = {
+    services.nginx.virtualHosts."vpn.samolensk.ru" = {
       enableACME = true;
-      forceSSL = false; # Temporarily disable to fix 526 error during challenge
+      forceSSL = true;
       locations."/" = {
         proxyPass = "http://127.0.0.1:51821";
         proxyWebsockets = true;

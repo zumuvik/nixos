@@ -18,6 +18,7 @@
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   sops.secrets."git_sync_env" = {};
   sops.secrets."wg_easy_env" = {};
+  sops.secrets."cloudflare_env" = {};
 
   # ────────────────────────────────────────────────────────
   # Services
@@ -25,6 +26,14 @@
   my.services.wg-easy = {
     enable = true;
     externalInterface = "ens18";
+  };
+
+  my.services.cloudflare-sync = {
+    enable = true;
+    checkInterval = "hourly";
+    domains = [
+      { zone = "samolensk.ru"; records = [ "vpn" "wg-easy" ]; }
+    ];
   };
 
   # ────────────────────────────────────────────────────────
