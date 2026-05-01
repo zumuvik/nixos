@@ -105,14 +105,14 @@ in
 
     # NAT на хосте через nftables (вместо iptables в контейнере)
     networking.nftables.enable = true;
-    networking.nftables.ruleset = ''
-      table ip nat {
+    networking.nftables.ruleset = lib.mkAfter ''
+      table ip wg_nat {
         chain postrouting {
           type nat hook postrouting priority 100; policy accept;
           ip saddr ${wgSubnet} oifname "${cfg.externalInterface}" masquerade
         }
       }
-      table ip filter {
+      table ip wg_filter {
         chain forward {
           type filter hook forward priority 0; policy accept;
           iifname "wg0" accept

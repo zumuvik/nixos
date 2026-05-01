@@ -3,6 +3,21 @@
 let
   cfg = config.my.services.awg-easy;
   wgSubnet = "10.9.0.0/24"; # Другая подсеть, чтобы не конфликтовать с wg-easy
+
+  # Заглушки для iptables — AmneziaWG Easy (как и wg-easy) может требовать iptables в контейнере
+  iptablesStub = pkgs.pkgsMusl.stdenv.mkDerivation {
+    name = "awg-iptables-stub";
+    src = pkgs.writeText "main.c" "int main(void) { return 0; }";
+    dontUnpack = true;
+    buildPhase = ''
+      $CC $src -o iptables -static
+    '';
+    installPhase = ''
+      mkdir -p $out/bin
+      cp iptables $out/bin/iptables
+      ln -s $out/bin/iptables $out/bin/ip6tables
+    '';
+  };
 in
 
 {
@@ -15,6 +30,28 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Kernel modules для NAT и AmneziaWG
+    # AmneziaWG может использовать обычный wireguard модуль, если не нужны специфичные параметры,
+    # но для полной поддержки AmneziaWG нужны соответствующие патчи.
+    boot.kernelModules = [
+      "wireguard"
+      "ip_tables"
+      "iptable_filter"
+      "ipt_MASQUERADE"
+      "nf_nat"
+      "nf_conntrack"
+      "nf_defrag_ipv4"
+      "xt_conntrack"
+      "xt_addrtype"
+      "xt_mark"
+    ];
+
+    # IP forwarding для маршрутизации трафика клиентов
+    boot.kernel.sysctl = {
+      "net.ipv4.ip_forward" = 1;
+      "net.ipv4.conf.all.src_valid_mark" = 1;
+    };
+
     # Arion (Docker Compose for Nix)
     virtualisation.arion = {
       backend = "docker";
@@ -33,8 +70,10 @@ in
             restart = "always";
             
             volumes = [
-              "awg-easy-config:/etc/amneziawg"
+              "awg-easy-config:/etc/wireguard"
               "/lib/modules:/lib/modules:ro"
+              "${iptablesStub}/bin/iptables:/usr/sbin/iptables:ro"
+              "${iptablesStub}/bin/iptables:/usr/sbin/ip6tables:ro"
             ];
 
             # Используем тот же секрет или отдельный, если нужно
@@ -46,7 +85,7 @@ in
               WEBUI_HOST = "0.0.0.0";
               PORT = "51823";
               WEBUI_PORT = "51823";
-              WG_DEFAULT_ADDRESS = "10.9.x.x";
+              WG_DEFAULT_ADDRESS = "10.9.0.x";
 
               WG_DEFAULT_DNS = "1.1.1.1";
               WG_AUTH_BYPASS_LOCALHOST = "true";
@@ -57,16 +96,20 @@ in
       };
     };
 
+    # Ensure docker is enabled
+    virtualisation.docker.enable = true;
+
     # NAT и Firewall для AWG
     networking.nftables.enable = true;
-    networking.nftables.ruleset = ''
-      table ip nat {
+    # Используем mkAfter, чтобы не конфликтовать с wg-easy, если оба включены
+    networking.nftables.ruleset = lib.mkAfter ''
+      table ip awg_nat {
         chain postrouting {
           type nat hook postrouting priority 100; policy accept;
           ip saddr ${wgSubnet} oifname "${cfg.externalInterface}" masquerade
         }
       }
-      table ip filter {
+      table ip awg_filter {
         chain forward {
           type filter hook forward priority 0; policy accept;
           iifname "awg0" accept
