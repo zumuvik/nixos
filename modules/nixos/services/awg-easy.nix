@@ -71,6 +71,7 @@ in
             
             volumes = [
               "awg-easy-config:/etc/amnezia/amneziawg"
+              "awg-easy-config:/etc/wireguard"
               "/lib/modules:/lib/modules:ro"
               "${iptablesStub}/bin/iptables:/usr/sbin/iptables:ro"
               "${iptablesStub}/bin/iptables:/usr/sbin/ip6tables:ro"
