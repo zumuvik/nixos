@@ -70,7 +70,7 @@ in
             restart = "always";
             
             volumes = [
-              "awg-easy-config:/etc/wireguard"
+              "awg-easy-config:/etc/amnezia/amneziawg"
               "/lib/modules:/lib/modules:ro"
               "${iptablesStub}/bin/iptables:/usr/sbin/iptables:ro"
               "${iptablesStub}/bin/iptables:/usr/sbin/ip6tables:ro"
