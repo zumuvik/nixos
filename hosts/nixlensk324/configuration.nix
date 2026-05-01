@@ -36,8 +36,8 @@
 
   my.services.x3-ui = {
     enable = true;
-    # panelPort = 2053;  # порт веб-панели (по умолчанию 2053)
-    vlessPort = 8443;    # порт VLESS-трафика (443 занят nginx)
+    # panelPort = 2053;     # порт веб-панели (по умолчанию 2053)
+    extraPorts = [ 8443 ];  # порты inbound-ов (добавляй при создании новых)
     environmentFile = config.sops.secrets."x3-ui_env".path;
     domain = "vpn.samolensk.ru";
   };

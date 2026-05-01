@@ -12,10 +12,14 @@ in
       description = "TCP-порт веб-панели 3X-UI";
     };
 
-    vlessPort = lib.mkOption {
-      type = lib.types.port;
-      default = 443;
-      description = "TCP-порт для входящего VLESS-трафика";
+    extraPorts = lib.mkOption {
+      type = lib.types.listOf lib.types.port;
+      default = [];
+      example = [ 8443 ];
+      description = ''
+        Дополнительные TCP-порты для firewall (напр. порты inbound-ов VLESS/Trojan).
+        Добавь сюда порт, когда создаёшь новый inbound в панели.
+      '';
     };
 
     dataDir = lib.mkOption {
@@ -58,10 +62,10 @@ in
     ];
 
     # ── Firewall ──
-    # Открываем порт VLESS-трафика и порт панели.
-    # При наличии domain дополнительно открываем 80/443 для nginx + ACME.
+    # panelPort — порт веб-панели, extraPorts — порты inbound-ов (VLESS, Trojan и т.д.).
+    # При наличии domain дополнительно 80/443 для nginx + ACME.
     networking.firewall.allowedTCPPorts =
-      [ cfg.vlessPort cfg.panelPort ]
+      [ cfg.panelPort ] ++ cfg.extraPorts
       ++ lib.optionals (cfg.domain != null) [ 80 443 ];
 
     # ── Nginx reverse proxy ──
