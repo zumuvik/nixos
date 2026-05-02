@@ -23,6 +23,11 @@
   # Services
   # ────────────────────────────────────────────────────────
 
+  my.services.legacy = {
+    enable = true;
+    port = 8080;
+    # domain = "legacy.samolensk.ru"; # можно раскомментировать и добавить домен для реверс-прокси
+  };
 
   my.services.cloudflare-sync = {
     enable = true;
@@ -41,12 +46,6 @@
     extraPortRanges = [ { from = 2000; to = 3000; } ];
     environmentFile = config.sops.secrets."x3-ui_env".path;
     domain = "vpn.samolensk.ru";
-  };
-
-  my.services.legacy = {
-    enable = true;
-    port = 8080;
-    # domain = "legacy.samolensk.ru"; # раскомментируйте, если нужен доступ по домену
   };
 
   # ────────────────────────────────────────────────────────
