@@ -35,6 +35,7 @@ in
       mysql = {
         enable = true;
         package = pkgs.mariadb;
+        settings.mysqld.bind-address = "127.0.0.1";
         ensureDatabases = [ "roundcube" ];
         ensureUsers = [
           {
@@ -76,7 +77,7 @@ in
     # Конфигурационный файл Roundcube
     environment.etc."roundcube/config.inc.php" = {
       source = ./config.inc.php;
-      mode = "0644";
+      mode = "0640";
       user = "nginx";
       group = "nginx";
     };

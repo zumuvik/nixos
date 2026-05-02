@@ -29,11 +29,16 @@
     # domain = "heroku.samolensk.ru";
   };
 
+  my.services.crafty = {
+    enable = true;
+    domain = "crafty.samolensk.ru";
+  };
+
   my.services.cloudflare-sync = {
     enable = true;
     checkInterval = "hourly";
     domains = [
-      { zone = "samolensk.ru"; records = [ "vpn" ]; }
+      { zone = "samolensk.ru"; records = [ "vpn" "crafty" ]; }
     ];
   };
 
@@ -43,7 +48,7 @@
     enable = true;
     # panelPort = 2053;     # порт веб-панели (по умолчанию 2053)
     extraPorts = [ 8443 2096 ];
-    extraPortRanges = [ { from = 2000; to = 3000; } ];
+    extraPortRanges = [ { from = 2053; to = 2096; } ];
     environmentFile = config.sops.secrets."x3-ui_env".path;
     domain = "vpn.samolensk.ru";
   };

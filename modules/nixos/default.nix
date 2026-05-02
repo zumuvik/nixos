@@ -7,6 +7,7 @@
     ./services/nh.nix
     ./services/3x-ui.nix
     ./services/heroku-bot.nix
+    ./services/crafty.nix
     ./hardware/bluetooth.nix
     ./hardware/zram.nix
     ./hardware/swap.nix

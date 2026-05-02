@@ -66,6 +66,7 @@ in
         ssl_cert = "<${sslCertDir}/fullchain.pem";
         ssl_key = "<${sslCertDir}/key.pem";
         ssl_min_protocol = "TLSv1.2";
+        disable_plaintext_auth = "yes";
         auth_username_format = "%Lu";
         auth_mechanisms = [ "plain" "login" ];
 

@@ -29,7 +29,7 @@ in
   config = lib.mkIf cfg.enable {
     # Создаем директорию для данных
     systemd.tmpfiles.rules = [
-      "d ${cfg.dataDir} 0755 root root -"
+      "d ${cfg.dataDir} 0700 root root -"
     ];
 
     virtualisation.oci-containers.containers.heroku-bot = {

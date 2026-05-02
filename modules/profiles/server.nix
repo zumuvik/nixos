@@ -11,6 +11,9 @@
     # Disable Cloudflare WARP by default on servers
     services.cloudflare-warp.enable = lib.mkDefault false;
 
+    # Brute-force protection
+    services.fail2ban.enable = true;
+
     # Performance / Server specific tweaks
     boot.kernelParams = [ "idle=nomwait" ];
     

@@ -130,7 +130,6 @@ in
       image = cfg.image;
       
       environment = {
-        XRAY_VMESS_AEAD_FORCED = "false";
         XUI_ENABLE_FAIL2BAN = "true";
       };
 
