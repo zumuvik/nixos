@@ -18,6 +18,12 @@ in
       default = "/var/lib/heroku-bot";
       description = "Директория для хранения сессий и данных бота";
     };
+
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Открыть порт в firewall для веб-интерфейса";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -27,15 +33,15 @@ in
     ];
 
     virtualisation.oci-containers.containers.heroku-bot = {
-      image = "localhost/heroku-bot:latest"; # Образ собран локально
+      image = "localhost/heroku-bot:latest";
       ports = [
         "${toString cfg.port}:8080"
       ];
       volumes = [
-        "${cfg.dataDir}:/data/Heroku/session" # Маппим сессию
+        "${cfg.dataDir}:/data/Heroku/session"
       ];
     };
 
-    networking.firewall.allowedTCPPorts = [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ cfg.port ];
   };
 }
