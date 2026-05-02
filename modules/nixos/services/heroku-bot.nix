@@ -35,7 +35,7 @@ in
     virtualisation.oci-containers.containers.heroku-bot = {
       image = "localhost/heroku-bot:latest";
       ports = [
-        "${toString cfg.port}:8080"
+        "127.0.0.1:${toString cfg.port}:8080"
       ];
       volumes = [
         "${cfg.dataDir}:/data/Heroku/session"
