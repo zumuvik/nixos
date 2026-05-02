@@ -23,10 +23,10 @@
   # Services
   # ────────────────────────────────────────────────────────
 
-  my.services.legacy = {
+  my.services.heroku-bot = {
     enable = true;
     port = 8080;
-    # domain = "legacy.samolensk.ru"; # можно раскомментировать и добавить домен для реверс-прокси
+    # domain = "heroku.samolensk.ru";
   };
 
   my.services.cloudflare-sync = {
