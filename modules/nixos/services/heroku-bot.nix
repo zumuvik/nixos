@@ -27,7 +27,7 @@ in
     ];
 
     virtualisation.oci-containers.containers.heroku-bot = {
-      image = "heroku-bot:latest"; # Образ собран локально
+      image = "localhost/heroku-bot:latest"; # Образ собран локально
       ports = [
         "${toString cfg.port}:8080"
       ];
