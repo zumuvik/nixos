@@ -22,6 +22,21 @@ in
       '';
     };
 
+    extraPortRanges = lib.mkOption {
+      type = lib.types.listOf (lib.types.submodule {
+        options = {
+          from = lib.mkOption { type = lib.types.port; description = "Начальный порт диапазона"; };
+          to = lib.mkOption { type = lib.types.port; description = "Конечный порт диапазона"; };
+        };
+      });
+      default = [];
+      example = [ { from = 2000; to = 3000; } ];
+      description = ''
+        Диапазоны TCP и UDP портов для firewall.
+        Удобно, если не хочется каждый раз пересобирать конфиг при добавлении inbound-а.
+      '';
+    };
+
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/3x-ui";
@@ -52,13 +67,21 @@ in
         Если null — панель доступна напрямую по порту.
       '';
     };
+
+    subscriptionPort = lib.mkOption {
+      type = lib.types.nullOr lib.types.port;
+      default = null;
+      description = "Порт подписок, если он отличается от основного порта панели (например, 2042).";
+    };
   };
 
   config = lib.mkIf cfg.enable {
-    # ── Персистентная директория ──
-    # Создаётся автоматически systemd-tmpfiles; хранит SQLite-базу панели.
+    # ── Персистентные директории ──
+    # Создаются автоматически systemd-tmpfiles; хранят SQLite-базу панели и сертификаты.
     systemd.tmpfiles.rules = [
       "d ${cfg.dataDir} 0700 root root -"
+      "d ${cfg.dataDir}/db 0700 root root -"
+      "d ${cfg.dataDir}/cert 0700 root root -"
     ];
 
     # ── Firewall ──
@@ -67,6 +90,9 @@ in
     networking.firewall.allowedTCPPorts =
       [ cfg.panelPort ] ++ cfg.extraPorts
       ++ lib.optionals (cfg.domain != null) [ 80 443 ];
+
+    networking.firewall.allowedTCPPortRanges = cfg.extraPortRanges;
+    networking.firewall.allowedUDPPortRanges = cfg.extraPortRanges;
 
     # ── Nginx reverse proxy ──
     # Проксируем панель через HTTPS с автоматическим Let's Encrypt.
@@ -84,6 +110,10 @@ in
           proxyPass = "http://127.0.0.1:${toString cfg.panelPort}";
           proxyWebsockets = true;
         };
+        locations."/sub" = lib.mkIf (cfg.subscriptionPort != null) {
+          proxyPass = "http://127.0.0.1:${toString cfg.subscriptionPort}";
+          proxyWebsockets = true;
+        };
       };
     };
 
@@ -93,37 +123,30 @@ in
       defaults.email = "admin@samolensk.ru";
     };
 
-    # ── Arion: бэкенд ──
-    # Используем Podman через сокет (не требует Docker-демона).
-    virtualisation.arion.backend = "podman-socket";
-
-    # ── Arion (docker-compose) проект ──
-    virtualisation.arion.projects.x3-ui.settings = {
-      services.x3-ui.service = {
-        # Образ 3X-UI (форк MHSanaei)
-        image = cfg.image;
-
-        # host-сеть: контейнер использует сетевой стек хоста напрямую.
-        # Это исключает NAT-оверхед Docker и позволяет панели
-        # корректно определять реальные IP-адреса клиентов.
-        network_mode = "host";
-
-        # Том: прокидываем локальную директорию в /etc/x-ui внутри контейнера,
-        # чтобы база данных SQLite (пользователи, inbound-ы, настройки)
-        # переживала перезапуски и nixos-rebuild.
-        volumes = [
-          "${cfg.dataDir}:/etc/x-ui"
-        ];
-
-        # env_file: секреты (XUI_USERNAME, XUI_PASSWORD) читаются из
-        # зашифрованного sops-файла, а не хранятся в Nix-коде.
-        env_file = lib.mkIf (cfg.environmentFile != null) [
-          cfg.environmentFile
-        ];
-
-        # Автоматический перезапуск при падении
-        restart = "unless-stopped";
+    # ── OCI Containers (Docker/Podman) ──
+    # Используем встроенный в NixOS oci-containers вместо Arion для
+    # точного соответствия официальному docker-compose.yml.
+    virtualisation.oci-containers.containers."3xui_app" = {
+      image = cfg.image;
+      
+      environment = {
+        XRAY_VMESS_AEAD_FORCED = "false";
+        XUI_ENABLE_FAIL2BAN = "true";
       };
+
+      environmentFiles = lib.mkIf (cfg.environmentFile != null) [
+        cfg.environmentFile
+      ];
+
+      volumes = [
+        "${cfg.dataDir}/db:/etc/x-ui/"
+        "${cfg.dataDir}/cert:/root/cert/"
+      ];
+
+      extraOptions = [
+        "--network=host"
+        "--tty"
+      ];
     };
   };
 }
