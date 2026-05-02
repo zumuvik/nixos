@@ -36,11 +36,17 @@
 
   my.services.x3-ui = {
     enable = true;
-    panelPort = 2042;
+    # panelPort = 2053;     # порт веб-панели (по умолчанию 2053)
     extraPorts = [ 8443 2096 ];
     extraPortRanges = [ { from = 2000; to = 3000; } ];
     environmentFile = config.sops.secrets."x3-ui_env".path;
     domain = "vpn.samolensk.ru";
+  };
+
+  my.services.legacy = {
+    enable = true;
+    port = 8080;
+    # domain = "legacy.samolensk.ru"; # раскомментируйте, если нужен доступ по домену
   };
 
   # ────────────────────────────────────────────────────────
