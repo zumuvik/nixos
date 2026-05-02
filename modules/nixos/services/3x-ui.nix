@@ -45,7 +45,7 @@ in
 
     image = lib.mkOption {
       type = lib.types.str;
-      default = "ghcr.io/mhsanaei/3x-ui:latest";
+      default = "ghcr.io/wings-n/3x-ui:latest";
       description = "Docker-образ 3X-UI";
     };
 
