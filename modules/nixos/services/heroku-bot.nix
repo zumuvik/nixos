@@ -21,8 +21,8 @@ in
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
-      default = false;
-      description = "Открыть порт в firewall для веб-интерфейса";
+      default = true;
+      description = "Открыть порт в firewall для веб-интерфейса (нужно для настройки)";
     };
   };
 
@@ -35,10 +35,10 @@ in
     virtualisation.oci-containers.containers.heroku-bot = {
       image = "localhost/heroku-bot:latest";
       ports = [
-        "127.0.0.1:${toString cfg.port}:8080"
+        "${toString cfg.port}:8080"
       ];
       volumes = [
-        "${cfg.dataDir}:/data/Heroku/session"
+        "${cfg.dataDir}:/data/session"
       ];
     };
 
