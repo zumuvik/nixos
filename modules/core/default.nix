@@ -43,17 +43,14 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
-    substituters = [ 
+    substituters = [
       "https://cache.nixos.org"
       "https://cache.garnix.io"
-      "https://attic.xuyh0120.win/lantian"
     ];
-    trusted-public-keys = [ 
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" 
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
-      "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-    ];
-    trusted-users = [ "root" "@wheel" "${username}" ];
+    ];    trusted-users = [ "root" "@wheel" "${username}" ];
   };
 
   nix.gc = {
