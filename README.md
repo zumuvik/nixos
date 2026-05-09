@@ -9,6 +9,7 @@ Flake-based NixOS configuration for multiple hosts with Hyprland desktop.
 | `nixlensk321` | Laptop | Hyprland, battery management, Zen kernel |
 | `nixlensk322` | Server/Router | Podman, Nginx, Firewall |
 | `nixlensk323` | Gaming PC | Hyprland, Steam, Zen kernel, AMD GPU |
+| `nixlensk324` | VPS | General purpose VPS, VPN, Crafty |
 
 ## Modular Structure
 
@@ -91,6 +92,7 @@ Edit `modules/programs/nixvim.nix` to customize the declarative Neovim experienc
 | nixlensk321 | 192.168.10.242 | Laptop |
 | nixlensk322 | 192.168.10.120 | Server |
 | nixlensk323 | 192.168.10.210 | Gaming PC |
+| nixlensk324 | - | VPS (contains 'valera-box' container for users) |
 
 ### Services (Server nixlensk322)
 

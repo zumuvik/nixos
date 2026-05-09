@@ -31,6 +31,8 @@ modules/
 
 ## Build / Test / Deploy
 
+**IMPORTANT**: `nixlensk324` is a VPS. Before running or changing any commands on a machine, ALWAYS run `hostname` to verify which host you are currently on.
+
 ```bash
 # Verification (run BEFORE applying)
 sudo nixos-rebuild build --flake .#<hostname>   # dry-run

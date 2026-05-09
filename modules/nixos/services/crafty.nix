@@ -1,4 +1,4 @@
-1{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.my.services.crafty;

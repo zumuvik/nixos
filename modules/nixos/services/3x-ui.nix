@@ -8,7 +8,7 @@ in
 
     panelPort = lib.mkOption {
       type = lib.types.port;
-      default = 2053;
+      default = 2042;
       description = "TCP-порт веб-панели 3X-UI";
     };
 
