@@ -1,89 +1,141 @@
 # Конфигурация NixOS
 
-Конфигурация NixOS на базе Flake для нескольких хостов с рабочим окружением Hyprland.
+Конфигурация NixOS на базе Flake для нескольких хостов с модульной системой опций `my.*`, Home Manager и рабочим окружением Hyprland.
 
-## Машины
+## Хосты
 
-| Хост | Роль | Особенности |
-|------|------|-------------|
-| `nixlensk321` | Ноутбук | Hyprland, управление питанием, ядро Zen |
-| `nixlensk322` | Сервер | Podman, Nginx, Firewall |
-| `nixlensk323` | Игровой ПК | Hyprland, Steam, ядро Zen, AMD GPU |
+| Хост | Роль | Профиль | Особенности |
+|------|------|---------|-------------|
+| `nixlensk321` | Ноутбук | Desktop | Hyprland, AMD GPU, Bluetooth, ядро CachyOS, управление питанием |
+| `nixlensk322` | Сервер | Server | Nginx, Roundcube, Mailserver, синхронизация DNS через Cloudflare |
+| `nixlensk323` | Игровой ПК | Desktop | Hyprland, Steam, AMD GPU, ядро CachyOS, игровые оптимизации |
+| `nixlensk324` | VPS | Server | 3X-UI (VPN), Crafty (Minecraft), NixOS-контейнер, Cloudflare DNS |
 
-## Модульная структура
-
-Конфигурация использует модульный подход с кастомным пространством имен `my.*` для всех системных настроек.
+## Структура
 
 ```
 .
-├── flake.nix                  # Точка входа Flake
-├── configuration.nix          # Базовая конфигурация системы (core)
-├── home.nix                   # Общая конфигурация Home Manager
-├── lib/default.nix            # Общие переменные (username)
-├── secrets/                   # Зашифрованные секреты (sops-nix)
+├── flake.nix                       # Точка входа — инпуты, определения хостов
+├── flake.lock                      # Закреплённые версии зависимостей
+├── home.nix                        # Общая конфигурация Home Manager
+├── lib/
+│   └── default.nix                 # Общие переменные (username, SSH-ключи)
+├── secrets/
+│   └── secrets.yaml                # Зашифрованные секреты (sops-nix)
 ├── hosts/
-│   ├── <host>/                # Специфичные для хоста файлы
-│   │   ├── default.nix        # Импорты хоста
-│   │   └── configuration.nix  # Переключатели функций хоста (my.*)
+│   ├── nixlensk3{21,22,23,24}/     # Конфиги для конкретных хостов
+│   │   ├── default.nix             # Импорты хоста
+│   │   ├── configuration.nix       # Переключатели функций (my.*)
+│   │   └── hardware-configuration.nix
+│   └── template/                   # Шаблон для новых хостов
 ├── modules/
-│   ├── nixos/                 # Модули NixOS (Namespace: my.*)
-│   │   ├── services/          # Сервисы (nginx, mailserver)
-│   │   ├── hardware/          # Оборудование (bluetooth, amdgpu, laptop, kernel)
-│   │   ├── ui/                # Интерфейс (fonts, greetd, common)
-│   │   └── gaming.nix         # Твики для игр
-│   ├── home/                  # Модули Home Manager
-│   │   ├── profiles/          # Общие профили home (desktop)
-│   │   └── hyprland/          # Конфигурация Hyprland
-│   ├── profiles/              # Системные профили (server, desktop)
-│   └── programs/              # Конфиги программ Home Manager (nixvim, fish и др.)
-├── AGENTS.md                  # Инструкции для ИИ-агентов
-└── SETUP_MANUAL.md            # Руководство по установке
+│   ├── core/
+│   │   └── default.nix             # Базовая конфигурация (общая для всех хостов)
+│   ├── profiles/                   # Системные профили
+│   │   ├── desktop.nix             # Профиль рабочего стола (UI, greetd, VLESS)
+│   │   └── server.nix              # Серверный профиль (fail2ban, nginx)
+│   ├── nixos/                      # Модули NixOS (пространство имён my.*)
+│   │   ├── hardware/               # bluetooth, amdgpu, laptop, kernel, zram, swap, virt
+│   │   ├── services/               # nginx, mailserver, roundcube, 3x-ui, crafty, nh, ...
+│   │   ├── ui/                     # fonts, greetd, plymouth, mpd, common
+│   │   └── gaming.nix              # Игровые оптимизации (Steam, Gamemode)
+│   └── home/                       # Модули Home Manager
+│       ├── programs/               # Конфиги приложений (nixvim, fish, starship, firefox, ...)
+│       ├── services/               # Пользовательские сервисы (mpd)
+│       ├── ui/                     # Тема (GTK/QT тёмный режим, курсоры)
+│       ├── profiles/
+│       │   └── desktop.nix         # Домашний профиль (пакеты, Hyprland, Waybar)
+│       ├── hyprland/               # Конфигурация WM (биндинги, стиль, скрипты, swaync)
+│       └── waybar/                 # Конфигурация панели Waybar
+├── AGENTS.md                       # Инструкции для ИИ-агентов
+└── SETUP_MANUAL.md                 # Руководство по установке
 ```
 
-## Как использовать модульные опции
+## Модульные опции (my.*)
 
-Вместо ручного импорта файлов, включайте нужные функции в `hosts/<host>/configuration.nix`:
+Все функции определены как модули NixOS с опциями `my.*`. Включайте их в `hosts/<host>/configuration.nix`:
 
 ```nix
 { ... }: {
-  my.profiles.desktop.enable = true;
+  # Профили
+  my.profiles.desktop.enable = true;   # или my.profiles.server.enable
+
+  # Оборудование
   my.hardware.amdgpu.enable = true;
   my.hardware.bluetooth.enable = true;
+  my.hardware.laptop.enable = true;
+  my.hardware.kernel-cachy.enable = true;
+  my.hardware.zram.enable = true;
+
+  # Сервисы
+  my.services.roundcube.enable = true;
+  my.services.mailserver.enable = true;
+  my.services.x3-ui.enable = true;
+  my.services.crafty.enable = true;
+
+  # Прочее
   my.gaming.enable = true;
+  my.ui.mpd.enable = true;
 }
 ```
 
 ## Сборка и деплой
 
-### Проверка (перед применением)
-
 ```bash
-sudo nixos-rebuild build --flake .#<hostname>   # сборка без применения
-nix flake check                                 # проверка flake outputs
-```
+# Проверка
+sudo nixos-rebuild build --flake .#<hostname>
+nix flake check
 
-### Применение
-
-```bash
+# Применение
 sudo nixos-rebuild switch --flake .#<hostname>
+
+# Откат
+sudo nixos-rebuild switch --rollback
 ```
 
-## Управление
+## Hyprland
 
-### Известные хосты
+Конфиги в `modules/home/hyprland/`:
+- `binds.nix` — горячие клавиши
+- `style.nix` — отступы, рамки, анимации
+- `exec-once.nix` — автозапуск приложений
+- `scripts/` — shell-скрипты для WM
+
+## Сервисы
+
+### Сервер nixlensk322
+
+| Сервис | Домен | Модуль |
+|--------|-------|--------|
+| Roundcube | mail.samolensk.ru | `services/roundcube/` |
+| Mailserver | samolensk.ru | `services/mailserver/` |
+| Cloudflare Sync | — | `services/cloudflare-sync/` |
+
+### VPS nixlensk324
+
+| Сервис | Домен | Модуль |
+|--------|-------|--------|
+| 3X-UI (VPN) | vpn.samolensk.ru | `services/3x-ui.nix` |
+| Crafty (Minecraft) | crafty.samolensk.ru | `services/crafty.nix` |
+| Cloudflare Sync | — | `services/cloudflare-sync/` |
+
+## Известные хосты
 
 | Хост | IP | Описание |
 |------|-----|----------|
 | nixlensk321 | 192.168.10.242 | Ноутбук |
-| nixlensk322 | 192.168.10.120 | Сервер |
+| nixlensk322 | 192.168.10.120 | Домашний сервер |
 | nixlensk323 | 192.168.10.210 | Игровой ПК |
+| nixlensk324 | 45.13.237.210 | VPS (+ контейнер `valera-box`) |
 
 ## Стиль кода
 
-- **Namespace**: Используйте `my.<category>.<feature>.enable` для всех переключателей.
-- **Отступы**: 2 пробела.
-- **Именование**: kebab-case для файлов, camelCase для опций.
+- **Namespace**: `my.<category>.<feature>.enable` для всех переключателей
+- **Отступы**: 2 пробела, без табов
+- **Имена файлов**: kebab-case (`amdgpu.nix`)
+- **Имена опций**: camelCase (`my.hardware.amdgpu.enable`)
+- **Импорты**: всегда указывать расширение `.nix`
 
 ## Для ИИ-агентов
 
-См. [`AGENTS.md`](./AGENTS.md) для получения подробных инструкций по новой модульной структуре и стандартам кодинга.
+См. [`AGENTS.md`](./AGENTS.md) для подробных инструкций по модульной структуре и стандартам кодинга.

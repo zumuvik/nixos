@@ -117,7 +117,7 @@
   hardware.opentabletdriver.enable = true;
   hardware.opentabletdriver.daemon.enable = true;
   hardware.uinput.enable = true;
-
+  services.ratbagd.enable = true;
    # ────────────────────────────────────────────────────────
    # System packages (host-specific)
    # ────────────────────────────────────────────────────────
