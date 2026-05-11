@@ -5,7 +5,7 @@
     ../hyprland
     ../waybar
     ../services/mpd.nix
-    ../ui/theme.nix
+    ../ui/theme
   ];
 
   config = lib.mkIf my.profiles.desktop.enable {
