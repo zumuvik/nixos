@@ -13,9 +13,6 @@
   };
   imports = [
     ./services/nginx
-    ./services/mailserver
-    ./services/roundcube
-    ./services/cloudflare-sync
     ./services/nh.nix
     ./services/3x-ui.nix
     ./services/heroku-bot.nix

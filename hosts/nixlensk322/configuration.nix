@@ -3,19 +3,9 @@
 
 {
   my.profiles.server.enable = true;
-  my.services.roundcube.enable = true;
-  my.services.mailserver.enable = true;
 
   imports = [
   ];
-
-  my.services.cloudflare-sync = {
-    enable = true;
-    checkInterval = "hourly";
-    domains = [
-      { zone = "samolensk.ru"; records = [ "mail" "@" ]; }
-    ];
-  };
 
   # ────────────────────────────────────────────────────────
   # Networking & Hostname
@@ -32,16 +22,7 @@
   # ────────────────────────────────────────────────────────
   sops.defaultSopsFile = ../../secrets/secrets.yaml;
   sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  sops.secrets."cloudflare_env" = {};
   sops.secrets."git_sync_env" = {};
-  sops.secrets."roundcube_db_pass" = {
-    owner = "nginx";
-    group = "nginx";
-  };
-  sops.secrets."mail_users" = {
-    owner = "vmail";
-    group = "vmail";
-  };
 
   # ────────────────────────────────────────────────────────
   # User (server-specific: qemu + SSH keys)
