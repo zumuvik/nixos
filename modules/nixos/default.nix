@@ -18,6 +18,7 @@
     ./services/heroku-bot.nix
     ./services/crafty.nix
     ./services/valent.nix
+    ./services/wingsv-panel.nix
     ./hardware
     ./gaming.nix
     ./ui

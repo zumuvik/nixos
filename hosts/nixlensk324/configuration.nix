@@ -33,6 +33,13 @@
     domain = "crafty.samolensk.ru";
   };
 
+  my.services.wingsv-panel = {
+    enable = true;
+    publicBaseUrl = "https://panel.samolensk.ru";
+    environmentFile = config.sops.secrets."wingsv-panel_env".path;
+  };
+
+  sops.secrets."wingsv-panel_env" = {};
   sops.secrets."x3-ui_env" = {};
 
   my.services.x3-ui = {
