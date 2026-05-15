@@ -19,8 +19,6 @@
      # Base packages for all hosts (CLI ONLY)
      packages = with pkgs; [
           micro
-          jq
-          btop
           inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
         ];
   };

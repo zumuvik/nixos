@@ -38,17 +38,6 @@
   security.sudo.extraRules = [
   ];
 
-  # ────────────────────────────────────────────────────────
-  # System packages (host-specific)
-  # ────────────────────────────────────────────────────────
-  environment.systemPackages = with pkgs; [
-    zip
-    unzip
-    unrar
-    xrandr
-    nix-search
-  ];
-
 
 
   # ────────────────────────────────────────────────────────

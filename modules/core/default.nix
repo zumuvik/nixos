@@ -29,6 +29,8 @@
   # Common packages
   environment.systemPackages = with pkgs; [
     git wget gh btop curl jq
+    zip unzip unrar tree
+    nix-search
   ];
 
   # User Configuration

@@ -8,6 +8,11 @@
     # Desktop Profile Settings
     # ────────────────────────────────────────────────────────
 
+    # Desktop-only packages
+    environment.systemPackages = with pkgs; [
+      xrandr
+    ];
+
     # UI Components
     my.ui.greetd.enable = lib.mkDefault true;
     my.ui.fonts.enable = lib.mkDefault true;

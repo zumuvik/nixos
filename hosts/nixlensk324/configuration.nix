@@ -64,16 +64,10 @@
   };
 
   # ────────────────────────────────────────────────────────
-  # System packages
+  # System packages (host-specific)
   # ────────────────────────────────────────────────────────
   environment.systemPackages = with pkgs; [
-    neovim     
-    wget
-    git        
-    curl
-    btop       
-    tree
-    btrfs-progs 
+    btrfs-progs
   ];
 
   # ────────────────────────────────────────────────────────
