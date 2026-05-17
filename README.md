@@ -58,7 +58,7 @@ All features are defined as NixOS modules with `my.*` options. Enable them in `h
 ```nix
 { ... }: {
   # Profiles
-  my.profiles.desktop.enable = true;   # or my.profiles.server.enable
+  my.profiles.desktop.enable = true;
 
   # Hardware
   my.hardware.amdgpu.enable = true;
@@ -66,16 +66,6 @@ All features are defined as NixOS modules with `my.*` options. Enable them in `h
   my.hardware.laptop.enable = true;
   my.hardware.kernel-cachy.enable = true;
   my.hardware.zram.enable = true;
-
-  # Services
-  my.services.roundcube.enable = true;
-  my.services.mailserver.enable = true;
-  my.services.x3-ui.enable = true;
-  my.services.crafty.enable = true;
-
-  # Other
-  my.gaming.enable = true;
-  my.ui.mpd.enable = true;
 }
 ```
 

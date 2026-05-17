@@ -58,7 +58,7 @@
 ```nix
 { ... }: {
   # Профили
-  my.profiles.desktop.enable = true;   # или my.profiles.server.enable
+  my.profiles.desktop.enable = true;
 
   # Оборудование
   my.hardware.amdgpu.enable = true;
@@ -66,16 +66,6 @@
   my.hardware.laptop.enable = true;
   my.hardware.kernel-cachy.enable = true;
   my.hardware.zram.enable = true;
-
-  # Сервисы
-  my.services.roundcube.enable = true;
-  my.services.mailserver.enable = true;
-  my.services.x3-ui.enable = true;
-  my.services.crafty.enable = true;
-
-  # Прочее
-  my.gaming.enable = true;
-  my.ui.mpd.enable = true;
 }
 ```
 
