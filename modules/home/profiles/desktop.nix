@@ -23,6 +23,24 @@
       package = pkgs.foot;
     };
 
+    # Set foot as the default terminal for Thunar (XFCE)
+    xdg.configFile."xfce4/helpers.rc".text = ''
+      TerminalEmulator=foot
+    '';
+
+    xdg.dataFile."xfce4/helpers/foot.desktop".text = ''
+      [Desktop Entry]
+      Version=1.0
+      Icon=foot
+      Type=X-XFCE-Helper
+      Name=Foot
+      StartupNotify=false
+      X-XFCE-Binaries=foot;
+      X-XFCE-Category=TerminalEmulator
+      X-XFCE-Commands=%B;
+      X-XFCE-CommandsWithParameter=%B -e %s;
+    '';
+
     home.packages = with pkgs; [
       # Desktop Environment
       waybar
@@ -45,6 +63,7 @@
       # GUI Utilities
       thunar
       thunar-archive-plugin
+      xfce.exo
       tumbler
       scrcpy
       android-tools
