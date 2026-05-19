@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="🐾 Самый милый фурри Minecraft сервер! Голосовой чат, уютная атмосфера и пушистые друзья ждут тебя на play.samolensk.ru ♡">
+  <meta name="keywords" content="minecraft, furry, сервер, фурри, play.samolensk.ru, голосовой чат, fabric">
+  <meta name="theme-color" content="#0d0915">
+  <meta property="og:title" content="🐾 FurryCraft — Милый Minecraft сервер">
+  <meta property="og:description" content="Уютный фурри Minecraft сервер с голосовым чатом! Заходи на play.samolensk.ru ♡">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://play.samolensk.ru">
+  <title>🐾 FurryCraft — Милый Minecraft сервер | play.samolensk.ru</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐾</text></svg>">
+</head>
+<body>
+
+  <!-- Floating Hearts Canvas -->
+  <canvas id="hearts-canvas" aria-hidden="true"></canvas>
+
+  <!-- ═══ Navigation ═══ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo">
+        <span class="nav-logo-icon">🐾</span>
+        <span class="nav-logo-text">FurryCraft</span>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">О сервере</a></li>
+        <li><a href="#plugins">Плагины</a></li>
+        <li><a href="#guide">Как зайти</a></li>
+        <li><a href="#voicechat">Войсчат</a></li>
+      </ul>
+      <button class="nav-mobile-toggle" id="nav-toggle" aria-label="Открыть меню">☰</button>
+    </div>
+  </nav>
+
+  <!-- ═══ Hero Section ═══ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="assets/hero-bg.png" alt="Фурри персонажи в Minecraft мире" loading="eager">
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        Сервер онлайн!
+      </div>
+      <h1 class="hero-title">
+        Добро пожаловать в<br>
+        <span class="highlight">FurryCraft</span> 🐾
+      </h1>
+      <p class="hero-subtitle">Самый уютный и пушистый Minecraft сервер для фурри и друзей ♡</p>
+      <p class="hero-ip">play.samolensk.ru</p>
+      <div class="hero-buttons">
+        <a href="#guide" class="btn btn-primary">🎮 Как подключиться</a>
+        <a href="#about" class="btn btn-secondary">🐱 Узнать больше</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ About Section ═══ -->
+  <section class="section about" id="about">
+    <div class="section-container">
+      <div class="about-grid">
+        <div class="about-image-wrapper">
+          <img src="assets/about-bg.png" alt="Милые фурри персонажи на пляже в Minecraft" loading="lazy">
+        </div>
+        <div class="about-text">
+          <h2>Что нас ждёт? OwO</h2>
+          <p>
+            <span class="uwu">FurryCraft</span> — это уютный Minecraft сервер, где каждый найдёт себе место! 
+            Здесь мы строим, исследуем и просто наслаждаемся компанией пушистых друзей 🐾
+          </p>
+          <p>
+            Сервер работает на <span class="uwu">Fabric 1.20.1</span> с оптимизациями для максимально 
+            плавного геймплея. У нас есть <span class="uwu">голосовой чат</span>, защита от читеров 
+            и система авторизации. Всё для того, чтобы ты чувствовал себя как дома~ >w<
+          </p>
+          <div class="about-stats">
+            <div class="stat-card">
+              <div class="stat-icon">⚡</div>
+              <div class="stat-value">1.20.1</div>
+              <div class="stat-label">Версия</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🧵</div>
+              <div class="stat-value">Fabric</div>
+              <div class="stat-label">Загрузчик</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">🎤</div>
+              <div class="stat-value">Войсчат</div>
+              <div class="stat-label">Голосовой</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Plugins Section ═══ -->
+  <section class="section" id="plugins">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-label">// модификации</span>
+        <h2 class="section-title">Наши плагины 🛠️</h2>
+        <p class="section-desc">Всё для комфортной и безопасной игры на нашем пушистом сервере~</p>
+      </div>
+
+      <div class="plugins-grid">
+
+        <div class="plugin-card highlight-card">
+          <span class="plugin-icon">🎤</span>
+          <div class="plugin-name">Simple Voice Chat</div>
+          <p class="plugin-desc">
+            Общайся с друзьями голосом прямо в игре! Разговаривай с теми, кто рядом, 
+            или создавай группы для приватных бесед~ 🐾
+          </p>
+        </div>
+
+        <div class="plugin-card">
+          <span class="plugin-icon">🛡️</span>
+          <div class="plugin-name">AntiXray</div>
+          <p class="plugin-desc">
+            Защита от X-Ray читов. Никто не сможет подглядывать за твоими алмазами! Все ресурсы 
+            честно добыты лапками ♡
+          </p>
+        </div>
+
+        <div class="plugin-card">
+          <span class="plugin-icon">🔐</span>
+          <div class="plugin-name">EasyAuth</div>
+          <p class="plugin-desc">
+            Система авторизации для защиты твоего аккаунта. Зарегистрируйся один раз и играй 
+            спокойно! Никто не украдёт твой домик >w<
+          </p>
+        </div>
+
+        <div class="plugin-card">
+          <span class="plugin-icon">🏎️</span>
+          <div class="plugin-name">Lithium</div>
+          <p class="plugin-desc">
+            Глубокая оптимизация сервера для максимальной производительности. Никаких лагов — 
+            только плавный геймплей!
+          </p>
+        </div>
+
+        <div class="plugin-card">
+          <span class="plugin-icon">🚀</span>
+          <div class="plugin-name">FerriteCore</div>
+          <p class="plugin-desc">
+            Снижает потребление оперативной памяти сервера. Больше памяти = больше возможностей 
+            для наших приключений~
+          </p>
+        </div>
+
+        <div class="plugin-card">
+          <span class="plugin-icon">⚡</span>
+          <div class="plugin-name">Krypton</div>
+          <p class="plugin-desc">
+            Оптимизация сетевого стека Minecraft. Стабильное соединение даже при слабом интернете. 
+            Пинг — наш друг!
+          </p>
+        </div>
+
+        <div class="plugin-card">
+          <span class="plugin-icon">📋</span>
+          <div class="plugin-name">Ledger</div>
+          <p class="plugin-desc">
+            Система логирования действий. Если кто-то сломает твой домик — мы узнаем кто! 
+            Справедливость для всех 🐾
+          </p>
+        </div>
+
+        <div class="plugin-card">
+          <span class="plugin-icon">🗺️</span>
+          <div class="plugin-name">Chunky</div>
+          <p class="plugin-desc">
+            Прегенерация мира для мгновенной загрузки чанков. Исследуй мир без задержек — 
+            всё уже готово для тебя!
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Guide Section ═══ -->
+  <section class="section guide" id="guide">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-label">// гайд</span>
+        <h2 class="section-title">Как зайти на сервер 🎮</h2>
+        <p class="section-desc">Простая инструкция, чтобы начать играть с нами! Всего несколько шагов~</p>
+      </div>
+
+      <div class="guide-steps">
+
+        <div class="guide-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Скачай Minecraft Java Edition ☕</h3>
+            <p>
+              Наш сервер работает на <strong>Java Edition</strong>. Убедись, что у тебя установлена 
+              лицензионная версия игры или используй лаунчер, поддерживающий Fabric.
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Установи Fabric Loader 🧵</h3>
+            <p>
+              Скачай и установи <strong>Fabric Loader</strong> для версии <code>1.20.1</code>. 
+              Это нужно для работы модов на сервере.
+            </p>
+            <a href="https://fabricmc.net/use/installer/" target="_blank" rel="noopener" class="mod-link">
+              📥 Скачать Fabric Installer →
+            </a>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Установи моды (опционально) 🎤</h3>
+            <p>
+              Для <strong>голосового чата</strong> тебе нужен мод <strong>Simple Voice Chat</strong> на клиенте. 
+              Без него играть можно, но общаться голосом — нет!
+            </p>
+            <a href="https://modrinth.com/plugin/simple-voice-chat/versions?l=fabric&g=1.20.1" target="_blank" rel="noopener" class="mod-link">
+              🎤 Скачать Simple Voice Chat для Fabric 1.20.1 →
+            </a>
+            <p style="margin-top: 8px;">
+              Также рекомендуем поставить <strong>Fabric API</strong> — он нужен для работы большинства модов.
+            </p>
+            <a href="https://modrinth.com/mod/fabric-api/versions?g=1.20.1" target="_blank" rel="noopener" class="mod-link">
+              ⚙️ Скачать Fabric API →
+            </a>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Подключись к серверу 🌐</h3>
+            <p>
+              Открой Minecraft, перейди в <strong>«Multiplayer»</strong> → <strong>«Add Server»</strong> 
+              и введи адрес сервера:
+            </p>
+            <p style="margin-top: 8px;"><code>play.samolensk.ru</code></p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h3>Зарегистрируйся 🔐</h3>
+            <p>
+              При первом входе сервер попросит тебя зарегистрироваться через <strong>EasyAuth</strong>. 
+              Просто введи команду в чат:
+            </p>
+            <p style="margin-top: 8px;"><code>/register пароль пароль</code></p>
+            <p style="margin-top: 8px;">
+              При следующих входах используй: <code>/login пароль</code>
+            </p>
+          </div>
+        </div>
+
+        <div class="guide-step">
+          <div class="step-number">6</div>
+          <div class="step-content">
+            <h3>Играй и наслаждайся! 🐾💜</h3>
+            <p>
+              Готово! Ты на сервере. Строй, исследуй и общайся с пушистыми друзьями~ 
+              Добро пожаловать в семью! >w<
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Voice Chat Section ═══ -->
+  <section class="section voicechat" id="voicechat">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-label">// голосовой чат</span>
+        <h2 class="section-title">Общайся голосом! 🎤</h2>
+      </div>
+
+      <div class="voicechat-card">
+        <span class="vc-icon">🎙️</span>
+        <h3>Simple Voice Chat</h3>
+        <p>
+          На нашем сервере установлен мод <strong>Simple Voice Chat</strong>, 
+          который позволяет общаться голосом прямо в игре!
+        </p>
+        <p>
+          Слышишь друзей тем громче, чем они ближе к тебе — как в реальной жизни~ 🐾
+        </p>
+        <p class="vc-note">
+          ⚠️ Для работы голосового чата тебе нужно установить мод 
+          <strong>Simple Voice Chat</strong> на свой клиент! Без клиентского мода 
+          ты сможешь играть, но голосовой чат работать не будет.
+        </p>
+        <a href="https://modrinth.com/plugin/simple-voice-chat/versions?l=fabric&g=1.20.1" target="_blank" rel="noopener" class="btn btn-primary">
+          📥 Скачать мод для Fabric 1.20.1
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ IP Copy Banner ═══ -->
+  <section class="ip-banner" id="connect">
+    <h3>Готов играть? Скопируй адрес сервера! 🐾</h3>
+    <div class="ip-copy-box" id="ip-copy" role="button" tabindex="0" aria-label="Скопировать IP адрес сервера">
+      <span class="ip-text">play.samolensk.ru</span>
+      <span class="copy-icon">📋</span>
+    </div>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="footer">
+    <div class="footer-hearts">💜🐾💖🐾💜</div>
+    <p>FurryCraft © 2025 — Сделано с любовью для пушистых друзей ♡</p>
+    <p class="footer-uwu">~nya~ Ждём тебя на сервере! UwU 🐾</p>
+  </footer>
+
+  <!-- Copy Toast -->
+  <div class="ip-copy-toast" id="copy-toast">✅ IP скопирован! Мяу~</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -28,18 +28,21 @@
     # domain = "heroku.samolensk.ru";
   };
 
+  my.services.playSite.enable = true;
+
   my.services.crafty = {
     enable = true;
     domain = "crafty.samolensk.ru";
   };
 
-  my.services.wingsv-panel = {
-    enable = true;
-    publicBaseUrl = "https://panel.samolensk.ru";
-    environmentFile = config.sops.secrets."wingsv-panel_env".path;
-  };
+  # TODO: добавить ключ wingsv-panel_env в secrets.yaml
+  # my.services.wingsv-panel = {
+  #   enable = true;
+  #   publicBaseUrl = "https://panel.samolensk.ru";
+  #   environmentFile = config.sops.secrets."wingsv-panel_env".path;
+  # };
 
-  sops.secrets."wingsv-panel_env" = {};
+  # sops.secrets."wingsv-panel_env" = {};
   sops.secrets."x3-ui_env" = {};
 
   my.services.x3-ui = {
@@ -139,4 +142,5 @@
   networking.firewall.allowedUDPPorts = [ 25565 24454 ];
   
   system.stateVersion = "25.11";
+  security.pki.certificateFiles = [ ./minica_root_ca.crt ];
 }
