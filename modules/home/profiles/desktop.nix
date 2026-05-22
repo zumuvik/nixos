@@ -63,7 +63,7 @@
       # GUI Utilities
       thunar
       thunar-archive-plugin
-      xfce.exo
+      xfce4-exo
       tumbler
       scrcpy
       android-tools
@@ -76,7 +76,6 @@
       virt-viewer
       pavucontrol
       networkmanagerapplet
-
       # Screenshots
       grim
       slurp

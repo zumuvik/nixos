@@ -18,6 +18,7 @@
     wayland.windowManager.hyprland = {
       enable = true;
       xwayland.enable = true;
+      configType = "hyprlang";
     };
 
     wayland.windowManager.hyprland.settings = lib.mkMerge [
@@ -44,7 +45,6 @@
           overlay = false;
         };
         dwindle = {
-          pseudotile = true;
           preserve_split = true;
         };
         env = [

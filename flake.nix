@@ -47,6 +47,8 @@
     };
   };
 
+
+
   outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, ... } @ inputs:
   let
     lib = import ./lib;
