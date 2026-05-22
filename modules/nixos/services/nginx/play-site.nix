@@ -4,7 +4,7 @@ let
   cfg = config.my.services.playSite;
   siteRoot = "/var/www/sites/play.samolensk.ru";
   # Пакуем файлы сайта из исходников в /etc/nixos/site/
-  siteFiles = ../../../site/play.samolensk.ru;
+  siteFiles = ../../../../site/play.samolensk.ru;
 in
 {
   options.my.services.playSite.enable = lib.mkEnableOption "play.samolensk.ru landing page";
@@ -37,7 +37,6 @@ in
         tryFiles = "$uri $uri/ =404";
         extraConfig = ''
           expires 1h;
-          add_header Cache-Control "public, no-transform";
         '';
       };
 
@@ -45,7 +44,6 @@ in
       locations."~* \\.(css|js|png|jpg|jpeg|webp|gif|ico|svg|woff2?)$" = {
         extraConfig = ''
           expires 7d;
-          add_header Cache-Control "public, immutable";
           access_log off;
         '';
       };

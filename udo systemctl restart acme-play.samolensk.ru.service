@@ -1,0 +1,20 @@
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: Waiting to acquire lock in /run/acme/
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + '[' -e out/acme-success ']'
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + minica --ca-cert=ca/cert.pem --ca-key=ca/key.pem --domains=play.samolensk.ru --ip-addresses=
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395536]: + cd play.samolensk.ru
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395536]: + cp -vp cert.pem ../out/cert.pem
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395537]: 'cert.pem' -> '../out/cert.pem'
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395536]: + cp -vp key.pem ../out/key.pem
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395536]: 'key.pem' -> '../out/key.pem'
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + cat out/cert.pem ca/cert.pem
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + cp ca/cert.pem out/chain.pem
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + cat out/key.pem out/fullchain.pem
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + for fixpath in out certificates
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + '[' -d out ']'
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + chmod -R u=rwX,g=rX,o= out
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + chown -R acme:nginx out
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + for fixpath in out certificates
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395526]: + '[' -d certificates ']'
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395543]: + mkdir -p /var/lib/acme/acme-challenge/.well-known/acme-challenge
+мая 18 00:17:02 nixlensk324 acme-play.samolensk.ru-start[395543]: + chgrp nginx /var/lib/acme/acme-challenge/.well-known/acme-challenge
+мая 18 00:17:02 nixlensk324 systemd[1]: Finished Ensure certificate for play.samolensk.ru.

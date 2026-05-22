@@ -17,6 +17,7 @@
   };
   imports = [
     ./services/nginx
+    ./services/nginx/play-site.nix
     ./services/nh.nix
     ./services/3x-ui.nix
     ./services/heroku-bot.nix
