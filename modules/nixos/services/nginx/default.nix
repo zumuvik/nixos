@@ -41,7 +41,16 @@ in
           listen 80 default_server;
           listen [::]:80 default_server;
           server_name _;
-          return 444;
+
+          location ^~ /.well-known/acme-challenge/ {
+            root /var/lib/acme/acme-challenge;
+            auth_basic off;
+            auth_request off;
+          }
+
+          location / {
+            return 444;
+          }
         }
       '';
     };

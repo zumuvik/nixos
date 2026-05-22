@@ -18,18 +18,26 @@ in
       "d ${siteRoot}/assets 0755 root root -"
     ];
 
-    # Копируем сайт при активации системы
+    # Копируем сайт и SSL сертификаты при активации системы
     system.activationScripts.playSite = ''
       ${pkgs.coreutils}/bin/cp -rT ${siteFiles} ${siteRoot}
       ${pkgs.coreutils}/bin/chmod -R 755 ${siteRoot}
+
+      # Настройка SSL-сертификатов Cloudflare Origin
+      ${pkgs.coreutils}/bin/mkdir -p /var/lib/ssl
+      ${pkgs.coreutils}/bin/cp -f /etc/nixos/secrets/play.samolensk.ru.cert.pem /var/lib/ssl/play.samolensk.ru.cert.pem
+      ${pkgs.coreutils}/bin/cp -f /etc/nixos/secrets/play.samolensk.ru.key.pem /var/lib/ssl/play.samolensk.ru.key.pem
+      ${pkgs.coreutils}/bin/chmod 400 /var/lib/ssl/play.samolensk.ru.cert.pem /var/lib/ssl/play.samolensk.ru.key.pem
+      ${pkgs.coreutils}/bin/chown nginx:nginx /var/lib/ssl/play.samolensk.ru.cert.pem /var/lib/ssl/play.samolensk.ru.key.pem
     '';
 
     # ────────────────────────────────────────────────────────
     # Nginx virtual host
     # ────────────────────────────────────────────────────────
     services.nginx.virtualHosts."play.samolensk.ru" = {
-      enableACME = true;
       forceSSL = true;
+      sslCertificate = "/var/lib/ssl/play.samolensk.ru.cert.pem";
+      sslCertificateKey = "/var/lib/ssl/play.samolensk.ru.key.pem";
       root = siteRoot;
 
       locations."/" = {
