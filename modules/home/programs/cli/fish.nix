@@ -166,7 +166,6 @@
       alias la='eza -a'
       alias lla='eza -la'
       alias lt='eza --tree'
-      alias cat='bat'
       alias top='btop'
       alias cd='z'
 
