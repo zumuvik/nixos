@@ -31,7 +31,11 @@
     git wget gh btop curl jq
     zip unzip unrar tree
     nix-search
+    wireguard-tools
   ];
+
+  networking.wireguard.enable = true;
+
 
   # User Configuration
   users.users.${username} = {
