@@ -35,6 +35,7 @@
   ];
 
   networking.wireguard.enable = true;
+  services.zerotierone.enable = true;
 
 
   # User Configuration
