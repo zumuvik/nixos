@@ -1,6 +1,7 @@
 { inputs, pkgs, ... }:{
   imports = [ inputs.nixvim.homeModules.nixvim ];
   programs.nixvim = {
+    nixpkgs.source = inputs.nixpkgs;
     enable = true;
     defaultEditor = true;
 
