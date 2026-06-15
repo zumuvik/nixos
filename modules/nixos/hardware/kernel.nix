@@ -17,10 +17,10 @@ in
       boot.kernelPackages = pkgs.linuxPackages_zen;
     })
     (lib.mkIf config.my.hardware.kernel-cachy.enable {
-      boot.kernelPackages = pkgs.linuxPackages_cachyos;
+      boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
     })
     (lib.mkIf config.my.hardware.kernel-cachy-bore.enable {
-      boot.kernelPackages = pkgs.linuxPackages_cachyos; # Chaotic-Nyx uses EEVDF by default in their cachyos kernel. There is no separate bore kernel in chaotic-nyx pkgs usually, it's just linuxPackages_cachyos.
+      boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
     })
   ];
 }
