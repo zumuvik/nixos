@@ -7,12 +7,14 @@
       "https://xddxdd.cachix.org"
       "https://nix-cachyos-kernel.cachix.org"
       "https://attic.xuyh0120.win/lantian"
+      "https://nyx-cache.chaotic.cx"
     ];
     extra-trusted-public-keys = [
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "xddxdd.cachix.org-1:ay1HJyNDYmlSwj5NXQG065C8LfoqqKaTNCyzeixGjf8="
       "nix-cachyos-kernel.cachix.org-1:709cn79S9L2XYD6B2S6mE6fF8n+yH5/S12CfS+J4mRM="
       "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+      "nyx-cache.chaotic.cx-1:dJxTrgMC3V3cFfyIiBQDQorG6k1LsqurH/srpMSq7qk="
     ];
   };
 
@@ -91,12 +93,14 @@
               substituters = [ 
                 "https://xddxdd.cachix.org"
                 "https://nix-cachyos-kernel.cachix.org"
-                "https://attic.xuyh0120.win/lantian" 
+                "https://attic.xuyh0120.win/lantian"
+                "https://nyx-cache.chaotic.cx"
               ];
               trusted-public-keys = [ 
                 "xddxdd.cachix.org-1:ay1HJyNDYmlSwj5NXQG065C8LfoqqKaTNCyzeixGjf8="
                 "nix-cachyos-kernel.cachix.org-1:709cn79S9L2XYD6B2S6mE6fF8n+yH5/S12CfS+J4mRM="
-                "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" 
+                "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+                "nyx-cache.chaotic.cx-1:dJxTrgMC3V3cFfyIiBQDQorG6k1LsqurH/srpMSq7qk="
               ];
             };
           })
