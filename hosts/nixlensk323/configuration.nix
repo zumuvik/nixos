@@ -10,7 +10,7 @@
   my.hardware.v4l2loopback.enable = true;
   my.hardware.kernel-zen.enable = false;
   my.hardware.kernel-cachy.enable = false;
-  my.hardware.kernel-cachy-bore.enable = false;
+  my.hardware.kernel-cachy-bore.enable = true;
   my.gaming.enable = true;
   my.ui.plymouth.enable = true;
   my.ui.mpd.enable = true;
