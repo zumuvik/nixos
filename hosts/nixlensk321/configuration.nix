@@ -33,6 +33,4 @@
   environment.systemPackages = with pkgs; [
     osu-lazer-bin
   ];
-
-  users.users.${username}.extraGroups = [ "video" "render" ];
 }

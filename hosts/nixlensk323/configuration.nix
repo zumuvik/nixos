@@ -7,6 +7,7 @@
   my.hardware.virtualization.enable = true;
   my.hardware.zram.enable = true;
   my.hardware.swap.enable = true;
+  my.hardware.v4l2loopback.enable = true;
   my.hardware.kernel-zen.enable = false;
   my.hardware.kernel-cachy.enable = false;
   my.hardware.kernel-cachy-bore.enable = true;
@@ -54,7 +55,7 @@
     boot = {
      consoleLogLevel = 0;
      initrd.verbose = false;
-     kernelModules = [ "bridge" "uinput" "v4l2loopback" "hid-playstation" ];
+     kernelModules = [ "bridge" "uinput" "hid-playstation" ];
      kernelParams = [
        "net.ipv4.ip_forward=1"
        "resume_offset=4988160"
@@ -66,15 +67,16 @@
        "udev.log_priority=3"
      ];
      resumeDevice = "/dev/disk/by-uuid/6703b7a2-d8ba-4f63-8fc0-5d770b59df7f";
-    extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
-    extraModprobeConfig = ''
-      options v4l2loopback devices=1 video_nr=10 card_label="OBS Cam" exclusive_caps=1
-    '';
   };
 
   # ────────────────────────────────────────────────────────
   # Remote Builder
   # ────────────────────────────────────────────────────────
+  nix.settings = {
+    substituters = [ "https://attic.xuyh0120.win/lantian" ];
+    trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+  };
+
   nix.buildMachines = [
     {
       hostName = "nixlensk323";
@@ -88,10 +90,9 @@
   # User (gaming PC: qemu + SSH keys + ROCm GPU access)
   # ────────────────────────────────────────────────────────
   users.users.${username} = {
-    extraGroups = [ "qemu" "render" "video" ];
-    openssh.authorizedKeys.keys = lib'.sshKeys;
+   extraGroups = [ "qemu" "libvirtd" ];
+   openssh.authorizedKeys.keys = lib'.sshKeys;
   };
-
    # ────────────────────────────────────────────────────────
    # Steam + Gaming
    # ────────────────────────────────────────────────────────
@@ -123,5 +124,8 @@
      osu-lazer-bin
      ayugram-desktop
      gemini-cli
+     virt-manager
+     qemu_kvm
+     transmission_4-qt
    ];
 }

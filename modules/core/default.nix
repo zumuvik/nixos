@@ -28,6 +28,7 @@
 
   # Common packages
   environment.systemPackages = with pkgs; [
+    neovim
     git wget gh btop curl jq
     zip unzip unrar tree
     nix-search
