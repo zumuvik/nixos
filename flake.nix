@@ -54,18 +54,16 @@
       url = "github:jacopone/antigravity-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-cachyos-kernel = {
-      url = "github:xddxdd/nix-cachyos-kernel/release";
+    chaotic = {
+      url = "github:chaotic-cx/nyx/nyxpkgs-unstable"; 
     };
     arion = {
       url = "github:hercules-ci/arion";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-  };
+    };
 
-
-
-  outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, ... } @ inputs:
+    outputs = { nixpkgs, home-manager, self, ags, grub2-themes, sops-nix, chaotic, ... } @ inputs:
   let
     lib = import ./lib;
     inherit (lib) username;
@@ -82,13 +80,13 @@
         modules = [
           sops-nix.nixosModules.sops
           inputs.arion.nixosModules.arion
+          chaotic.nixosModules.default
           ./hosts/${hostName}/default.nix
           ./modules/profiles
           home-manager.nixosModules.home-manager
           grub2-themes.nixosModules.default
 
           ({ ... }: {
-            nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
             nix.settings = {
               substituters = [ 
                 "https://xddxdd.cachix.org"
